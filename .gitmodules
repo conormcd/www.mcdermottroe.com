@@ -1,0 +1,15 @@
+[submodule "lib/klein"]
+	path = lib/klein
+	url = git://github.com/chriso/klein.php.git
+[submodule "lib/mustache"]
+	path = lib/mustache
+	url = git://github.com/bobthecow/mustache.php.git
+[submodule "lib/markdown"]
+	path = lib/markdown
+	url = git://github.com/michelf/php-markdown.git
+[submodule "lib/raven-php"]
+	path = lib/raven-php
+	url = git://github.com/getsentry/raven-php.git
+[submodule "lib/geshi"]
+	path = lib/geshi
+	url = git://github.com/javiereguiluz/geshi.git
