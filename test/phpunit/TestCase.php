@@ -41,6 +41,12 @@ extends PHPUnit_Framework_TestCase
      */
     public function setUp() {
         date_default_timezone_set('Europe/Dublin');
+
+        // Dummy Amazon Affiliate data
+        $_ENV['AMAZON_AFFILIATE_TAG'] = 'affiliate_tag';
+        $_ENV['AMAZON_AFFILIATE_LINK_CODE'] = 'affiliate_link_code';
+        $_ENV['AMAZON_AFFILIATE_CAMP'] = 1234566789;
+        $_ENV['AMAZON_AFFILIATE_CREATIVE'] = 26667;
     }
 
     /**

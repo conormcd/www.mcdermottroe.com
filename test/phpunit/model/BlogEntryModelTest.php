@@ -169,10 +169,6 @@ MARKDOWN
      * @return void
      */
     public function testBlogPostWithAnAmazonLink() {
-        $_ENV['AMAZON_AFFILIATE_TAG'] = 'test_tag';
-        $_ENV['AMAZON_AFFILIATE_LINK_CODE'] = 'test_link_code';
-        $_ENV['AMAZON_AFFILIATE_CAMP'] = 'test_camp';
-        $_ENV['AMAZON_AFFILIATE_CREATIVE'] = 'test_creative';
         $file = $this->generateTestFile(
 <<<MARKDOWN
 # Title
@@ -200,8 +196,6 @@ MARKDOWN
      * @return void
      */
     public function testBlogPostWithAnAmazonBug() {
-        $_ENV['AMAZON_AFFILIATE_TAG'] = 'test_tag';
-        $_ENV['AMAZON_AFFILIATE_LINK_CODE'] = 'test_link_code';
         $file = $this->generateTestFile(
 <<<MARKDOWN
 # Title

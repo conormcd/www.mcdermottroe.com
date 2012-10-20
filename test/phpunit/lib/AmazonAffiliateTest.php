@@ -38,26 +38,6 @@ require_once dirname(dirname(dirname(__DIR__))) . '/lib/AmazonAffiliate.php';
 class AmazonAffiliateTest
 extends TestCase
 {
-    /** Dummy Amazon Affiliate link data. */
-    private static $amazonData = array(
-        'AMAZON_AFFILIATE_TAG' => 'affiliate_tag',
-        'AMAZON_AFFILIATE_LINK_CODE' => 'affiliate_link_code',
-        'AMAZON_AFFILIATE_CAMP' => 1234566789,
-        'AMAZON_AFFILIATE_CREATIVE' => 26667,
-    );
-
-    /**
-     * Copy the dummy link data into the environment.
-     *
-     * @return void
-     */
-    public function setUp() {
-        parent::setUp();
-        foreach (self::$amazonData as $key => $value) {
-            $_ENV[$key] = $value;
-        }
-    }
-
     /**
      * Make sure that AmazonAffiliate::link actually produces a link.
      *
@@ -78,7 +58,7 @@ extends TestCase
     public function testLinkContainsData() {
         $link = AmazonAffiliate::link(array('', 'My_Test_ASIN'));
         $this->assertRegexp("/My_Test_ASIN/", $link);
-        foreach (array_values(self::$amazonData) as $value) {
+        foreach ($this->amazonEnvValues() as $value) {
             $this->assertRegexp("/$value/", $link);
         }
     }
@@ -105,6 +85,21 @@ extends TestCase
         $this->assertRegexp("/My_Test_ASIN/", $bug);
         $this->assertRegexp("/{$_ENV['AMAZON_AFFILIATE_TAG']}/", $bug);
         $this->assertRegexp("/{$_ENV['AMAZON_AFFILIATE_LINK_CODE']}/", $bug);
+    }
+
+    /**
+     * Pull out the values of the Amazon environment variables.
+     *
+     * @return array The values of the Amazon environment variables.
+     */
+    private function amazonEnvValues() {
+        $ret = array();
+        foreach ($_ENV as $key => $value) {
+            if (preg_match('/^AMAZON_/', $key)) {
+                $ret[] = $value;
+            }
+        }
+        return $ret;
     }
 }
 
