@@ -42,6 +42,11 @@
         <exclude name="PEAR.NamingConventions.ValidFunctionName.PublicUnderscore" />
         <exclude name="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
     </rule>
+    <rule ref="Generic.NamingConventions.CamelCapsFunctionName">
+        <properties>
+            <property name="strict" value="false" />
+        </properties>
+    </rule>
     
     <include name="Generic.PHP.LowerCaseConstant" />
     <include name="Generic.Functions.OpeningFunctionBraceKernighanRitchie" />
