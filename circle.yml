@@ -1,0 +1,10 @@
+checkout:
+  post:
+    - git submodule update --init
+
+dependencies:
+  pre:
+    - yes no | pecl install --alldeps apc
+    - pecl install xdebug
+    - pear channel-discover pear.phpmd.org
+    - pear install --alldeps phpmd/PHP_PMD
