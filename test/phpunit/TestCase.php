@@ -84,6 +84,36 @@ extends PHPUnit_Framework_TestCase
         }
         $this->assertTrue($exception_thrown, $message);
     }
+
+    /**
+     * Trap the output of a chunk of code.
+     *
+     * @param callable $func The code to run.
+     * @return array         An associative array with three elements with the
+     *                       keys "output", "return" and "exception". The
+     *                       values are (respectively) anything printed in the
+     *                       course of running the function, the return value
+     *                       of the function (if any) and any exception thrown
+     *                       while executing the function.
+     */
+    protected function trapOutput($func) {
+        $result = array(
+            'output' => null,
+            'return' => null,
+            'exception' => null,
+        );
+
+        ob_start();
+        try {
+            $result['return'] = call_user_func_array($func, array());
+        } catch (Exception $e) {
+            $result['exception'] = $e;
+        }
+        $result['output'] = ob_get_contents();
+        ob_end_clean();
+
+        return $result;
+    }
 }
 
 ?>
