@@ -89,6 +89,7 @@ extends PHPUnit_Framework_TestCase
      * Trap the output of a chunk of code.
      *
      * @param callable $func The code to run.
+     *
      * @return array         An associative array with three elements with the
      *                       keys "output", "return" and "exception". The
      *                       values are (respectively) anything printed in the
