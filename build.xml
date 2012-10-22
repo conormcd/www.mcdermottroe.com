@@ -32,31 +32,16 @@
 
 <project name="mcdermottroe.com" default="test">
     <!-- Run all the tests. -->
-    <target name="test" depends="lint,phpunit,phpcpd,phpcs,phpmd" />
+    <target name="test" depends="phpcpd,phpcs,phpmd,phpunit" />
 
     <!-- Run all the tests which Travis can run. -->
-    <target name="test-travis" depends="lint,phpunit,phpcpd,phpcs" />
+    <target name="test-travis" depends="phpcpd,phpcs,phpunit" />
 
     <!-- Generate the docs. -->
     <target name="doc" depends="phpdox" />
 
     <!-- Remove anything that shouldn't be checked in. -->
     <target name="clean" depends="clean-docs" />
-
-    <!-- Ensure that the .php files are parseable. -->
-    <target name="lint">
-        <apply executable="php" failonerror="true">
-            <arg value="-l" />
-            <fileset dir=".">
-                <include name="**/*.php" />
-                <exclude name="lib/geshi/**" />
-                <exclude name="lib/klein/**" />
-                <exclude name="lib/markdown/**" />
-                <exclude name="lib/mustache/**" />
-                <exclude name="lib/raven-php/**" />
-            </fileset>
-        </apply>
-    </target>
 
     <!-- Run the PHPUnit tests. -->
     <target name="phpunit">
