@@ -59,8 +59,8 @@ extends PageableModelTestCase
      *             class.
      */
     public function maxPageNumber() {
-        return count((new TestPageableModel())->all()) / 
-                PageableModel::DEFAULT_PER_PAGE;
+        $model = new TestPageableModel();
+        return count($model->all()) / PageableModel::DEFAULT_PER_PAGE;
     }
 }
 
