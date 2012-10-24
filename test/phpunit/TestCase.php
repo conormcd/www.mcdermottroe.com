@@ -57,7 +57,7 @@ extends PHPUnit_Framework_TestCase
      * @param array    $args    The arguments to pass to the function.
      * @param string   $message The message to show if the assertion fails.
      *
-     * @return void
+     * @return exception        The exception which was thrown.
      */
     protected function assertException($func, $args = null, $message = null) {
         $this->assertTrue(
@@ -68,21 +68,32 @@ extends PHPUnit_Framework_TestCase
             $args = array();
         }
         if ($message === null) {
+            $function_name = '<anonymous function>';
+            if (is_array($func)) {
+                if (is_object($func[0])) {
+                    $function_name = get_class($func[0]) . '->';
+                } else {
+                    $function_name = "{$func[0]}::";
+                }
+                $function_name .= $func[1];
+            } else if (is_string($func)) {
+                $function_name = $func;
+            }
             $message = sprintf(
-                "Expected %s->%s(%s) to throw an exception but it didn't.",
-                get_class($func[0]),
-                $func[1],
+                'Expected %s(%s) to throw an exception but it did not.',
+                $function_name,
                 $args ? var_export($args, true) : ''
             );
         }
 
-        $exception_thrown = false;
+        $exception = null;
         try {
             call_user_func_array($func, $args);
         } catch (Exception $e) {
-            $exception_thrown = true;
+            $exception = $e;
         }
-        $this->assertTrue($exception_thrown, $message);
+        $this->assertNotNull($exception, $message);
+        return $exception;
     }
 
     /**
