@@ -8,3 +8,4 @@ dependencies:
     - pecl install xdebug
     - pear channel-discover pear.phpmd.org
     - pear install --alldeps phpmd/PHP_PMD
+    - php -r 'phpinfo();'
