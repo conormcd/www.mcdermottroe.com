@@ -74,6 +74,9 @@ extends TestCase
             }
         );
         $headers = _Request::$_headers->headers;
+        if (!$headers) {
+            $headers = array();
+        }
 
         $this->assertNotNull($res['output']);
         $this->assertArrayHasKey('Content-Length', $headers);
