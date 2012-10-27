@@ -67,16 +67,22 @@ extends Model
      *               parameters.
      */
     public function page() {
-        $all = $this->all();
-        if ($this->page * $this->per_page > count($all)) {
-            throw new Exception("Bad page number.", 404);
+        if ($this->page > $this->numPages()) {
+            throw new Exception(
+                sprintf(
+                    "Bad page number (%d of %d)",
+                    $this->page,
+                    $this->numPages()
+                ),
+                404
+            );
         }
         if ($this->per_page > 0) {
             $min = ($this->page - 1) * $this->per_page;
             $min = max(0, $min);
-            return array_slice($all, $min, $this->per_page);
+            return array_slice($this->all(), $min, $this->per_page);
         } else {
-            return $all;
+            return $this->all();
         }
     }
 
@@ -88,7 +94,7 @@ extends Model
      */
     public function next() {
         $link = "";
-        if (count($this->all()) > ($this->page * $this->per_page)) {
+        if ($this->page < $this->numPages()) {
             $link = $this->link() . '?page=' . ($this->page + 1);
             if ($this->per_page !== self::DEFAULT_PER_PAGE) {
                 $link .= "&per_page={$this->per_page}";
@@ -119,12 +125,25 @@ extends Model
     }
 
     /**
+     * The number of pages of data availble.
+     *
+     * @return The highest valid page number.
+     */
+    public function numPages() {
+        if ($this->per_page > 0) {
+            return ceil(count($this->all()) / $this->per_page);
+        } else {
+            return 1;
+        }
+    }
+
+    /**
      * Fetch all the data for the items requested. This data will then be paged
      * using {@link #page}.
      *
      * @return array The data to page through.
      */
-    protected abstract function all();
+    public abstract function all();
 
     /**
      * Construct the base of the link to a page of data, but without the paging

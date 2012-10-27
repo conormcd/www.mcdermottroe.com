@@ -47,15 +47,6 @@ extends TestCase
     protected abstract function createTestObject($page = null, $per_page = null);
 
     /**
-     * The highest valid page number for the test data.
-     *
-     * @return int The highest valid page number for the test data or zero or a 
-     *             negative number if the number can't be known at test 
-     *             authoring time.
-     */
-    protected abstract function maxPageNumber();
-
-    /**
      * Check that the default page is the first page of results.
      *
      * @return void
@@ -96,15 +87,14 @@ extends TestCase
      * @return void
      */
     public function testLastPage() {
-        if ($this->maxPageNumber() > 0) {
-            $page = $this->createTestObject($this->maxPageNumber());
-            $this->assertEquals($this->maxPageNumber(), $page->page);
-            $this->assertEquals(PageableModel::DEFAULT_PER_PAGE, $page->per_page);
-            $this->assertLessThanOrEqual(
-                PageableModel::DEFAULT_PER_PAGE,
-                count($page->page())
-            );
-        }
+        $page = $this->createTestObject();
+        $page = $this->createTestObject($page->numPages());
+        $this->assertEquals($page->numPages(), $page->page);
+        $this->assertEquals(PageableModel::DEFAULT_PER_PAGE, $page->per_page);
+        $this->assertLessThanOrEqual(
+            PageableModel::DEFAULT_PER_PAGE,
+            count($page->page())
+        );
     }
 
     /**
@@ -113,10 +103,9 @@ extends TestCase
      * @return void
      */
     public function testNextIsEmptyForLastPage() {
-        if ($this->maxPageNumber() > 0) {
-            $page = $this->createTestObject($this->maxPageNumber());
-            $this->assertEmpty($page->next());
-        }
+        $page = $this->createTestObject();
+        $page = $this->createTestObject($page->numPages());
+        $this->assertEmpty($page->next());
     }
 
     /**
@@ -125,10 +114,9 @@ extends TestCase
      * @return void
      */
     public function testPreviousIsNotEmptyForLastPage() {
-        if ($this->maxPageNumber() > 0) {
-            $page = $this->createTestObject($this->maxPageNumber());
-            $this->assertNotEmpty($page->previous());
-        }
+        $page = $this->createTestObject();
+        $page = $this->createTestObject($page->numPages());
+        $this->assertNotEmpty($page->previous());
     }
 
     /**
@@ -152,7 +140,7 @@ extends TestCase
         $page = $this->createTestObject(2, 3);
         $this->assertEquals(2, $page->page);
         $this->assertEquals(3, $page->per_page);
-        $this->assertEquals(array(3, 4, 5), $page->page());
+        $this->assertEquals(3, count($page->page()));
         $this->assertRegexp('/per_page=3/', $page->next());
         $this->assertRegexp('/per_page=3/', $page->previous());
     }
@@ -177,9 +165,10 @@ extends TestCase
      * @return void
      */
     public function testTooLargePageNumber() {
-        $page = $this->createTestObject($this->maxPageNumber() + 1);
+        $too_large = $this->createTestObject()->numPages() + 1;
         $exception = $this->assertException(
-            function() use ($page) {
+            function() use ($too_large) {
+                $page = $this->createTestObject($too_large);
                 $page->page();
             }
         );
