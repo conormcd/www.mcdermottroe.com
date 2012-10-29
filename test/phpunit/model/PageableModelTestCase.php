@@ -54,9 +54,9 @@ extends TestCase
     public function testDefaultPageIsFirstPage() {
         $page = $this->createTestObject();
         $this->assertEquals(1, $page->page);
-        $this->assertEquals(PageableModel::DEFAULT_PER_PAGE, $page->per_page);
+        $this->assertEquals($page->getDefaultPerPage(), $page->per_page);
         $this->assertLessThanOrEqual(
-            PageableModel::DEFAULT_PER_PAGE,
+            $page->getDefaultPerPage(),
             count($page->page())
         );
     }
@@ -90,9 +90,9 @@ extends TestCase
         $page = $this->createTestObject();
         $page = $this->createTestObject($page->numPages());
         $this->assertEquals($page->numPages(), $page->page);
-        $this->assertEquals(PageableModel::DEFAULT_PER_PAGE, $page->per_page);
+        $this->assertEquals($page->getDefaultPerPage(), $page->per_page);
         $this->assertLessThanOrEqual(
-            PageableModel::DEFAULT_PER_PAGE,
+            $page->getDefaultPerPage(),
             count($page->page())
         );
     }

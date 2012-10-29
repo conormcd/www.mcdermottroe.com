@@ -54,7 +54,7 @@ extends Model
      */
     protected function __construct($page = null, $per_page = null) {
         $this->page = $page ? intval($page) : 1;
-        $this->per_page = $per_page ? intval($per_page) : self::DEFAULT_PER_PAGE;
+        $this->per_page = $per_page ? intval($per_page) : $this->getDefaultPerPage();
         if ($this->page < 1) {
             throw new Exception("Bad page number.", 404);
         }
@@ -96,7 +96,7 @@ extends Model
         $link = "";
         if ($this->page < $this->numPages()) {
             $link = $this->link() . '?page=' . ($this->page + 1);
-            if ($this->per_page !== self::DEFAULT_PER_PAGE) {
+            if ($this->per_page !== $this->getDefaultPerPage()) {
                 $link .= "&per_page={$this->per_page}";
             }
         }
@@ -115,7 +115,7 @@ extends Model
             if ($this->page != 2) {
                 $link .= '?page=' . ($this->page - 1);
             }
-            if ($this->per_page !== self::DEFAULT_PER_PAGE) {
+            if ($this->per_page !== $this->getDefaultPerPage()) {
                 $link .= $link ? '&' : '?';
                 $link .= "per_page={$this->per_page}";
             }
@@ -135,6 +135,15 @@ extends Model
         } else {
             return 1;
         }
+    }
+
+    /**
+     * The default number of items per page for this model.
+     *
+     * @return int The default number of items per page for this model.
+     */
+    public function getDefaultPerPage() {
+        return self::DEFAULT_PER_PAGE;
     }
 
     /**
