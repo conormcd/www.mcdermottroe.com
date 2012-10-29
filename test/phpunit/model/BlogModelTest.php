@@ -35,7 +35,7 @@ require_once dirname(dirname(dirname(__DIR__))) . '/model/BlogModel.php';
 require_once dirname(dirname(dirname(__DIR__))) . '/model/BlogEntryModel.php';
 
 /**
- * Tests for the PageableModel abstract class.
+ * Tests for the BlogModel class.
  *
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
@@ -43,7 +43,7 @@ class BlogModelTest
 extends PageableModelTestCase
 {
     /**
-     * Proxy for the TestPageableModel constructor.
+     * Proxy for the BlogModel constructor.
      *
      * @param int $page     The page number to fetch.
      * @param int $per_page The size of the page.
@@ -52,7 +52,7 @@ extends PageableModelTestCase
      * @param int $day      The day value for the BlogModel constructor.
      * @param int $slug     The slug value for the BlogModel constructor.
      *
-     * @return object An instance of TestPageableModel.
+     * @return object An instance of BlogModel.
      */
     public function createTestObject(
         $page = null,
@@ -92,7 +92,7 @@ extends PageableModelTestCase
     }
 
     /**
-     * Test the BlogModel when the year, month and day are specified but the 
+     * Test the BlogModel when the year, month and day are specified but the
      * slug is left null.
      *
      * @return void
@@ -120,7 +120,7 @@ extends PageableModelTestCase
     }
 
     /**
-     * Ensure that the results of dateISO8601 calls return dates in the correct 
+     * Ensure that the results of dateISO8601 calls return dates in the correct
      * pattern.
      *
      * @return void
@@ -134,7 +134,7 @@ extends PageableModelTestCase
     }
 
     /**
-     * Ensure that the results of dateRSS calls return dates in the correct 
+     * Ensure that the results of dateRSS calls return dates in the correct
      * pattern.
      *
      * @return void
@@ -148,7 +148,7 @@ extends PageableModelTestCase
     }
 
     /**
-     * Make sure that links from atomLink include /feed/atom/ at the end of 
+     * Make sure that links from atomLink include /feed/atom/ at the end of
      * their return values.
      *
      * @return void
@@ -159,7 +159,7 @@ extends PageableModelTestCase
     }
 
     /**
-     * Make sure that links from rssLink include /feed/rss/ at the end of their 
+     * Make sure that links from rssLink include /feed/rss/ at the end of their
      * return values.
      *
      * @return void
