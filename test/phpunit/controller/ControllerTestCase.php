@@ -158,20 +158,27 @@ extends TestCase
     /**
      * A wrapper for instantiating controllers in a useful form for testing.
      *
-     * @param string $class The class of the controller to create.
-     * @param object $req   The klein _Request object.
-     * @param object $res   The klein _Response object.
+     * @param mixed  $controller Either a string specifying the controller class to
+     *                           create or a callable which takes two objects -
+     *                           the request and response objects - and returns
+     *                           an instance of the controller under test.
+     * @param object $req        The klein _Request object.
+     * @param object $res        The klein _Response object.
      *
      * @return object A controller instance.
      */
-    protected function create($class, $req = null, $res = null) {
+    protected function create($controller, $req = null, $res = null) {
         $request = $req !== null ? $req : new _Request();
         $response = $res !== null ? $res : new _Response();
         if (!$request->action) {
             $request->action = 'error';
         }
         _Request::$_headers = _Response::$_headers = new HeaderCatcher();
-        return new $class($request, $response);
+        if (is_string($controller)) {
+            return new $controller($request, $response);
+        } else {
+            return call_user_func_array($controller, array($request, $response));
+        }
     }
 
     /**
