@@ -1,0 +1,603 @@
+<!-- DTD for CVML as designed by Conor McDermottroe -->
+
+<!-- 	
+		First, declare all the elements as entities to allow us to use
+		namespaces, even though DTDs aren't namespace aware.
+-->
+
+<!-- The namespace entities -->
+<!ENTITY % namespace-prefix "cv">
+<!ENTITY % rdf-prefix "rdf">
+<!ENTITY % dc-prefix "dc">
+<!ENTITY % colon ":">
+
+<!-- xmlns entities -->
+<!ENTITY % xmlns-rdf "xmlns%colon;%rdf-prefix;">
+<!ENTITY % xmlns-dc "xmlns%colon;%dc-prefix;">
+
+<!ENTITY % l-paren "&#x28;">
+<!ENTITY % pipe "&#x7c;">
+<!ENTITY % r-paren "&#x29;">
+<!ENTITY % star "&#x2a;">
+
+<!-- The elements, as entities, in alphabetical order -->
+<!-- For information on each element, see the ELEMENT declarations below -->
+<!ENTITY % cv-achievement "%namespace-prefix;%colon;achievement">
+<!ENTITY % cv-achievements "%namespace-prefix;%colon;achievements">
+<!ENTITY % cv-address "%namespace-prefix;%colon;address">
+<!ENTITY % cv-areacode "%namespace-prefix;%colon;areacode">
+<!ENTITY % cv-building "%namespace-prefix;%colon;building">
+<!ENTITY % cv-contactdetails "%namespace-prefix;%colon;contactdetails">
+<!ENTITY % cv-content "%namespace-prefix;%colon;content">
+<!ENTITY % cv-country "%namespace-prefix;%colon;country">
+<!ENTITY % cv-countrycode "%namespace-prefix;%colon;countrycode">
+<!ENTITY % cv-coursetitle "%namespace-prefix;%colon;coursetitle">
+<!ENTITY % cv-courseyear "%namespace-prefix;%colon;courseyear">
+<!ENTITY % cv-date "%namespace-prefix;%colon;date">
+<!ENTITY % cv-education "%namespace-prefix;%colon;education">
+<!ENTITY % cv-educationalinstitution "%namespace-prefix;%colon;educationalinstitution">
+<!ENTITY % cv-email "%namespace-prefix;%colon;email">
+<!ENTITY % cv-employer "%namespace-prefix;%colon;employer">
+<!ENTITY % cv-job "%namespace-prefix;%colon;job">
+<!ENTITY % cv-jobinfo "%namespace-prefix;%colon;jobinfo">
+<!ENTITY % cv-label "%namespace-prefix;%colon;label">
+<!ENTITY % cv-link "%namespace-prefix;%colon;link">
+<!ENTITY % cv-name "%namespace-prefix;%colon;name">
+<!ENTITY % cv-otherskills "%namespace-prefix;%colon;otherskills">
+<!ENTITY % cv-personal "%namespace-prefix;%colon;personal">
+<!ENTITY % cv-phone "%namespace-prefix;%colon;phone">
+<!ENTITY % cv-phonenumber "%namespace-prefix;%colon;phonenumber">
+<!ENTITY % cv-position "%namespace-prefix;%colon;position">
+<!ENTITY % cv-postcode "%namespace-prefix;%colon;postcode">
+<!ENTITY % cv-qualification "%namespace-prefix;%colon;qualification">
+<!ENTITY % cv-qualificationnote "%namespace-prefix;%colon;qualificationnote">
+<!ENTITY % cv-qualificationnotes "%namespace-prefix;%colon;qualificationnotes">
+<!ENTITY % cv-qualifications "%namespace-prefix;%colon;qualifications">
+<!ENTITY % cv-referee "%namespace-prefix;%colon;referee">
+<!ENTITY % cv-references "%namespace-prefix;%colon;references">
+<!ENTITY % cv-referencesinfo "%namespace-prefix;%colon;referencesinfo">
+<!ENTITY % cv-root "%namespace-prefix;%colon;root">
+<!ENTITY % cv-skill "%namespace-prefix;%colon;skill">
+<!ENTITY % cv-street "%namespace-prefix;%colon;street">
+<!ENTITY % cv-subject "%namespace-prefix;%colon;subject">
+<!ENTITY % cv-subjects "%namespace-prefix;%colon;subjects">
+<!ENTITY % cv-town "%namespace-prefix;%colon;town">
+<!ENTITY % cv-work "%namespace-prefix;%colon;work">
+<!ENTITY % cv-year "%namespace-prefix;%colon;year">
+
+<!-- Entities for Dublin Core and RDF -->
+<!ENTITY % rdf-metadata "%rdf-prefix;%colon;RDF">
+<!ENTITY % rdf-description "%rdf-prefix;%colon;Description">
+<!ENTITY % dc-title "%dc-prefix;%colon;Title">
+<!ENTITY % dc-creator "%dc-prefix;%colon;Creator">
+<!ENTITY % dc-subject "%dc-prefix;%colon;Subject">
+<!ENTITY % dc-description "%dc-prefix;%colon;Description">
+<!ENTITY % dc-publisher "%dc-prefix;%colon;Publisher">
+<!ENTITY % dc-contributor "%dc-prefix;%colon;Contributor">
+<!ENTITY % dc-date "%dc-prefix;%colon;Date">
+<!ENTITY % dc-type "%dc-prefix;%colon;Type">
+<!ENTITY % dc-format "%dc-prefix;%colon;Format">
+<!ENTITY % dc-identifier "%dc-prefix;%colon;Identifier">
+<!ENTITY % dc-source "%dc-prefix;%colon;Source">
+<!ENTITY % dc-language "%dc-prefix;%colon;Language">
+<!ENTITY % dc-relation "%dc-prefix;%colon;Relation">
+<!ENTITY % dc-coverage "%dc-prefix;%colon;Coverage">
+<!ENTITY % dc-rights "%dc-prefix;%colon;Rights">
+
+<!-- An entity to allow us to add default attributes to everything -->
+<!ENTITY % cv-default-attr	"lang CDATA #IMPLIED
+							 xmlns%colon;%namespace-prefix; CDATA #IMPLIED">
+
+<!-- Entities to provide descriptive names for the contents of elements -->
+<!ENTITY % PlainText	"(#PCDATA|%cv-link;)*">
+	<!-- .* -->
+<!ENTITY % Digits		"#PCDATA">
+	<!-- [0-9]* -->
+<!ENTITY % EmailAddress	"#PCDATA">
+	<!-- [a-zA-Z0-9-\.]+@([a-zA-Z0-9]+\.)*[a-zA-Z0-9]+ -->
+
+<!--
+		Now we actually declare the elements and their attributes in terms of
+		the entities as set out above.
+
+		The elements are presented in alphabetical order.
+-->
+
+<!-- achievement												-->
+<!-- A list item in the list of achievements and interests.		-->
+<!ELEMENT	%cv-achievement;
+				%PlainText;
+>
+<!ATTLIST	%cv-achievement;
+			%cv-default-attr;
+>
+
+<!-- achievements												-->
+<!-- A list of achievements and interests						-->
+<!ELEMENT	%cv-achievements; 
+			(
+				(%cv-achievement;)+
+			)
+>
+<!ATTLIST	%cv-achievements;
+			%cv-default-attr;
+>
+
+<!-- address													-->
+<!-- A postal address 											-->
+<!ELEMENT	%cv-address; 
+			(	
+				(%cv-building;)?,
+				(%cv-street;)?,
+				(%cv-town;)?,
+				(%cv-postcode;)?,
+				(%cv-country;)?
+			)
+>
+<!ATTLIST	%cv-address;
+			%cv-default-attr;
+>
+
+<!-- areacode 													-->
+<!-- The area code portion of a telephone number				-->
+<!ELEMENT	%cv-areacode;
+				(%Digits;)
+>
+<!ATTLIST	%cv-areacode;
+			%cv-default-attr;
+>
+
+<!-- building													-->
+<!-- A reference to a building in an address					-->
+<!ELEMENT	%cv-building;
+				%PlainText;
+>
+<!ATTLIST	%cv-building;
+			%cv-default-attr;
+>
+
+<!-- contactdetails												-->
+<!-- Contact details for a person or organisation				-->
+<!ELEMENT	%cv-contactdetails;
+			(
+				(%cv-name;),
+				(%cv-address;),
+				(%cv-phone;)*,
+				(%cv-email;)*
+			)
+>
+<!ATTLIST	%cv-contactdetails;
+			%cv-default-attr;
+>
+
+<!-- content													-->
+<!-- The content portion of a qualificationnote					-->
+<!ELEMENT	%cv-content;
+				%PlainText;
+>
+<!ATTLIST	%cv-content;
+			%cv-default-attr;
+>
+
+<!-- country													-->
+<!-- The country portion of an address							-->
+<!ELEMENT	%cv-country;
+				%PlainText;
+>
+<!ATTLIST	%cv-country;
+			%cv-default-attr;
+>
+
+<!-- countrycode												-->
+<!-- The country code portion of a telephone number				-->
+<!ELEMENT	%cv-countrycode;
+				(%Digits;)
+>
+<!ATTLIST	%cv-countrycode;
+			%cv-default-attr;
+>
+
+<!-- coursetitle 												-->
+<!-- The title of an educational course							-->
+<!ELEMENT	%cv-coursetitle; 
+				%PlainText;
+>
+<!ATTLIST	%cv-coursetitle;
+			%cv-default-attr;
+>
+
+<!-- courseyear 												-->
+<!-- A description of a particular year of a course.			-->
+<!ELEMENT	%cv-courseyear;
+			(
+				(%cv-year;),
+				(%cv-subject;)+
+			)
+>
+<!ATTLIST	%cv-courseyear;
+			%cv-default-attr;
+>
+
+<!-- date 														-->
+<!-- A date or range of dates in any particular form			-->
+<!ELEMENT	%cv-date;
+				%PlainText;
+>
+<!ATTLIST	%cv-date;
+			%cv-default-attr;
+>
+
+<!-- education 													-->
+<!-- The education and qualifications section of the CV			-->
+<!ELEMENT	%cv-education;
+			(
+				(%cv-qualifications;),
+				(%cv-otherskills;)?
+			)
+>
+<!ATTLIST	%cv-education;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-educationalinstitution;
+			(
+				(%cv-name;),
+				(%cv-address;),
+				(%cv-phone;)*,
+				(%cv-email;)*
+			)
+>
+<!ATTLIST	%cv-educationalinstitution;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-email;
+				(%EmailAddress;)
+>
+<!ATTLIST	%cv-email;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-employer;
+			(
+				(%cv-name;),
+				(%cv-address;)?
+			)
+>
+<!ATTLIST	%cv-employer;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-job;
+			(
+				(%cv-date;),
+				(%cv-position;)?,
+				(%cv-employer;)?,
+				(%cv-jobinfo;)+
+			)
+>
+<!ATTLIST	%cv-job;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-jobinfo;
+				%PlainText;
+>
+<!ATTLIST	%cv-jobinfo;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-label;
+				%PlainText;
+>
+<!ATTLIST	%cv-label;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-link;
+				%PlainText;
+>
+<!ATTLIST	%cv-link;
+			href	CDATA	#REQUIRED
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-name;
+				%PlainText;
+>
+<!ATTLIST	%cv-name;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-otherskills;
+			(
+				(%cv-skill;)+
+			)
+>
+<!ATTLIST	%cv-otherskills;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-personal;
+			(
+				(%cv-name;),
+				(%cv-address;),
+				(%cv-phone;)+,
+				(%cv-email;)*
+			)
+>
+<!ATTLIST	%cv-personal;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-phone;
+			(
+				(%cv-countrycode;),
+				(%cv-areacode;),
+				(%cv-phonenumber;)
+			)
+>
+<!ATTLIST	%cv-phone;
+			type (mobile|landline) "landline"
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-phonenumber;
+				(%Digits;)
+>
+<!ATTLIST	%cv-phonenumber;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-position;
+				%PlainText;
+>
+<!ATTLIST	%cv-position;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-postcode;
+				%PlainText;
+>
+<!ATTLIST	%cv-postcode;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-qualification;
+			(
+				(%cv-coursetitle;),
+				(%cv-educationalinstitution;),
+				(%cv-subjects;)?,
+				(%cv-qualificationnotes;)?
+			)
+>
+<!ATTLIST	%cv-qualification;
+			%cv-default-attr;
+>
+
+<!ELEMENT	%cv-qualificationnote;
+			(
+				(%cv-label;),
+				(%cv-content;)
+			)
+>
+<!ATTLIST	%cv-qualificationnote;
+			%cv-default-attr;
+>
+
+<!ELEMENT	%cv-qualificationnotes;
+			(
+				(%cv-qualificationnote;)+
+			)
+>
+<!ATTLIST	%cv-qualificationnotes;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-qualifications;
+			(
+				(%cv-qualification;)+
+			)
+>
+<!ATTLIST	%cv-qualifications;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-referee;
+			(
+				(%cv-name;),
+				(%cv-position;)?,
+				(%cv-address;)?,
+				(%cv-phone;)*,
+				(%cv-email;)*
+			)
+>
+<!ATTLIST	%cv-referee;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-references;
+			(
+				(%cv-referee;)*,
+				(%cv-referencesinfo;)*
+			)
+>
+<!ATTLIST	%cv-references;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-referencesinfo;
+				%PlainText;
+>
+<!ATTLIST	%cv-referencesinfo;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-root;
+			(
+				(%rdf-metadata;)?,
+				(%cv-personal;)?,
+				(%cv-education;)?,
+				(%cv-work;)?,
+				(%cv-achievements;)?,
+				(%cv-references;)?
+			)
+>
+<!ATTLIST	%cv-root;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-skill;
+				%PlainText;
+>
+<!ATTLIST	%cv-skill;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-street;
+				%PlainText;
+>
+<!ATTLIST	%cv-street;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-subject;
+				%PlainText;
+>
+<!ATTLIST	%cv-subject;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-subjects;
+				(
+					(%cv-courseyear;)+ | (%cv-subject;)+
+				)
+>
+<!ATTLIST	%cv-subjects;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-town;
+				%PlainText;
+>
+<!ATTLIST	%cv-town;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-work;
+			(
+				(%cv-job;)+
+			)
+>
+<!ATTLIST	%cv-work;
+			%cv-default-attr;
+>
+
+<!-- -->
+<!-- -->
+<!ELEMENT	%cv-year;
+				%PlainText;
+>
+<!ATTLIST	%cv-year;
+			%cv-default-attr;
+>
+
+<!-- Dublin Core in RDF form -->
+<!ELEMENT	%rdf-metadata;
+				(%rdf-description;)
+>
+<!ATTLIST	%rdf-metadata;
+			%xmlns-rdf;		CDATA	#IMPLIED
+			%xmlns-dc;		CDATA	#IMPLIED
+>
+
+<!ELEMENT	%rdf-description;
+			(
+				(%dc-title;)?,
+				(%dc-creator;)?,
+				(%dc-subject;)?,
+				(%dc-description;)?,
+				(%dc-publisher;)?,
+				(%dc-contributor;)?,
+				(%dc-date;)?,
+				(%dc-type;)?,
+				(%dc-format;)?,
+				(%dc-identifier;)?,
+				(%dc-source;)?,
+				(%dc-language;)?,
+				(%dc-relation;)?,
+				(%dc-coverage;)?,
+				(%dc-rights;)?
+			)
+>
+<!ATTLIST	%rdf-description;
+			about	CDATA	#IMPLIED
+>
+
+<!ELEMENT	%dc-title;	%PlainText;>
+<!ELEMENT   %dc-creator;  %PlainText;>
+<!ELEMENT   %dc-subject;  %PlainText;>
+<!ELEMENT   %dc-description;  %PlainText;>
+<!ELEMENT   %dc-publisher;  %PlainText;>
+<!ELEMENT   %dc-contributor;  %PlainText;>
+<!ELEMENT   %dc-date;  %PlainText;>
+<!ELEMENT   %dc-type;  %PlainText;>
+<!ELEMENT   %dc-format;  %PlainText;>
+<!ELEMENT   %dc-identifier;  %PlainText;>
+<!ELEMENT   %dc-source;  %PlainText;>
+<!ELEMENT   %dc-language;  %PlainText;>
+<!ELEMENT   %dc-relation;  %PlainText;>
+<!ELEMENT   %dc-coverage;  %PlainText;>
+<!ELEMENT   %dc-rights;  %PlainText;>
