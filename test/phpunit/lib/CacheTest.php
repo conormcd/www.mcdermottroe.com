@@ -26,9 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-require_once dirname(__DIR__) . '/TestCase.php';
-
-require_once dirname(dirname(dirname(__DIR__))) . '/lib/Cache.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/lib/autoloader.php';
 
 /**
  * Tests for Cache.

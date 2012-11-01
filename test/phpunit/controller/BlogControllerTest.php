@@ -26,18 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-require_once __DIR__ . '/ControllerTestCase.php';
-
-require_once dirname(dirname(dirname(__DIR__))) . '/controller/Controller.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/controller/BlogController.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/lib/AmazonAffiliate.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/lib/Cache.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/lib/SyntaxHighlighter.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/model/Model.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/model/PageableModel.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/model/BlogModel.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/model/BlogEntryModel.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/lib/Mustache.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/lib/autoloader.php';
 
 /**
  * Test the BlogController class.

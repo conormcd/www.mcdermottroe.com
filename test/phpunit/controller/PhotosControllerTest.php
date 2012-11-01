@@ -26,15 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-require_once __DIR__ . '/ControllerTestCase.php';
-
-require_once dirname(dirname(dirname(__DIR__))) . '/controller/Controller.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/controller/PhotosController.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/lib/Cache.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/lib/Picasa.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/model/Model.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/model/PageableModel.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/model/PhotosModel.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/lib/autoloader.php';
 
 /**
  * Test the PhotosController class.

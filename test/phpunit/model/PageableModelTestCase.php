@@ -26,7 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-require_once dirname(__DIR__) . '/TestCase.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/lib/autoloader.php';
 
 /**
  * A common set of tests for classes which inherit from PageableModel.

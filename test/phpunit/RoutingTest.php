@@ -26,10 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-require_once __DIR__ . '/HeaderCatcher.php';
-require_once __DIR__ . '/TestCase.php';
-
-require dirname(dirname(__DIR__)) . '/lib/autoloader.php';
+require_once dirname(dirname(__DIR__)) . '/lib/autoloader.php';
 
 /**
  * Test the routing.
@@ -94,10 +91,7 @@ extends TestCase
         $__routes = null;
         $__namespace = null;
         
-        $root = dirname(dirname(__DIR__));
-        include "$root/config/routes.php";
-        
-        autoloader($root);
+        include dirname(dirname(__DIR__)) . '/config/routes.php';
         
         _Request::$_headers = _Response::$_headers = new HeaderCatcher();
         dispatch($uri, $method, null, true);

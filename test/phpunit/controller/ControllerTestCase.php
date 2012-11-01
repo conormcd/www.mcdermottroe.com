@@ -26,11 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-require_once dirname(__DIR__) . '/HeaderCatcher.php';
-require_once dirname(__DIR__) . '/TestCase.php';
-
-require_once dirname(dirname(dirname(__DIR__))) . '/lib/Mustache.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/lib/klein/klein.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/lib/autoloader.php';
 
 /**
  * Tests for all the controllers.

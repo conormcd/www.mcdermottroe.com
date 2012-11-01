@@ -26,11 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-require_once __DIR__ . '/PageableModelTestCase.php';
-
-require_once dirname(dirname(dirname(__DIR__))) . '/lib/Cache.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/model/Model.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/model/PageableModel.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/lib/autoloader.php';
 
 /**
  * Tests for the PageableModel abstract class.

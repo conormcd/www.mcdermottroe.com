@@ -26,10 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-require_once __DIR__ . '/ControllerTestCase.php';
-
-require_once dirname(dirname(dirname(__DIR__))) . '/controller/Controller.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/lib/Mustache.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/lib/autoloader.php';
 
 /**
  * Test the Controller class.
