@@ -29,11 +29,11 @@
 require_once dirname(dirname(dirname(__DIR__))) . '/lib/autoloader.php';
 
 /**
- * Tests for ShootingClubsModel.
+ * Tests for ShootingClubModel.
  *
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
-class ShootingClubsModelTest
+class ShootingClubModelTest
 extends TestCase
 {
     /**
@@ -44,7 +44,7 @@ extends TestCase
     public function testMissingClub() {
         $exception = $this->assertException(
             function () {
-                new ShootingClubsModel('Not a club');
+                new ShootingClubModel('Not a club');
             }
         );
         $this->assertEquals(404, $exception->getCode());
@@ -57,7 +57,7 @@ extends TestCase
      */
     public function testRealClub() {
         $test_clubs = array();
-        $dir = dirname(dirname(dirname(__DIR__))) . ShootingClubsModel::DATA_DIR;
+        $dir = dirname(dirname(dirname(__DIR__))) . ShootingClubModel::DATA_DIR;
         if (($dirhandle = opendir($dir)) !== false) {
             while (($file = readdir($dirhandle)) !== false) {
                 if (is_file("$dir/$file")) {
@@ -69,7 +69,7 @@ extends TestCase
         }
 
         foreach ($test_clubs as $test_club) {
-            $club = new ShootingClubsModel($test_club);
+            $club = new ShootingClubModel($test_club);
             $this->assertEquals($test_club, $club->name);
             $this->assertGreaterThan(52, $club->latitude);
             $this->assertLessThan(55, $club->latitude);
@@ -92,7 +92,7 @@ extends TestCase
     }
 
     /**
-     * Attempt to assign data to a non-existent property of ShootingClubsModel.
+     * Attempt to assign data to a non-existent property of ShootingClubModel.
      *
      * @return void
      */
@@ -203,16 +203,16 @@ extends TestCase
     public function testDMSBasic() {
         $this->assertEquals(
             array(53, 0, 0),
-            ShootingClubsModel::decimalToDegreesMinutesSeconds(53)
+            ShootingClubModel::decimalToDegreesMinutesSeconds(53)
         );
         $this->assertEquals(
             array(-7, 0, 0),
-            ShootingClubsModel::decimalToDegreesMinutesSeconds(-7)
+            ShootingClubModel::decimalToDegreesMinutesSeconds(-7)
         );
     }
 
     /**
-     * Test creating a ShootingClubsModel from bad data.
+     * Test creating a ShootingClubModel from bad data.
      *
      * @param mixed $data Either a JSON string or an object to be converted
      *                    into JSON.
@@ -223,7 +223,7 @@ extends TestCase
         list($data_dir, $name) = $this->fakeClub($data);
         return $this->assertException(
             function () use ($name, $data_dir) {
-                new ShootingClubsModel($name, $data_dir);
+                new ShootingClubModel($name, $data_dir);
             }
         );
     }

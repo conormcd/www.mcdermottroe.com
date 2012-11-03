@@ -27,11 +27,11 @@
  */
 
 /**
- * Wrap one or more shooting clubs.
+ * Wrap a shooting club.
  *
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
-class ShootingClubsModel
+class ShootingClubModel
 extends Model
 {
     const DATA_DIR = '/data/shooting/clubs';
