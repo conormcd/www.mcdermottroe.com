@@ -48,7 +48,7 @@ GET /blog/feed/
 GET /blog/feed/atom/
 GET /blog/feed/rss/
 GET /boards/
-GET /boards/6th.pistol.png
+GET /boards/6th.pistol.png 404
 GET /boards/boards_responsiveness_average-day.png
 GET /boards/boards_text.png
 GET /boards/development/
