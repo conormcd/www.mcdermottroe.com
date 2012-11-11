@@ -26,6 +26,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+if (!function_exists('json_last_error_msg')) {
+    /**
+     * Implement json_last_error_msg in versions of PHP which don't include it.
+     *
+     * @return string A message corresponding to the last error which was 
+     *                encountered while encoding/decoding JSON.
+     */
+    // @codingStandardsIgnoreStart
+    function json_last_error_msg() {
+        $error = json_last_error();
+        foreach (get_defined_constants() as $name => $value) {
+            if (preg_match('/^JSON_ERROR_/', $name)) {
+                if ($error == $value) {
+                    $error = $name;
+                    break;
+                }
+            }
+        }
+        return "JSON error: $error";
+    }
+    // @codingStandardsIgnoreEnd
+}
+
 /**
  * A thin wrapper around the json_encode and json_decode functions in order to
  * provide slightly better error handling.
@@ -46,14 +69,16 @@ class JSON {
         $string = json_encode($object);
         restore_error_handler();
         if ($string === false) {
-            self::errorHandler();
+            return self::errorHandler();
         }
 
         // The JSON spec says that the top level must be an array or object but
         // the PHP encoder is a bit more lenient. We reject any out-of-spec
         // values here.
         if (preg_match('/^[^{\[]/', $string)) {
-            self::errorHandler("Bad input for encode, not an object or array");
+            return self::errorHandler(
+                "Bad input for encode, not an object or array"
+            );
         }
 
         // I prefer to default to an empty object in the ambiguous case.
@@ -77,32 +102,11 @@ class JSON {
         if ($object === null) {
             $err = json_last_error();
             if ($err !== JSON_ERROR_NONE) {
-                self::errorHandler();
+                return self::errorHandler();
             }
         }
 
         return $object;
-    }
-
-    /**
-     * Create an error message to use in an exception.
-     *
-     * @return string An error message based on json_last_error.
-     */
-    private static function errorMessage() {
-        if (function_exists('json_last_error_msg')) {
-            return json_last_error_msg();
-        } else {
-            $error = json_last_error();
-            foreach (get_defined_constants() as $name => $value) {
-                if (preg_match('/^JSON_ERROR_/', $name)) {
-                    if ($error == $value) {
-                        return $name;
-                    }
-                }
-            }
-            return "Unknown error value: $error";
-        }
     }
 
     /**
@@ -115,7 +119,7 @@ class JSON {
      */
     private static function errorHandler($errno = null, $errstr = null) {
         if ($errno === null && $errstr === null) {
-            $message = self::errorMessage();
+            $message = json_last_error_msg();
         } else if ($errstr === null) {
             $message = $errno;
         } else {
