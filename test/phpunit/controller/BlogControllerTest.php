@@ -27,6 +27,7 @@
  */
 
 require_once dirname(dirname(dirname(__DIR__))) . '/lib/autoloader.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/lib/klein/klein.php';
 
 /**
  * Test the BlogController class.
