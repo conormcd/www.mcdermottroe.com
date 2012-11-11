@@ -34,8 +34,6 @@
 class ShootingClubModel
 extends Model
 {
-    const DATA_DIR = '/data/shooting/clubs';
-
     /** The name of the club. */
     public $name;
 
@@ -61,7 +59,7 @@ extends Model
     public function __construct($name, $data_dir = null) {
         $this->name = $name;
         if ($data_dir === null) {
-            $data_dir = dirname(__DIR__) . self::DATA_DIR;
+            $data_dir = ShootingClubsModel::dataDir();
         }
 
         $this->initFromJSON($name, $data_dir);

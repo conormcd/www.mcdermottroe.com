@@ -57,7 +57,8 @@ extends TestCase
      */
     public function testRealClub() {
         $test_clubs = array();
-        $dir = dirname(dirname(dirname(__DIR__))) . ShootingClubModel::DATA_DIR;
+        $dir = ShootingClubsModel::dataDir();
+        $this->assertTrue(is_dir($dir));
         if (($dirhandle = opendir($dir)) !== false) {
             while (($file = readdir($dirhandle)) !== false) {
                 if (is_file("$dir/$file")) {
@@ -69,7 +70,7 @@ extends TestCase
         }
 
         foreach ($test_clubs as $test_club) {
-            $club = new ShootingClubModel($test_club);
+            $club = new ShootingClubModel($test_club, $dir);
             $this->assertEquals($test_club, $club->name);
             $this->assertGreaterThan(52, $club->latitude);
             $this->assertLessThan(55, $club->latitude);
@@ -220,12 +221,26 @@ extends TestCase
      * @return exception  The exception thrown.
      */
     private function doTestBadData($data) {
-        list($data_dir, $name) = $this->fakeClub($data);
+        list($data_dir, $name) = $this->createFakeClub($data);
         return $this->assertException(
             function () use ($name, $data_dir) {
                 new ShootingClubModel($name, $data_dir);
             }
         );
+    }
+
+    /**
+     * Get the details of a fake club to test with.
+     *
+     * @return array An associative array containing the directory containing
+     *               the backing file ('dir'), the name of the club ('name')
+     *               and the full path to the backing file ('file').
+     */
+    private function fakeClub() {
+        $club['dir'] = sys_get_temp_dir();
+        $club['name'] = 'Test Club';
+        $club['file'] = sprintf('%s/%s.json', $club['dir'], $club['name']);
+        return $club;
     }
 
     /**
@@ -238,19 +253,21 @@ extends TestCase
      *                    fake club data file. The second element is the name
      *                    of the fake club.
      */
-    private function fakeClub($data) {
+    private function createFakeClub($data) {
         if (!is_string($data)) {
             $data = JSON::encode($data);
         }
         $this->cleanFakeClub();
-        $file = sys_get_temp_dir() . '/Test Club.json';
-        $this->assertFalse(file_exists($file));
-        if (($filehandle = fopen($file, 'w')) !== false) {
+
+        $club = $this->fakeClub();
+        $this->assertFalse(file_exists($club['file']));
+        if (($filehandle = fopen($club['file'], 'w')) !== false) {
             fwrite($filehandle, $data);
             fclose($filehandle);
         }
-        $this->assertTrue(file_exists($file));
-        return array(sys_get_temp_dir(), 'Test Club');
+        $this->assertTrue(file_exists($club['file']));
+
+        return array($club['dir'], $club['name']);
     }
 
     /**
@@ -259,7 +276,10 @@ extends TestCase
      * @return void
      */
     private function cleanFakeClub() {
-        unlink(sys_get_temp_dir() . '/Test Club.json');
+        $club = $this->fakeClub();
+        if (file_exists($club['file'])) {
+            unlink($club['file']);
+        }
     }
 }
 
