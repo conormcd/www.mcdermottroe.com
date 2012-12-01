@@ -75,7 +75,7 @@ class Controller {
         }
         $this->request = $request;
         $this->response = $response;
-        $this->output_format = 'html';
+        $this->output_format = null;
 
         $this->action_name = '';
         foreach (explode('-', $this->action) as $part) {
@@ -154,12 +154,10 @@ class Controller {
      * @return string The name of the template to render.
      */
     protected function view() {
-        switch ($this->output_format) {
-            case 'atom':
-            case 'rss':
-                return $this->action . '_' . $this->output_format;
-            default:
-                return $this->action;
+        if ($this->output_format) {
+            return $this->action . '_' . $this->output_format;
+        } else {
+            return $this->action;
         }
     }
 }
