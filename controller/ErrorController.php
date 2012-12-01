@@ -50,6 +50,7 @@ extends Controller
                 $code = 500;
             }
             $this->response->code($code);
+            $this->model = $exception;
         } else {
             $this->response->code(404);
         }
