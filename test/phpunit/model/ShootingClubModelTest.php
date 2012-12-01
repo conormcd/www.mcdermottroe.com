@@ -77,8 +77,12 @@ extends TestCase
             $this->assertGreaterThan(-9, $club->longitude);
             $this->assertLessThan(-4, $club->longitude);
             $this->assertRegexp(
-                '/^(\d+&deg; \d+\' \d+\.\d+"[NSEW] *){2}$/',
-                $club->coordinates()
+                '/^\d+&deg; \d+\' \d+\.\d+"[NS]$/',
+                $club->latitudeDMS()
+            );
+            $this->assertRegexp(
+                '/^\d+&deg; \d+\' \d+\.\d+"[EW]$/',
+                $club->longitudeDMS()
             );
         }
     }

@@ -87,24 +87,28 @@ extends Model
     }
 
     /**
-     * Get the human readable form of the coordinates.
+     * The latitude of the club/range in degrees, minutes and seconds.
      *
-     * @return string A string like "53&deg; 1' 2\"N 6&deg; 3' 4\"W"
+     * @return string The latitude of the club/range in degrees, minutes and
+     *                seconds.
      */
-    public function coordinates() {
-        $lat = self::decimalToDegreesMinutesSeconds($this->latitude);
-        $long = self::decimalToDegreesMinutesSeconds($this->longitude);
+    public function latitudeDMS() {
+        return self::formatDMS(
+            self::decimalToDegreesMinutesSeconds($this->latitude),
+            array('S', 'N')
+        );
+    }
 
-        return sprintf(
-            "%d&deg; %d' %.2f\"%s %d&deg; %d' %.2f\"%s",
-            abs($lat[0]),
-            $lat[1],
-            $lat[2],
-            $lat[0] < 0 ? 'S' : 'N',
-            abs($long[0]),
-            $long[1],
-            $long[2],
-            $long[0] < 0 ? 'W' : 'E'
+    /**
+     * The longitude of the club/range in degrees, minutes and seconds.
+     *
+     * @return string The longitude of the club/range in degrees, minutes and
+     *                seconds.
+     */
+    public function longitudeDMS() {
+        return self::formatDMS(
+            self::decimalToDegreesMinutesSeconds($this->longitude),
+            array('W', 'E')
         );
     }
 
@@ -150,6 +154,29 @@ extends Model
         $seconds = ($minutes_portion - $minutes) * 60;
 
         return array($degrees, abs($minutes), abs($seconds));
+    }
+
+    /**
+     * Format the result of decimalToDegreesMinutesSeconds as a human-readable
+     * string.
+     *
+     * @param array $dms        The result from a call to
+     *                          decimalToDegreesMinutesSeconds.
+     * @param array $directions A two element array, either array('S', 'N') or
+     *                          array('W', 'E').
+     *
+     * @return string           A string showing the degrees, minutes and
+     *                          seconds form of the data produced by the call
+     *                          to decimalToDegreesMinutesSeconds.
+     */
+    public static function formatDMS($dms, $directions) {
+        return sprintf(
+            "%d&deg; %d' %.2f\"%s",
+            abs($dms[0]),
+            $dms[1],
+            $dms[2],
+            $dms[0] < 0 ? $directions[0] : $directions[1]
+        );
     }
 }
 
