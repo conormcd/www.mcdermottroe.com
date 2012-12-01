@@ -50,6 +50,15 @@ extends Model
     public $longitude;
 
     /**
+     * The address of the club/range as an associative array where the keys are
+     * hCard field names and the values are the corresponding hCard values.
+     */
+    public $address;
+
+    /** The URL of the website for the club/range, if any. */
+    public $url;
+
+    /**
      * Initialize.
      *
      * @param string $name     The name of the club.
