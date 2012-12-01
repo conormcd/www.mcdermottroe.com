@@ -28,10 +28,12 @@
     <description>Style checks for www.mcdermottroe.com</description>
 
     <rule ref="Generic">
+        <exclude name="Generic.Files.OneClassPerFile" />
         <exclude name="Generic.Formatting.MultipleStatementAlignment.NotSameWarning" />
         <exclude name="Generic.Formatting.SpaceAfterCast" />
         <exclude name="Generic.Functions.OpeningFunctionBraceBsdAllman" />
         <exclude name="Generic.PHP.UpperCaseConstant" />
+        <exclude name="Generic.WhiteSpace.DisallowSpaceIndent" />
     </rule>
     <rule ref="PEAR">
         <exclude name="PEAR.Classes.ClassDeclaration.OpenBraceNewLine" />
@@ -50,4 +52,5 @@
     
     <include name="Generic.PHP.LowerCaseConstant" />
     <include name="Generic.Functions.OpeningFunctionBraceKernighanRitchie" />
+    <include name="Generic.WhiteSpace.DisallowTabIndent" />
 </ruleset>
