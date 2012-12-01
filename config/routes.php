@@ -77,26 +77,28 @@ $blog_route_regex = <<<REGEX
 REGEX;
 $blog_route_regex = preg_replace('/\s+/', '', $blog_route_regex);
 
-/**
- * A helper for responding to GET requests.
- *
- * @param string $route           The route in klein syntax.
- * @param string $controller_name The name of the controller class to use.
- *
- * @return void
- */
-function respondToGet($route, $controller_name) {
-    respond(
-        'GET',
-        $route,
-        function($request, $response) use ($controller_name) {
-            try {
-                (new $controller_name($request, $response))->get();
-            } catch (Exception $e) {
-                (new ErrorController($request, $response, $e))->get();
+if (!function_exists('respondToGet')) {
+    /**
+     * A helper for responding to GET requests.
+     *
+     * @param string $route           The route in klein syntax.
+     * @param string $controller_name The name of the controller class to use.
+     *
+     * @return void
+     */
+    function respondToGet($route, $controller_name) {
+        respond(
+            'GET',
+            $route,
+            function($request, $response) use ($controller_name) {
+                try {
+                    (new $controller_name($request, $response))->get();
+                } catch (Exception $e) {
+                    (new ErrorController($request, $response, $e))->get();
+                }
             }
-        }
-    );
+        );
+    }
 }
 
 /*
