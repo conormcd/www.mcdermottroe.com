@@ -1,0 +1,10 @@
+{
+    "name": "An Riocht",
+    "latitude": 52.199655,
+    "longitude": -9.686714,
+    "address": {
+        "street-address": "Ballyreameen",
+        "extended-address": "Castlemaine",
+        "locality": "Co. Kerry"
+    }
+}

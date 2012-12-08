@@ -1,5 +1,11 @@
 {
     "name": "Fermoy Rifle Club",
     "latitude": 52.1388629651757,
-    "longitude": -8.43548144534083
+    "longitude": -8.43548144534083,
+    "url": "http://www.fermoyrifleclub.com/",
+    "address": {
+        "street-address": "Ballydague",
+        "extended-address": "Ballyhooly",
+        "locality": "Co. Cork"
+    }
 }

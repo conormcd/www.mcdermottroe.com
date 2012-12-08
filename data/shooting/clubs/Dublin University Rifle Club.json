@@ -1,5 +1,12 @@
 {
     "name": "Dublin University Rifle Club",
     "latitude": 53.3443899108315,
-    "longitude": -6.25254297679989
+    "longitude": -6.25254297679989,
+    "url": "http://www.rifle.tcdlife.ie/",
+    "address": {
+        "street-address": "c/o DUCAC",
+        "extended-address": ["Sports Centre", "Trinity College"],
+        "locality": "Dublin",
+        "postal-code": "2"
+    }
 }

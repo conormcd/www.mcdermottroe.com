@@ -1,5 +1,11 @@
 {
     "name": "Mourne Shooting Grounds",
     "latitude": 54.07205,
-    "longitude": -6.8353
+    "longitude": -6.8353,
+    "url": "http://www.mourneadventureactivities.com/",
+    "address": {
+        "street-address": "Mourne View",
+        "extended-address": ["Loughmourne", "Castleblayney"],
+        "locality": "Co Monaghan"
+    }
 }

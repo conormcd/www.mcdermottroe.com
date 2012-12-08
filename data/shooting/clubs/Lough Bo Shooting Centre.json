@@ -1,5 +1,11 @@
 {
     "name": "Lough Bo Shooting Centre",
     "latitude": 54.1229162906092,
-    "longitude": -8.31515936065645
+    "longitude": -8.31515936065645,
+    "url": "http://www.loughbo.ie/",
+    "address": {
+        "street-address": "Coollemoneen",
+        "extended-address": "Drumnacool",
+        "locality": "Co. Sligo"
+    }
 }

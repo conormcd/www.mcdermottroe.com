@@ -1,0 +1,11 @@
+{
+    "name": "Munster Target Shooting Club",
+    "latitude": 52.325911,
+    "longitude": -8.437221,
+    "url": "http://www.mtsc.ie/",
+    "address": {
+        "street-address": "Ballinacourty",
+        "extended-address": ["Glenroe", "Kilfinnane"],
+        "locality": "Co. Limerick"
+    }
+}
