@@ -74,7 +74,7 @@ extends TestCase
             $this->assertEquals($test_club, $club->name);
             $this->assertGreaterThan(52, $club->latitude);
             $this->assertLessThan(55, $club->latitude);
-            $this->assertGreaterThan(-9, $club->longitude);
+            $this->assertGreaterThan(-10, $club->longitude);
             $this->assertLessThan(-4, $club->longitude);
             $this->assertRegexp(
                 '/^\d+&deg; \d+\' \d+\.\d+"[NS]$/',
