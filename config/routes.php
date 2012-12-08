@@ -110,7 +110,11 @@ respondToGet(
     'PhotosController'
 );
 respondToGet(
-    '/shooting/clubs/locations/[|gpx|kml|map:format][.php]?',
+    '/shooting/clubs/locations/map.php',
+    'ShootingClubMapRedirectController'
+);
+respondToGet(
+    '/shooting/clubs/locations/[|gpx|kml:format][.php]?',
     'ShootingClubsController'
 );
 respondToGet('/[about|tech:action]/?', 'Controller');
