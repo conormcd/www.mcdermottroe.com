@@ -4,20 +4,26 @@ html {
 
 body {
   height: 100%;
-
   margin: 0;
-
   font-family: "HelveticaNeue", "Helvetica Neue", "Helvetica", "Arial", sans-serif; 
-
   background-color: #F4F4F4;
 }
 
 h1, h2, h3, h4 {
   margin: 0;
 }
-  
+
+h1 a, h2 a, h3 a, h4 a {
+  text-decoration: none;
+}
+
 a {
   color: #000000;
+}
+
+pre {
+  font-size: 14px;
+  margin-left: 40px;
 }
 
 code {
@@ -29,28 +35,39 @@ code {
 }
 
 #title h1 {
-  margin-left: 95px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  text-align: center;
+  font-size: 40px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
-#sidebar {
-  position: fixed;
-  height: 100%;
-  width: 60px;
-
-  padding: 10px;
+#menu {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 15px;
 }
 
-#sidebar a {
+#menu a {
   text-decoration: none;
 }
 
+#menu a:hover {
+  text-decoration: underline;
+}
+
+#menu span {
+  border-bottom: 1px solid #000000;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
 #body {
-  margin-left: 80px;
-  border-top: 1px solid #AAAAAA;
-  border-left: 1px solid #AAAAAA;
-  padding: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #AAAAAA;
+  padding: 10px;
+  width: 1000px;
 
   background-color: #FFFFFF;
 }
@@ -63,10 +80,66 @@ code {
   margin-left: 80px;
 }
 
-.blogentry .date {
-  font-size: 75%;
+.blogentry {
+  margin-bottom: 50px;
 }
 
-.codeblock {
-  margin-left: 40px;
+.blogentry h2 {
+  text-align: center;
+}
+
+.blogentry .date {
+  font-size: 75%;
+  text-align: center;
+  width: 100%;
+}
+
+.blogbody {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 18px;
+  text-align: justify;
+}
+
+.youtube-player {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.photoalbumgrid {
+  overflow: hidden;
+  padding-bottom: 3em;
+  width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.photocaption {
+  text-align: center;
+}
+
+.photopager {
+  width: 100%;
+  text-align: center;
+  padding: 5px;
+}
+
+.photoalbumthumbnail {
+  width: 144px;
+  height: 144px;
+  margin: 3.5%;
+  float: left;
+  text-align: center;
+}
+
+.photoalbumthumbnail img {
+  margin: auto;
+}
+
+.photoalbumthumbnail a {
+  text-decoration: none;
+}
+
+.photoalbumthumbnail .photocaption {
+  font-size: 77%;
 }
