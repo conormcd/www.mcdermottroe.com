@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2012, Conor McDermottroe
+ * Copyright (c) 2012-2014, Conor McDermottroe
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,7 +27,7 @@
  */
 
 /**
- * Model for wrapping accesses to Picasa.
+ * Model for wrapping accesses to Flickr.
  *
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
@@ -43,11 +43,11 @@ extends PageableModel
     /** The name of the album to show. */
     public $album;
 
-    /** The photo provider we're using for a backend is Picasa. */
-    private $picasa;
+    /** The photo provider we're using for a backend is Flickr. */
+    private $_flickr;
 
     /**
-     * Create a facade over Picasa.
+     * Create a facade over Flickr.
      *
      * @param string $album    The name of the album to fetch, null if you want
      *                         to receive a page of thumbnails for albums.
@@ -68,7 +68,11 @@ extends PageableModel
         }
         parent::__construct($page, $per_page);
         $this->album = $album;
-        $this->picasa = new Picasa('conor.mcdermottroe', array('ProfilePhotos'));
+        $this->_flickr = new Flickr(
+            $_ENV['FLICKR_API_KEY'],
+            $_ENV['FLICKR_API_SECRET'],
+            $_ENV['FLICKR_API_USER']
+        );
     }
 
     /**
@@ -94,14 +98,14 @@ extends PageableModel
     }
 
     /**
-     * Get the list of albums from Picasa.
+     * Get the list of albums from Flickr.
      *
      * @return array The list of albums.
      */
     public function albums() {
         $albums = array();
-        foreach ($this->picasa->albums() as $album) {
-            $album['link'] = '/photos/' . $album['name'];
+        foreach ($this->_flickr->getAlbums() as $album) {
+            $album['link'] = '/photos/' . $album['short_title'];
             $albums[] = $album;
         }
         return $albums;
@@ -115,10 +119,10 @@ extends PageableModel
      * @return array A list of the photos in that album.
      */
     public function photos($album) {
-        $photos = $this->picasa->photos($album);
-        $num_photos = count($photos);
-        for ($i = 0; $i < $num_photos; $i++) {
-            $photos[$i]['link'] = "/photos/$album/" . $i + 1 . "/1";
+        $photos = $this->_flickr->getPhotos($album);
+        foreach ($photos as $photo) {
+            $idx = $photo['index'];
+            $photos[$idx]['link'] = "/photos/$album/" . ($idx + 1) . "/1";
         }
         return $photos;
     }
