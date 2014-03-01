@@ -42,17 +42,8 @@ extends TestCase
      * @return void
      */
     public function testGetReturnsSomeContent() {
-        $controller = $this->sampleController();
-
-        $res = $this->trapOutput(
-            function () use ($controller) {
-                $controller->get();
-            }
-        );
-
-        $this->assertNotNull($res['output']);
-        $this->assertNull($res['return']);
-        $this->assertNull($res['exception']);
+        $result = $this->runController($this->sampleController());
+        $this->assertNotNull($result['output']);
     }
 
     /**
@@ -62,21 +53,14 @@ extends TestCase
      * @return void
      */
     public function testGetCreatesContentLengthHeader() {
-        $controller = $this->sampleController();
+        $result = $this->runController($this->sampleController());
 
-        $res = $this->trapOutput(
-            function () use ($controller) {
-                $controller->get();
-            }
+        $this->assertNotNull($result['output']);
+        $this->assertArrayHasKey('content-length', $result['headers']);
+        $this->assertEquals(
+            strlen($result['output']),
+            $result['headers']['content-length']
         );
-        $headers = _Request::$_headers->headers;
-        if (!$headers) {
-            $headers = array();
-        }
-
-        $this->assertNotNull($res['output']);
-        $this->assertArrayHasKey('Content-Length', $headers);
-        $this->assertEquals(strlen($res['output']), $headers['Content-Length']);
     }
 
     /**
@@ -86,13 +70,13 @@ extends TestCase
      * @return void
      */
     public function testConstructorValidatesParameters() {
-        $req = new _Request();
+        $req = new \Klein\Request();
         $req->action = 'error';
 
         // Both not null
         $exception_thrown = false;
         try {
-            new Controller($req, new _Response());
+            new Controller(new \Klein\Klein(), $req, new \Klein\Response());
         } catch (Exception $e) {
             $exception_thrown = true;
         }
@@ -104,7 +88,7 @@ extends TestCase
         // Request null
         $exception_thrown = false;
         try {
-            new Controller(null, new _Response());
+            new Controller(null, new \Klein\Response());
         } catch (Exception $e) {
             $exception_thrown = true;
         }
@@ -141,7 +125,7 @@ extends TestCase
         unset($req->action);
         $exception_thrown = false;
         try {
-            new Controller(new _Request(), new _Response());
+            new Controller(new \Klein\Request(), new \Klein\Response());
         } catch (Exception $e) {
             $exception_thrown = true;
         }
@@ -158,22 +142,23 @@ extends TestCase
      *                           create or a callable which takes two objects -
      *                           the request and response objects - and returns
      *                           an instance of the controller under test.
-     * @param object $req        The klein _Request object.
-     * @param object $res        The klein _Response object.
+     * @param object $req        The klein \Klein\Request object.
+     * @param object $res        The klein \Klein\Response object.
+     * @param object $klein      The klein \Klein\Klein object.
      *
      * @return object A controller instance.
      */
-    protected function create($controller, $req = null, $res = null) {
-        $request = $req !== null ? $req : new _Request();
-        $response = $res !== null ? $res : new _Response();
-        if (!$request->action) {
-            $request->action = 'error';
+    protected function create($controller, $req = null, $res = null, $klein = null) {
+        $req = $this->req($req);
+        $res = $this->res($res);
+        $klein = $this->klein($klein);
+        if (!$req->action) {
+            $req->action = 'error';
         }
-        _Request::$_headers = _Response::$_headers = new HeaderCatcher();
         if (is_string($controller)) {
-            return new $controller($request, $response);
+            return new $controller($klein, $req, $res);
         } else {
-            return call_user_func_array($controller, array($request, $response));
+            return call_user_func_array($controller, array($klein, $req, $res));
         }
     }
 
@@ -184,6 +169,83 @@ extends TestCase
      * @return object The controller on which to run some of the tests.
      */
     protected abstract function sampleController();
+
+    /**
+     * Run a controller and capture the results.
+     *
+     * @param object $controller The controller to run.
+     * @param object $method     The HTTP method to send to it.
+     *
+     * @return array An associative array with four members: 'output' which is
+     *               a string with the body of the HTTP response, 'status'
+     *               which is the HTTP status code returned, 'headers' which is
+     *               an associative array containing all of the headers output
+     *               by the controller and 'response' which is the
+     *               \Klein\Response object from the controller.
+     */
+    protected function runController($controller, $method = 'get') {
+        ob_start();
+        $response = call_user_func(array($controller, $method));
+        $output = ob_get_contents();
+        ob_end_clean();
+        return array(
+            'output' => $output,
+            'status' => $response->status()->getCode(),
+            'headers' => $response->headers()->all(),
+            'response' => $response,
+        );
+    }
+
+    /**
+     * A wrapper for getting a \Klein\Klein object without needing null and
+     * type checking.
+     *
+     * @param object $klein A \Klein\Klein object or null.
+     *
+     * @return object A \Klein\Klein object.
+     */
+    private function klein($klein) {
+        if ($klein && !($klein instanceof \Klein\Klein)) {
+            throw new Exception(
+                var_export($klein, true) . " is not an instance of \Klein\Klein"
+            );
+        }
+        return ($klein ? $klein : new \Klein\Klein());
+    }
+
+    /**
+     * A wrapper for getting a \Klein\Request object without needing null and
+     * type checking.
+     *
+     * @param object $req A \Klein\Request object or null.
+     *
+     * @return object A \Klein\Request object.
+     */
+    private function req($req) {
+        if ($req && !($req instanceof \Klein\Request)) {
+            throw new Exception(
+                var_export($req, true) . " is not an instance of \Klein\Request"
+            );
+        }
+        return ($req ? $req : new \Klein\Request());
+    }
+
+    /**
+     * A wrapper for getting a \Klein\Response object without needing null and
+     * type checking.
+     *
+     * @param object $res A \Klein\Response object or null.
+     *
+     * @return object A \Klein\Response object.
+     */
+    private function res($res) {
+        if ($res && !($res instanceof \Klein\Response)) {
+            throw new Exception(
+                var_export($res, true) . " is not an instance of \Klein\Response"
+            );
+        }
+        return ($res ? $res : new \Klein\Response());
+    }
 }
 
 ?>

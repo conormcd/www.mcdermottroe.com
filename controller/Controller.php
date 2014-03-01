@@ -44,10 +44,13 @@ class Controller {
     /** The model object to render. */
     protected $model;
 
-    /** The klein _Request object for the current page request. */
+    /** The Klein main object for this app. */
+    protected $klein;
+
+    /** The klein Request object for the current page request. */
     protected $request;
 
-    /** The klein _Response object for the current page request. */
+    /** The klein Response object for the current page request. */
     protected $response;
 
     /** The format of the output. */
@@ -56,14 +59,18 @@ class Controller {
     /**
      * Initialise this controller.
      *
-     * @param object $request  The _Request object from klein.
-     * @param object $response The _Response object from klein.
+     * @param object $klein    The Klein main object.
+     * @param object $request  The Request object from klein.
+     * @param object $response The Response object from klein.
      */
-    public function __construct($request, $response) {
-        if (!($request instanceof _Request)) {
+    public function __construct($klein, $request, $response) {
+        if (!($klein instanceof \Klein\Klein)) {
+            throw new Exception("Bad Klein object provided.");
+        }
+        if (!($request instanceof \Klein\Request)) {
             throw new Exception("Bad request object provided.");
         }
-        if (!($response instanceof _Response)) {
+        if (!($response instanceof \Klein\Response)) {
             throw new Exception("Bad response object provided.");
         }
         if (!($this->action || $request->action)) {
@@ -73,6 +80,7 @@ class Controller {
         if (!$this->action) {
             $this->action = $request->action;
         }
+        $this->klein = $klein;
         $this->request = $request;
         $this->response = $response;
         $this->output_format = null;
@@ -82,7 +90,7 @@ class Controller {
             $this->action_name .= ucfirst($part);
         }
 
-        $this->response->onError(array($this, 'onError'));
+        $this->klein->onError(array($this, 'onError'));
     }
 
     /**
@@ -94,13 +102,14 @@ class Controller {
         $content = Mustache::render($this->view(), $this->model());
         $this->response->header('Content-Length', strlen($content));
         echo $content;
+        return $this->response;
     }
 
     /**
      * Get the model for the current request.
      *
      * @return object An appropriate sub-class of Model if one exists, if not,
-     *                the _Response object from klein is used as the model.
+     *                the Response object from klein is used as the model.
      */
     protected function model() {
         if (!$this->model) {

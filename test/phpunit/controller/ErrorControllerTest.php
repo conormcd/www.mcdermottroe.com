@@ -39,10 +39,17 @@ extends ControllerTestCase
     /**
      * Create a basic ErrorController to do the common controller tests.
      *
+     * @param Exception $exception An optional exception to handle with the
+     *                             exception controller.
+     *
      * @return object An instance of ErrorController.
      */
-    public function sampleController() {
-        return $this->create('ErrorController');
+    public function sampleController($exception = null) {
+        return $this->create(
+            function ($klein, $req, $res) use ($exception) {
+                return new ErrorController($klein, $req, $res, $exception);
+            }
+        );
     }
 
     /**
@@ -59,24 +66,10 @@ extends ControllerTestCase
             $exception = $e;
         }
 
-        $controller = $this->create(
-            function ($req, $res) use ($exception) {
-                return new ErrorController($req, $res, $exception);
-            }
-        );
-        $res = $this->trapOutput(
-            function () use ($controller) {
-                $controller->get();
-            }
-        );
-        $headers = _Request::$_headers->headers;
-        if (!$headers) {
-            $headers = array();
-        }
-        $this->assertArrayHasKey('HTTP/1.0 503', $headers);
-        $this->assertNotNull($res['output']);
-        $this->assertNull($res['return']);
-        $this->assertNull($res['exception']);
+        $result = $this->runController($this->sampleController($exception));
+
+        $this->assertEquals(503, $result['status']);
+        $this->assertNotNull($result['output']);
     }
 
     /**
@@ -93,24 +86,10 @@ extends ControllerTestCase
             $exception = $e;
         }
 
-        $controller = $this->create(
-            function ($req, $res) use ($exception) {
-                return new ErrorController($req, $res, $exception);
-            }
-        );
-        $res = $this->trapOutput(
-            function () use ($controller) {
-                $controller->get();
-            }
-        );
-        $headers = _Request::$_headers->headers;
-        if (!$headers) {
-            $headers = array();
-        }
-        $this->assertArrayHasKey('HTTP/1.0 500', $headers);
-        $this->assertNotNull($res['output']);
-        $this->assertNull($res['return']);
-        $this->assertNull($res['exception']);
+        $result = $this->runController($this->sampleController($exception));
+
+        $this->assertEquals(500, $result['status']);
+        $this->assertNotNull($result['output']);
     }
 }
 

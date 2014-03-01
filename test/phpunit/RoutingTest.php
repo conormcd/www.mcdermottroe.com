@@ -26,6 +26,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+require_once dirname(dirname(__DIR__)) . '/config/routes.php';
 require_once dirname(dirname(__DIR__)) . '/lib/autoloader.php';
 
 /**
@@ -80,40 +81,39 @@ extends TestCase
      *
      * @param string $method          The HTTP method to use.
      * @param string $uri             The path portion of the URI to test.
-     * @param int    $expected_status The HTTP status code which should be the 
-     *                                result of the call to the specified 
+     * @param int    $expected_status The HTTP status code which should be the
+     *                                result of the call to the specified
      *                                route.
      *
      * @return void
      */
     private function assertRoute($method, $uri, $expected_status = 200) {
-        global $__routes, $__namespace;
-        $__routes = null;
-        $__namespace = null;
-        
-        include dirname(dirname(__DIR__)) . '/config/routes.php';
-        
-        _Request::$_headers = _Response::$_headers = new HeaderCatcher();
-        dispatch($uri, $method, null, true);
-        $headers = _Response::$_headers->headers;
-        if (!$headers) {
-            $headers = array();
-        }
+        global $ROUTES;
+        $router = new Router($ROUTES);
 
-        $header_found = ($expected_status == 200);
-        foreach ($headers as $key => $value) {
-            if (preg_match('#^HTTP/\d\.\d\s+\d\d\d(?:$|\D)#', $key)) {
-                $this->assertNull($value);
-                $status = preg_split('/\s+/', $key);
-                $this->assertEquals(
-                    $expected_status,
-                    intval($status[1]),
-                    "Bad route: $method $uri"
-                );
-                $header_found = true;
-            }
-        }
-        $this->assertTrue($header_found);
+        $request = new \Klein\Request(
+            array(),
+            array(),
+            array(),
+            array(
+                'REQUEST_METHOD' => $method,
+                'REQUEST_URI' => $uri,
+            )
+        );
+        $response = new \Klein\Response();
+
+        $output = $router->dispatch(
+            $request,
+            $response,
+            false,
+            \Klein\Klein::DISPATCH_CAPTURE_AND_RETURN
+        );
+        $this->assertEquals(
+            $expected_status,
+            $response->status()->getCode(),
+            "$method $uri $expected_status"
+        );
+        $this->assertNotNull($output);
     }
 }
 

@@ -52,19 +52,15 @@ extends ControllerTestCase
      */
     public function testWithAlbumSpecified() {
         $controller = $this->create(
-            function ($req, $res) {
-                $req->album = 'Graduation';
-                return new PhotosController($req, $res);
+            function ($klein, $req, $res) {
+                $req->album = 'ISSFWorldCupGranada2013';
+                return new PhotosController($klein, $req, $res);
             }
         );
-        $res = $this->trapOutput(
-            function () use ($controller) {
-                $controller->get();
-            }
-        );
-        $this->assertNotNull($res['output']);
-        $this->assertNull($res['return']);
-        $this->assertNull($res['exception']);
+        $result = $this->runController($controller);
+
+        $this->assertEquals(200, $result['status']);
+        $this->assertNotNull($result['output']);
     }
 }
 

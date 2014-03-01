@@ -48,11 +48,9 @@ if (isset($_ENV['SENTRY_DSN'])) {
     set_exception_handler(array($error_handler, 'handleException'));
 }
 
-// Now pull in the rest of the includes
 require_once dirname(__DIR__) . '/config/routes.php';
 require_once dirname(__DIR__) . '/lib/autoloader.php';
 
-// Run the klein dispatch.
-dispatch();
+(new Router($ROUTES))->dispatch();
 
 ?>

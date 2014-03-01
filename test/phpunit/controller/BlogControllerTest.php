@@ -27,7 +27,6 @@
  */
 
 require_once dirname(dirname(dirname(__DIR__))) . '/lib/autoloader.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/lib/klein/klein.php';
 
 /**
  * Test the BlogController class.
@@ -52,26 +51,19 @@ extends ControllerTestCase
      * @return void
      */
     public function testAtomOutput() {
-        $req = new _Request();
+        $req = new \Klein\Request();
         $req->format = 'atom';
         $controller = $this->create('BlogController', $req);
 
-        $res = $this->trapOutput(
-            function() use ($controller) {
-                $controller->get();
-            }
-        );
-        $headers = _Request::$_headers->headers;
-        if (!$headers) {
-            $headers = array();
-        }
+        $result = $this->runController($controller);
 
-        $this->assertNotNull($res['output']);
-        $this->assertRegexp('#^<\?xml.*</feed>$#s', $res['output']);
-        $this->assertArrayHasKey('Content-Type', $headers);
-        $this->assertEquals('application/atom+xml', $headers['Content-Type']);
-        $this->assertNull($res['return']);
-        $this->assertNull($res['exception']);
+        $this->assertNotNull($result['output']);
+        $this->assertRegexp('#^<\?xml.*</feed>$#s', $result['output']);
+        $this->assertArrayHasKey('content-type', $result['headers']);
+        $this->assertEquals(
+            'application/atom+xml',
+            $result['headers']['content-type']
+        );
     }
 
     /**
@@ -80,26 +72,19 @@ extends ControllerTestCase
      * @return void
      */
     public function testRSSOutput() {
-        $req = new _Request();
+        $req = new \Klein\Request();
         $req->format = 'rss';
         $controller = $this->create('BlogController', $req);
 
-        $res = $this->trapOutput(
-            function() use ($controller) {
-                $controller->get();
-            }
-        );
-        $headers = _Request::$_headers->headers;
-        if (!$headers) {
-            $headers = array();
-        }
+        $result = $this->runController($controller);
 
-        $this->assertNotNull($res['output']);
-        $this->assertRegexp('#^<\?xml.*</rss>$#s', $res['output']);
-        $this->assertArrayHasKey('Content-Type', $headers);
-        $this->assertEquals('application/rss+xml', $headers['Content-Type']);
-        $this->assertNull($res['return']);
-        $this->assertNull($res['exception']);
+        $this->assertNotNull($result['output']);
+        $this->assertRegexp('#^<\?xml.*</rss>$#s', $result['output']);
+        $this->assertArrayHasKey('content-type', $result['headers']);
+        $this->assertEquals(
+            'application/rss+xml',
+            $result['headers']['content-type']
+        );
     }
 }
 

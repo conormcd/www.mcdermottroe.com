@@ -37,13 +37,14 @@ extends Controller
     /**
      * Initialize.
      *
-     * @param object $request   The _Request object from klein.
-     * @param object $response  The _Response object from klein.
+     * @param object $klein     The Klein main object.
+     * @param object $request   The Request object from klein.
+     * @param object $response  The Response object from klein.
      * @param object $exception An optional exception to get error data from.
      */
-    public function __construct($request, $response, $exception = null) {
+    public function __construct($klein, $request, $response, $exception = null) {
         $this->action = 'error';
-        parent::__construct($request, $response);
+        parent::__construct($klein, $request, $response);
         if ($exception !== null) {
             $code = $exception->getCode();
             if ($code < 400 || $code >= 600) {

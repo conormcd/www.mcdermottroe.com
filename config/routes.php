@@ -26,34 +26,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-require_once dirname(__DIR__) . '/lib/klein/klein.php';
-
-// Aliases
-$aliases = array(
-    '@^/contact(?:\.php|/)?$' => '/about',
-    '@^/computer-stuff(?P<suffix>.*)' => '/tech',
-    '@^/shooting/?$' => '/shooting/clubs/locations/',
-);
-foreach ($aliases as $regex => $redirect) {
-    respond(
-        'GET',
-        $regex,
-        function($request, $response) use ($redirect) {
-            if ($request->suffix) {
-                $redirect .= $request->suffix;
-            }
-            $response->redirect($redirect, 301, false);
-        }
-    );
-}
-
-/* 
- * The blog route is a little complex, but it matches Wordpress for backwards 
- * compatibility. I don't know how to represent it in klein syntax so here it 
+/*
+ * The blog route is a little complex, but it matches Wordpress for backwards
+ * compatibility. I don't know how to represent it in klein syntax so here it
  * is in a regex (prefixed with @ so that klein recognizes it as such).
  *
- * It's not possible to add the PCRE_EXTENDED modifier to a regex in klein, so 
- * it's built here with spaces and then the spaces are stripped afterwards. 
+ * It's not possible to add the PCRE_EXTENDED modifier to a regex in klein, so
+ * it's built here with spaces and then the spaces are stripped afterwards.
  */
 $blog_route_regex = <<<REGEX
 @^/
@@ -77,52 +56,20 @@ $blog_route_regex = <<<REGEX
 REGEX;
 $blog_route_regex = preg_replace('/\s+/', '', $blog_route_regex);
 
-if (!function_exists('respondToGet')) {
-    /**
-     * A helper for responding to GET requests.
-     *
-     * @param string $route           The route in klein syntax.
-     * @param string $controller_name The name of the controller class to use.
-     *
-     * @return void
-     */
-    function respondToGet($route, $controller_name) {
-        respond(
-            'GET',
-            $route,
-            function($request, $response) use ($controller_name) {
-                try {
-                    (new $controller_name($request, $response))->get();
-                } catch (Exception $e) {
-                    (new ErrorController($request, $response, $e))->get();
-                }
-            }
-        );
-    }
-}
-
-/*
- * Declare all the routes
- */
-respondToGet($blog_route_regex, 'BlogController');
-respondToGet(
-    '/photos/?[:album]?/?[i:start]?/?[i:perpage]?/?',
-    'PhotosController'
-);
-respondToGet(
-    '/shooting/clubs/locations/map.php',
-    'ShootingClubMapRedirectController'
-);
-respondToGet(
-    '/shooting/clubs/locations/[|gpx|kml:format][.php]?',
-    'ShootingClubsController'
-);
-respondToGet('/[about|tech:action]/?', 'Controller');
-respond(
-    '404',
-    function($request, $response) {
-        (new ErrorController($request, $response))->get();
-    }
+$ROUTES = array(
+    '@^/contact(?:\.php|/)?$' => array('redirect' => '/about'),
+    '@^/computer-stuff(?P<suffix>.*)' => array('redirect' => '/tech'),
+    '@^/shooting/?$' => array('redirect' => '/shooting/clubs/locations/'),
+    $blog_route_regex => 'BlogController',
+    '/photos/[:album]/[i:start]/[i:perpage]/?' => 'PhotosController',
+    '/photos/[:album]/[i:start]/?' => 'PhotosController',
+    '/photos/[:album]/?' => 'PhotosController',
+    '/photos/?' => 'PhotosController',
+    '/shooting/clubs/locations/map.php' => 'ShootingClubMapRedirectController',
+    '/shooting/clubs/locations/[|gpx|kml:format][.php]?' =>
+        'ShootingClubsController',
+    '/[about|tech:action]/?' => 'Controller',
+    '@/(?:css|js).*' => 'StaticFileController',
 );
 
 ?>
