@@ -39,7 +39,7 @@ class Flickr {
     private $_username;
 
     /**
-     * Create a new Flickr interface. You can find the credentials in the 
+     * Create a new Flickr interface. You can find the credentials in the
      * environment if you include environment.php.
      *
      * @param string $key    The API key for Flickr.
@@ -51,7 +51,7 @@ class Flickr {
         $this->_api_secret = $secret;
         $this->_username = $user;
     }
-    
+
     /**
      * Get a list of the sets owned by the current user.
      *
@@ -109,7 +109,7 @@ class Flickr {
      *
      * @param string $album The album from which to retrieve the photos.
      *
-     * @return array An array of hashes where each hash contains the details of 
+     * @return array An array of hashes where each hash contains the details of
      *               a single photo.
      */
     public function getPhotos($album) {
@@ -213,7 +213,7 @@ class Flickr {
     }
 
     /**
-     * Build a URL for a given method (and optionally arguments) in the Flickr 
+     * Build a URL for a given method (and optionally arguments) in the Flickr
      * API.
      *
      * @param string $method The method to call.
@@ -224,7 +224,7 @@ class Flickr {
     private function constructAPIURL($method, $args=array()) {
         $api_key = preg_replace('/^[^0-9a-fA-F]+$/', '', $this->_api_key);
         $method = preg_replace('/^\W$/', '', $method);
-        
+
         $url  = "http://api.flickr.com/services/rest/";
         $url .= "?api_key=$api_key";
         $url .= "&format=json";
@@ -237,15 +237,15 @@ class Flickr {
     }
 
     /**
-     * Return the most appropriate HTTP status code for a given Flickr error 
+     * Return the most appropriate HTTP status code for a given Flickr error
      * code.
      *
-     * @param string $method              The Flickr API method which was 
+     * @param string $method              The Flickr API method which was
      *                                    called.
-     * @param int    $flickr_error_number The Flickr error code which was 
+     * @param int    $flickr_error_number The Flickr error code which was
      *                                    returned.
      *
-     * @return int The most appropriate HTTP status code or 500 if none can be 
+     * @return int The most appropriate HTTP status code or 500 if none can be
      *             calculated.
      */
     private function mapErrorCode($method, $flickr_error_number) {
@@ -284,7 +284,7 @@ class FlickrMagic {
      * @param string $method The method to call.
      * @param string $args   The arguments to pass to the method.
      *
-     * @return array The decoded version of the JSON response from the method 
+     * @return array The decoded version of the JSON response from the method
      *               call.
      */
     public function __call($method, $args) {

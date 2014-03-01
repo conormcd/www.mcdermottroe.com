@@ -276,7 +276,7 @@ MARKDOWN
      * @param string $content     The contents of the file.
      * @param string $name_prefix The prefix for the file name.
      *
-     * @return string             The full path to a file containing that 
+     * @return string             The full path to a file containing that
      *                            content.
      */
     private function generateTestFile($content, $name_prefix = '2012-01-01-') {

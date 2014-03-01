@@ -40,7 +40,7 @@ abstract class Model {
      * @param callable $callable The code to wrap in caching.
      * @param array    $args     Arguments to pass to the cached function.
      *
-     * @return mixed             The result of the wrapped code, possibly from 
+     * @return mixed             The result of the wrapped code, possibly from
      *                           the cache.
      */
     protected function cache($key, $ttl, $callable, $args = array()) {

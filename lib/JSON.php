@@ -30,7 +30,7 @@ if (!function_exists('json_last_error_msg')) {
     /**
      * Implement json_last_error_msg in versions of PHP which don't include it.
      *
-     * @return string A message corresponding to the last error which was 
+     * @return string A message corresponding to the last error which was
      *                encountered while encoding/decoding JSON.
      */
     // @codingStandardsIgnoreStart

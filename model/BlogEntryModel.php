@@ -38,7 +38,7 @@ class BlogEntryModel
 extends Model
 {
     /** The path to the file containing the blog post. */
-    private $file;
+    private $_file;
 
     /** The direct link to this blog post. */
     public $link;
@@ -46,7 +46,7 @@ extends Model
     /**
      * Initialize.
      *
-     * @param string $blog_markdown_file The full path to the file containing 
+     * @param string $blog_markdown_file The full path to the file containing
      *                                   the blog post.
      */
     public function __construct($blog_markdown_file) {
@@ -56,11 +56,11 @@ extends Model
                 404
             );
         }
-        $this->file = $blog_markdown_file;
+        $this->_file = $blog_markdown_file;
         $this->link = preg_replace(
             '#^(\d{4})-(\d\d)-(\d\d)-(.*?)\.md$#',
             '/blog/$1/$2/$3/$4/',
-            basename($this->file)
+            basename($this->_file)
         );
     }
 
@@ -103,7 +103,7 @@ extends Model
     /**
      * The date of publication of the blog post in ISO8601 format.
      *
-     * @return string The date of publication of the blog post in ISO8601 
+     * @return string The date of publication of the blog post in ISO8601
      *                format.
      */
     public function dateISO8601() {
@@ -138,7 +138,7 @@ extends Model
      * @return string The UNIX epoch timestamp for the blog post.
      */
     public function timestamp() {
-        $file = basename($this->file);
+        $file = basename($this->_file);
         $matches = array();
         if (preg_match('/^(\d{4}-\d\d-\d\d)-/', $file, $matches)) {
             $time = new DateTime(
@@ -167,13 +167,13 @@ extends Model
     }
 
     /**
-     * The full HTML of the entire blog post file. This will be modified 
+     * The full HTML of the entire blog post file. This will be modified
      * before being rendered.
      *
      * @return The HTML of the entire blog post.
      */
     private function html() {
-        $markdown = file_get_contents($this->file);
+        $markdown = file_get_contents($this->_file);
         return $this->cache(
             'blog_html_' . md5($markdown),
             0,

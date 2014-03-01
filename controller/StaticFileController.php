@@ -27,8 +27,8 @@
  */
 
 /**
- * Handle requests for static files. This should only ever be hit in 
- * development since the web server should serve all static file requests 
+ * Handle requests for static files. This should only ever be hit in
+ * development since the web server should serve all static file requests
  * directly.
  *
  * @author Conor McDermottroe <conor@mcdermottroe.com>

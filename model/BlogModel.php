@@ -58,20 +58,20 @@ extends PageableModel
     /**
      * Initialize the selection.
      *
-     * @param int    $year     The year of publication of the blog post(s). If 
-     *                         this is null, then all blog posts are included 
+     * @param int    $year     The year of publication of the blog post(s). If
+     *                         this is null, then all blog posts are included
      *                         in the set.
-     * @param int    $month    The month of publication of the blog post(s). 
-     *                         If this is null, then any blog posts from the 
-     *                         year provided in the $year parameter above will 
+     * @param int    $month    The month of publication of the blog post(s).
+     *                         If this is null, then any blog posts from the
+     *                         year provided in the $year parameter above will
      *                         be included in the set.
-     * @param int    $day      The day of publication of the blog post(s). If 
-     *                         this is null, then any blog posts from the year 
-     *                         and month provided in the other parameters will 
+     * @param int    $day      The day of publication of the blog post(s). If
+     *                         this is null, then any blog posts from the year
+     *                         and month provided in the other parameters will
      *                         be included in the set.
-     * @param string $slug     The URL-sanitized form of the blog post title. 
-     *                         If this is null, then any blog post with the 
-     *                         year, month and day provided in the other 
+     * @param string $slug     The URL-sanitized form of the blog post title.
+     *                         If this is null, then any blog post with the
+     *                         year, month and day provided in the other
      *                         parameters will be included in the set.
      * @param int    $page     The number (1-based) of the page of blog posts.
      * @param int    $per_page The number of blog posts to display on the page.
@@ -103,7 +103,7 @@ extends PageableModel
     /**
      * The date of publication of the most recent blog post in ISO8601 format.
      *
-     * @return string The date of publication of the most recent blog post in 
+     * @return string The date of publication of the most recent blog post in
      *                ISO8601 format.
      */
     public function dateISO8601() {
@@ -113,7 +113,7 @@ extends PageableModel
     /**
      * The date of publication of the most recent blog post in RSS date format.
      *
-     * @return string The date of publication of the most recent blog post in 
+     * @return string The date of publication of the most recent blog post in
      *                RSS date format.
      */
     public function dateRSS() {
@@ -158,7 +158,7 @@ extends PageableModel
     /**
      * Get a list of all the blog posts available.
      *
-     * @return array The full paths to each of the files containing blog 
+     * @return array The full paths to each of the files containing blog
      *               posts.
      */
     public function all() {
@@ -179,7 +179,7 @@ extends PageableModel
     /**
      * Construct the pattern to match file names of blog posts.
      *
-     * @return string A regular expression which can be used to match blog 
+     * @return string A regular expression which can be used to match blog
      *                post file names.
      */
     private function pattern() {

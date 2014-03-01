@@ -167,7 +167,7 @@ extends TestCase
     public function testTooLargePageNumber() {
         $too_large = $this->createTestObject()->numPages() + 1;
         $exception = $this->assertException(
-            function() use ($too_large) {
+            function () use ($too_large) {
                 $page = $this->createTestObject($too_large);
                 $page->page();
             }

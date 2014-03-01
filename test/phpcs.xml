@@ -28,6 +28,8 @@
     <description>Style checks for www.mcdermottroe.com</description>
 
     <rule ref="Generic">
+        <exclude name="Generic.Files.EndFileNoNewline" />
+        <exclude name="Generic.Files.LowercasedFilename.NotFound" />
         <exclude name="Generic.Files.OneClassPerFile" />
         <exclude name="Generic.Formatting.MultipleStatementAlignment.NotSameWarning" />
         <exclude name="Generic.Formatting.SpaceAfterCast" />
@@ -39,10 +41,11 @@
         <exclude name="PEAR.Classes.ClassDeclaration.OpenBraceNewLine" />
         <exclude name="PEAR.Commenting.ClassComment.MissingTag" />
         <exclude name="PEAR.Commenting.FileComment" />
-        <exclude name="PEAR.WhiteSpace.ScopeIndent.Incorrect" />
         <exclude name="PEAR.Functions.FunctionDeclaration.BraceOnSameLine" />
+        <exclude name="PEAR.NamingConventions.ValidFunctionName.PrivateNoUnderscore" />
         <exclude name="PEAR.NamingConventions.ValidFunctionName.PublicUnderscore" />
         <exclude name="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
+        <exclude name="PEAR.WhiteSpace.ScopeIndent.Incorrect" />
     </rule>
     <rule ref="Generic.NamingConventions.CamelCapsFunctionName">
         <properties>

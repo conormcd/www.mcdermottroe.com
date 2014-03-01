@@ -53,7 +53,7 @@ extends TestCase
             $this->assertEquals($expected, JSON::encode($object));
         }
     }
-    
+
     /**
      * Test a few values can be decoded into an expected format.
      *
@@ -73,7 +73,7 @@ extends TestCase
     }
 
     /**
-     * Check that a selection of values can be round-tripped in both directions 
+     * Check that a selection of values can be round-tripped in both directions
      * through the JSON class.
      *
      * @return void
@@ -89,7 +89,7 @@ extends TestCase
             $decoded = JSON::decode($encoded);
             $this->assertEquals($sample, $decoded);
         }
-        
+
         $decode_encode = array(
             '{}',
             '[1,2,3]',
@@ -104,8 +104,8 @@ extends TestCase
     }
 
     /**
-     * Make sure that encode refuses to encode some values but let decode 
-     * decode the same ones. I don't want to spread bad JSON around, but I 
+     * Make sure that encode refuses to encode some values but let decode
+     * decode the same ones. I don't want to spread bad JSON around, but I
      * don't want to choke on it unnecessarily.
      *
      * @return void
@@ -264,7 +264,7 @@ extends TestCase
     }
 
     /**
-     * Trigger JSON_ERROR_UNSUPPORTED_TYPE or the old PHP error for an 
+     * Trigger JSON_ERROR_UNSUPPORTED_TYPE or the old PHP error for an
      * unsupported type.
      *
      * @return void

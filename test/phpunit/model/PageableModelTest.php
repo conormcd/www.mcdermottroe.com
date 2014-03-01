@@ -51,7 +51,7 @@ extends PageableModelTestCase
     /**
      * The largest page number which can be returned from a TestPageableModel.
      *
-     * @return int The largest page number which is legit in a test on this 
+     * @return int The largest page number which is legit in a test on this
      *             class.
      */
     public function maxPageNumber() {
@@ -72,7 +72,7 @@ extends PageableModel
     const LINK = "http://this.is.a/link";
 
     /** The data to be paged through. */
-    private $data;
+    private $_data;
 
     /**
      * See PageableModel.
@@ -82,9 +82,9 @@ extends PageableModel
      */
     public function __construct($page = null, $per_page = null) {
         parent::__construct($page, $per_page);
-        $this->data = array();
+        $this->_data = array();
         for ($i = 0; $i < 100; $i++) {
-            $this->data[] = $i;
+            $this->_data[] = $i;
         }
     }
 
@@ -94,7 +94,7 @@ extends PageableModel
      * @return array All the data.
      */
     public function all() {
-        return $this->data;
+        return $this->_data;
     }
 
     /**

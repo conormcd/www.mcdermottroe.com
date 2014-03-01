@@ -38,7 +38,7 @@ extends Model
     const DATA_DIR = '/data/shooting/clubs/';
 
     /** If we only want one club, this is the name of the club. */
-    private $club;
+    private $_club;
 
     /**
      * Initialize.
@@ -46,7 +46,7 @@ extends Model
      * @param string $club The name of the club to show, if any.
      */
     public function __construct($club = null) {
-        $this->club = $club !== 'All' ? $club : null;
+        $this->_club = $club !== 'All' ? $club : null;
     }
 
     /**
@@ -66,8 +66,8 @@ extends Model
     public function clubs() {
         $clubs = array();
         $data_dir = self::dataDir();
-        if ($this->club) {
-            $clubs[] = new ShootingClubModel($this->club, $data_dir);
+        if ($this->_club) {
+            $clubs[] = new ShootingClubModel($this->_club, $data_dir);
         } else {
             if (($dirhandle = opendir($data_dir)) !== false) {
                 while (($file = readdir($dirhandle)) !== false) {

@@ -37,7 +37,7 @@ class SyntaxHighlighterTest
 extends TestCase
 {
     /** Test snippets in a few languages */
-    private static $testCases = array(
+    private static $_testCases = array(
         'php' => '<?php phpinfo(); ?>',
     );
 
@@ -47,7 +47,7 @@ extends TestCase
      * @return void
      */
     public function testHighlightsCode() {
-        foreach (self::$testCases as $lang => $codeblock) {
+        foreach (self::$_testCases as $lang => $codeblock) {
             $html = SyntaxHighlighter::highlight(array('', $lang, $codeblock));
             $this->assertStringStartsWith(
                 "<pre class=\"$lang codeblock\"",
