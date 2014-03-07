@@ -64,7 +64,7 @@ extends TestCase
         $post = new BlogEntryModel($file);
 
         $this->assertException(array($post, 'title'));
-        $this->assertEquals($post->date(), '1 January 2012');
+        $this->assertEquals($post->date(), '1st January 2012');
         $this->assertEquals($post->dateISO8601(), '2012-01-01T00:00:00Z');
         $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 00:00:00 +0000');
         $this->assertEmpty($post->body());
@@ -87,7 +87,7 @@ MARKDOWN
         $post = new BlogEntryModel($file);
 
         $this->assertEquals($post->title(), 'Title Goes Here');
-        $this->assertEquals($post->date(), '1 January 2012');
+        $this->assertEquals($post->date(), '1st January 2012');
         $this->assertEquals($post->dateISO8601(), '2012-01-01T00:00:00Z');
         $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 00:00:00 +0000');
         $this->assertEmpty($post->body());
@@ -106,7 +106,7 @@ MARKDOWN
         $post = new BlogEntryModel($file);
 
         $this->assertException(array($post, 'title'));
-        $this->assertEquals($post->date(), '1 June 2012');
+        $this->assertEquals($post->date(), '1st June 2012');
         $this->assertEquals($post->dateISO8601(), '2012-05-31T23:00:00Z');
         $this->assertEquals($post->dateRSS(), 'Fri, 01 Jun 2012 00:00:00 +0100');
         $this->assertEmpty($post->body());
@@ -148,7 +148,7 @@ MARKDOWN
         $post = new BlogEntryModel($file);
 
         $this->assertEquals($post->title(), 'Title');
-        $this->assertEquals($post->date(), '1 January 2012');
+        $this->assertEquals($post->date(), '1st January 2012');
         $this->assertEquals($post->dateISO8601(), '2012-01-01T00:00:00Z');
         $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 00:00:00 +0000');
         $this->assertEquals($post->body(), '<p>Body</p>');
@@ -173,7 +173,7 @@ MARKDOWN
         $post = new BlogEntryModel($file);
 
         $this->assertEquals($post->title(), 'Title');
-        $this->assertEquals($post->date(), '1 January 2012');
+        $this->assertEquals($post->date(), '1st January 2012');
         $this->assertEquals($post->dateISO8601(), '2012-01-01T00:00:00Z');
         $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 00:00:00 +0000');
         $this->assertRegExp(
@@ -200,7 +200,7 @@ MARKDOWN
         $post = new BlogEntryModel($file);
 
         $this->assertEquals($post->title(), 'Title');
-        $this->assertEquals($post->date(), '1 January 2012');
+        $this->assertEquals($post->date(), '1st January 2012');
         $this->assertEquals($post->dateISO8601(), '2012-01-01T00:00:00Z');
         $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 00:00:00 +0000');
         $this->assertRegExp(
@@ -229,7 +229,7 @@ MARKDOWN
         $post = new BlogEntryModel($file);
 
         $this->assertEquals($post->title(), 'Title');
-        $this->assertEquals($post->date(), '1 January 2012');
+        $this->assertEquals($post->date(), '1st January 2012');
         $this->assertEquals($post->dateISO8601(), '2012-01-01T00:00:00Z');
         $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 00:00:00 +0000');
         $this->assertRegExp(
@@ -259,7 +259,7 @@ MARKDOWN
         $post = new BlogEntryModel($file);
 
         $this->assertEquals($post->title(), 'Title');
-        $this->assertEquals($post->date(), '1 January 2012');
+        $this->assertEquals($post->date(), '1st January 2012');
         $this->assertEquals($post->dateISO8601(), '2012-01-01T00:00:00Z');
         $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 00:00:00 +0000');
         $this->assertRegExp(

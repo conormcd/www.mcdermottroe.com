@@ -97,7 +97,7 @@ extends Model
      * @return string The human-readable date of publication of the blog post.
      */
     public function date() {
-        return date('j F Y', $this->timestamp());
+        return Time::day($this->timestamp());
     }
 
     /**
@@ -107,7 +107,7 @@ extends Model
      *                format.
      */
     public function dateISO8601() {
-        return preg_replace('/\+00:00$/', 'Z', gmdate('c', $this->timestamp()));
+        return Time::dateISO8601($this->timestamp());
     }
 
     /**
@@ -116,7 +116,7 @@ extends Model
      * @return string The date of publication of the blog post in RSS format.
      */
     public function dateRSS() {
-        return date(DATE_RSS, $this->timestamp());
+        return Time::dateRSS($this->timestamp());
     }
 
     /**

@@ -107,7 +107,7 @@ extends PageableModel
      *                ISO8601 format.
      */
     public function dateISO8601() {
-        return preg_replace('/\+00:00$/', 'Z', gmdate('c', $this->timestamp));
+        return Time::dateISO8601($this->timestamp);
     }
 
     /**
@@ -117,7 +117,7 @@ extends PageableModel
      *                RSS date format.
      */
     public function dateRSS() {
-        return date(DATE_RSS, $this->timestamp);
+        return Time::dateRSS($this->timestamp);
     }
 
     /**
