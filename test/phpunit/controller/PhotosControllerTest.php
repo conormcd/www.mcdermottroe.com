@@ -53,7 +53,7 @@ extends ControllerTestCase
     public function testWithAlbumSpecified() {
         $controller = $this->create(
             function ($klein, $req, $res) {
-                $req->album = 'ISSFWorldCupGranada2013';
+                $req->album = 'ISSFWorldCupGranadaJul2013';
                 return new PhotosController($klein, $req, $res);
             }
         );

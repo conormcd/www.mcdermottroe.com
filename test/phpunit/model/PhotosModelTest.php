@@ -52,7 +52,7 @@ extends PageableModelTestCase
             $per_page = PhotosModel::PHOTOS_PER_PAGE;
         }
         $start = (($page - 1) * $per_page) + 1;
-        $album = 'IsleOfManEasterShoot2009';
+        $album = 'IsleOfManEasterShootApr2009';
         return new PhotosModel($album, $start, $per_page);
     }
 

@@ -71,17 +71,54 @@ class Flickr {
                 foreach (preg_split('/[^A-Za-z0-9]+/', $title) as $part) {
                     $short_title .= ucfirst($part);
                 }
+                $timestamp = $this->calculateDateFromAlbumTitle(
+                    $title,
+                    $set['date_create']
+                );
                 $thumbnail = $this->getThumbnail($set['primary']);
                 $albums[] = array(
                     'title' => $title,
                     'short_title' => $short_title,
                     'thumbnail' => $thumbnail,
-                    'set' => $set['id']
+                    'set' => $set['id'],
+                    'timestamp' => $timestamp,
+                    'isPhotoAlbum' => true,
                 );
             }
             Cache::set($key, $albums, 3600);
         }
         return $albums;
+    }
+
+    /** Try and infer the real dates of the photos from the album title.
+     *
+     * @param string $title     The title of the album (set).
+     * @param int    $timestamp The timestamp of the creation of the album
+     *                          which can be used as a fallback if there's no
+     *                          date that can be gleaned from the album title.
+     *
+     * @return array A timestamp for the album.
+     */
+    private function calculateDateFromAlbumTitle($title, $timestamp) {
+        $mon = '[A-Z][a-z][a-z]';
+        $year = '\d\d\d\d';
+        $title_time = false;
+        if (preg_match("/($mon $year) - $mon $year$/", $title, $match)) {
+            $title_time = strtotime($match[1]);
+        } else if (preg_match("/($mon)(?:\/| - )$mon ($year)$/", $title, $match)) {
+            $title_time = strtotime("{$match[1]} {$match[2]}");
+        } else if (preg_match("/\b($mon $year)$/", $title, $match)) {
+            $title_time = strtotime($match[1]);
+        }
+        if ($title_time === false && preg_match("/\b($year)$/", $title, $match)) {
+            $title_time = strtotime("Jan " . $match[1]);
+        }
+
+        if ($title_time === false) {
+            return $timestamp;
+        }
+
+        return $title_time;
     }
 
     /**
