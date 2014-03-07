@@ -1,12 +1,6 @@
 {{> head}}
 {{#entries}}
-<div class="blogentry">
-<h2><a href="{{link}}">{{title}}</a></h2>
-<div class="date">{{date}}</div>
-<div class="blogbody">
-{{{body}}}
-</div>
-</div>
+{{> blogentry}}
 {{/entries}}
 <div>
     {{#previous}}
