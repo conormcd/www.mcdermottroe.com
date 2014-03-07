@@ -36,22 +36,20 @@
  */
 $blog_route_regex = <<<REGEX
 @^/
+    blog
     (?:
-        blog
+        /(?P<year>\d{4})
         (?:
-            /(?P<year>\d{4})
+            /(?P<month>\d\d)
             (?:
-                /(?P<month>\d\d)
+                /(?P<day>\d\d)
                 (?:
-                    /(?P<day>\d\d)
-                    (?:
-                        /(?P<slug>[a-z0-9-]+)
-                    )?
+                    /(?P<slug>[a-z0-9-]+)
                 )?
             )?
         )?
-        (?:/feed(?:/(?P<format>rss|atom))?)?
     )?
+    (?:/feed(?:/(?P<format>rss|atom))?)?
 /?$
 REGEX;
 $blog_route_regex = preg_replace('/\s+/', '', $blog_route_regex);
@@ -60,6 +58,7 @@ $ROUTES = array(
     '@^/contact(?:\.php|/)?$' => array('redirect' => '/about'),
     '@^/computer-stuff(?P<suffix>.*)' => array('redirect' => '/tech'),
     '@^/shooting/?$' => array('redirect' => '/shooting/clubs/locations/'),
+    '/' => 'FrontPageController',
     $blog_route_regex => 'BlogController',
     '/photos/[:album]/[i:start]/[i:perpage]/?' => 'PhotosController',
     '/photos/[:album]/[i:start]/?' => 'PhotosController',

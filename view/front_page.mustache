@@ -1,0 +1,22 @@
+{{> head}}
+{{#entries}}
+{{#isBlogEntry}}
+{{> blogentry}}
+{{/isBlogEntry}}
+{{#isPhotoAlbum}}
+{{> photoalbumsummary}}
+{{/isPhotoAlbum}}
+{{#isInstagramPhoto}}
+{{> instagramphoto}}
+{{/isInstagramPhoto}}
+{{/entries}}
+<div>
+    {{#previous}}
+    <a href="{{previous}}" style="float: left">&laquo; Newer</a>
+    {{/previous}}
+    &nbsp;
+    {{#next}}
+    <a href="{{next}}" style="float: right">Older &raquo;</a>
+    {{/next}}
+</div>
+{{> tail}}

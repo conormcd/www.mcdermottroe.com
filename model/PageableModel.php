@@ -52,7 +52,7 @@ extends Model
      * @param int $page     The number of the page to select (1-based).
      * @param int $per_page The number of items to display per page.
      */
-    protected function __construct($page = null, $per_page = null) {
+    public function __construct($page = null, $per_page = null) {
         $this->page = $page ? intval($page) : 1;
         $this->per_page = $per_page ? intval($per_page) : $this->getDefaultPerPage();
         if ($this->page < 1) {

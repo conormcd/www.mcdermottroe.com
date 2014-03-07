@@ -120,6 +120,15 @@ extends Model
     }
 
     /**
+     * Identifier for templates, because Mustache can't run real code.
+     *
+     * @return boolean Always true.
+     */
+    public function isBlogEntry() {
+        return true;
+    }
+
+    /**
      * A summary for the blog post - only used in the RSS output.
      *
      * @return string A summary for the blog post.
