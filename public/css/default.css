@@ -5,7 +5,7 @@ html {
 body {
   height: 100%;
   margin: 0;
-  font-family: "HelveticaNeue", "Helvetica Neue", "Helvetica", "Arial", sans-serif; 
+  font-family: "HelveticaNeue", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   background-color: #F4F4F4;
 }
 
@@ -80,6 +80,14 @@ code {
   margin-left: 80px;
 }
 
+.pager {
+  width: 20em;
+  height: 1em;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .blogentry {
   margin-bottom: 50px;
 }
@@ -106,22 +114,11 @@ code {
   margin-right: auto;
 }
 
-.photoalbumsummary {
-  margin-bottom: 50px;
-}
-
-.photoalbumsummary h2 {
+.caption {
   text-align: center;
 }
 
-.photoalbumsummary img {
-  width: 400px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.photoalbumgrid {
+.photogrid {
   overflow: hidden;
   padding-bottom: 3em;
   width: 800px;
@@ -129,34 +126,43 @@ code {
   margin-right: auto;
 }
 
-.caption {
-  text-align: center;
-}
-
-.photopager {
-  width: 100%;
-  text-align: center;
-  padding: 5px;
-}
-
-.photoalbumthumbnail {
+.photogrid .photo {
   width: 144px;
   height: 144px;
   margin: 3.5%;
   float: left;
-  text-align: center;
+  margin-bottom: 50px;
 }
 
-.photoalbumthumbnail img {
-  margin: auto;
-}
-
-.photoalbumthumbnail a {
+.photo a {
   text-decoration: none;
 }
 
-.photoalbumthumbnail .caption {
-  font-size: 77%;
+.photo .caption {
+  display: block;
+}
+
+.photo.fullsize img {
+  display: block;
+  width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.photo.frontpage {
+  margin-bottom: 50px;
+}
+
+.photo.frontpage h2 {
+  text-align: center;
+}
+
+.photo.frontpage img {
+  display: block;
+  max-width: 480px;
+  max-height: 480px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .instagramphoto {
@@ -168,6 +174,13 @@ code {
 }
 
 .instagramphoto img {
+  width: 480px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.instagramphoto .caption {
   width: 480px;
   display: block;
   margin-left: auto;

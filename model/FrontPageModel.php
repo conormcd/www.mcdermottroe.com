@@ -55,24 +55,23 @@ extends PageableModel
     /**
      * Get a list of all the things that may go on the front page.
      *
-     * @return array An array of mixed objects and arrays which have been 
-     *               returned from the various models representing the sources 
+     * @return array An array of mixed objects and arrays which have been
+     *               returned from the various models representing the sources
      *               of data we fetch from.
      */
     public function all() {
         $all = array();
 
         // Mix in the blog
-        $blog = new BlogModel(null, null, null, null, 1, $this->getDefaultPerPage());
+        $blog = new BlogModel(null, null, null, null, 1, -1);
         foreach ($blog->entries() as $blog_entry) {
             $all[$blog_entry->timestamp()] = $blog_entry;
         }
 
         // Mix in the photos from Flickr
-        $photos = new PhotosModel(null, 1, $this->getDefaultPerPage());
+        $photos = new PhotosModel(null, 1, -1);
         foreach ($photos->albums() as $album) {
-            $album['type'] = 'album';
-            $all[$album['timestamp']] = $album;
+            $all[$album->timestamp()] = $album;
         }
 
         // Mix in the photos from Instagram

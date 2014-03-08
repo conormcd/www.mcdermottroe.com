@@ -104,6 +104,16 @@ extends Model
     }
 
     /**
+     * What "next" means in the context of the given model.
+     *
+     * @return string A word or short phrase that accurately describes what
+     *                clicking the "next" link will do.
+     */
+    public function nextLabel() {
+        return "Older";
+    }
+
+    /**
      * A link to the previous page of results, if applicable.
      *
      * @return string A link which, if fetched, will return the previous page
@@ -122,6 +132,16 @@ extends Model
             $link = $this->link() . $link;
         }
         return $link;
+    }
+
+    /**
+     * What "previous" means in the context of the given model.
+     *
+     * @return string A word or short phrase that accurately describes what
+     *                clicking the "previous" link will do.
+     */
+    public function previousLabel() {
+        return "Newer";
     }
 
     /**

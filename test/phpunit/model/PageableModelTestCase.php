@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2012, Conor McDermottroe
+ * Copyright (c) 2012-2014, Conor McDermottroe
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -141,8 +141,8 @@ extends TestCase
         $this->assertEquals(2, $page->page);
         $this->assertEquals(3, $page->per_page);
         $this->assertEquals(3, count($page->page()));
-        $this->assertRegexp('/per_page=3/', $page->next());
-        $this->assertRegexp('/per_page=3/', $page->previous());
+        $this->assertRegexp('/3/', $page->next());
+        $this->assertRegexp('/3/', $page->previous());
     }
 
     /**

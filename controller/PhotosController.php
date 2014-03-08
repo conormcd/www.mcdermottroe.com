@@ -42,7 +42,7 @@ extends Controller
      * @param object $response The Response object from klein.
      */
     public function __construct($klein, $request, $response) {
-        $this->action = 'photos';
+        $this->action = $request->perpage == 1 ? 'photo' : 'photos';
         parent::__construct($klein, $request, $response);
         $this->model = new PhotosModel(
             $request->album,

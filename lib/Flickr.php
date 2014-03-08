@@ -66,59 +66,17 @@ class Flickr {
                 array('user_id' => $this->getCurrentUserNSID())
             );
             foreach ($response['photosets']['photoset'] as $set) {
-                $title = $set['title']['_content'];
-                $short_title = '';
-                foreach (preg_split('/[^A-Za-z0-9]+/', $title) as $part) {
-                    $short_title .= ucfirst($part);
-                }
-                $timestamp = $this->calculateDateFromAlbumTitle(
-                    $title,
-                    $set['date_create']
-                );
-                $thumbnail = $this->getThumbnail($set['primary']);
-                $albums[] = array(
-                    'title' => $title,
-                    'short_title' => $short_title,
-                    'thumbnail' => $thumbnail,
-                    'set' => $set['id'],
-                    'timestamp' => $timestamp,
-                    'isPhotoAlbum' => true,
+                $albums[] = new PhotoAlbumModel(
+                    $this,
+                    $set['id'],
+                    $set['title']['_content'],
+                    $set['date_create'],
+                    $set['primary']
                 );
             }
             Cache::set($key, $albums, 3600);
         }
         return $albums;
-    }
-
-    /** Try and infer the real dates of the photos from the album title.
-     *
-     * @param string $title     The title of the album (set).
-     * @param int    $timestamp The timestamp of the creation of the album
-     *                          which can be used as a fallback if there's no
-     *                          date that can be gleaned from the album title.
-     *
-     * @return array A timestamp for the album.
-     */
-    private function calculateDateFromAlbumTitle($title, $timestamp) {
-        $mon = '[A-Z][a-z][a-z]';
-        $year = '\d\d\d\d';
-        $title_time = false;
-        if (preg_match("/($mon $year) - $mon $year$/", $title, $match)) {
-            $title_time = strtotime($match[1]);
-        } else if (preg_match("/($mon)(?:\/| - )$mon ($year)$/", $title, $match)) {
-            $title_time = strtotime("{$match[1]} {$match[2]}");
-        } else if (preg_match("/\b($mon $year)$/", $title, $match)) {
-            $title_time = strtotime($match[1]);
-        }
-        if ($title_time === false && preg_match("/\b($year)$/", $title, $match)) {
-            $title_time = strtotime("Jan " . $match[1]);
-        }
-
-        if ($title_time === false) {
-            return $timestamp;
-        }
-
-        return $title_time;
     }
 
     /**
@@ -131,7 +89,7 @@ class Flickr {
     public function getAlbum($album_short_name) {
         $albums = $this->getAlbums();
         foreach ($albums as $album) {
-            if ($album['short_title'] == $album_short_name) {
+            if ($album->slug() == $album_short_name) {
                 return $album;
             }
         }
@@ -144,33 +102,41 @@ class Flickr {
     /**
      * Get a list of the photos in a set.
      *
-     * @param string $album The album from which to retrieve the photos.
+     * @param PhotoAlbumModel $album The album from which to retrieve the
+     *                               photos.
      *
-     * @return array An array of hashes where each hash contains the details of
-     *               a single photo.
+     * @return array An array of PhotoModel objects.
      */
     public function getPhotos($album) {
-        $key = 'FLICKR_PHOTOS_' . $album;
+        $key = 'FLICKR_PHOTOS_' . $album->slug();
         $photos = Cache::get($key);
+        $photos = null;
         if (!$photos) {
-            $album_id = $this->getAlbum($album);
-            $album_id = $album_id['set'];
             $photos = array();
             $index = 0;
             $result = $this->photosets->getPhotos(
                 array(
-                    'photoset_id' => $album_id,
-                    'extras' => 'url_o,url_q,url_m'
+                    'photoset_id' => $album->albumID(),
+                    'extras' => 'url_o,url_q,url_c,url_z,url_m'
                 )
             );
             foreach ($result['photoset']['photo'] as $photo) {
-                $photos[$index] = array(
-                    'album' => $album,
-                    'index' => $index,
+                $sizes = array(
                     'thumbnail' => $photo['url_q'],
-                    'large' => $photo['url_m'],
-                    'fullsize' => $photo['url_o'],
-                    'title' => $photo['title'],
+                    'fullsize' => $photo['url_o']
+                );
+                foreach (array('c', 'z', 'm', 'o') as $size) {
+                    if (array_key_exists("url_$size", $photo)) {
+                        $sizes['large'] = $photo["url_$size"];
+                        break;
+                    }
+                }
+                $photos[$index] = new PhotoModel(
+                    $album,
+                    $photo['id'],
+                    $index,
+                    $photo['title'],
+                    $sizes
                 );
                 $index++;
             }
@@ -189,25 +155,6 @@ class Flickr {
             array('username' => $this->_username)
         );
         return $response['user']['nsid'];
-    }
-
-    /**
-     * Get the thumbnail for a specific photo.
-     *
-     * @param string $photo_id The ID of the photo.
-     *
-     * @return string The URL of the thumbnail.
-     */
-    private function getThumbnail($photo_id) {
-        $response = $this->photos->getSizes(array('photo_id' => $photo_id));
-        $url = null;
-        foreach ($response['sizes']['size'] as $size) {
-            $url = $size['source'];
-            if ($size['label'] == 'Large Square') {
-                break;
-            }
-        }
-        return $url;
     }
 
     /**

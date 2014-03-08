@@ -98,17 +98,64 @@ extends PageableModel
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @return array See {@link PageableModel#next()}.
+     */
+    public function next() {
+        $link = "";
+        if ($this->album && $this->page < $this->numPages()) {
+            $link = $this->generateLink(
+                $this->album,
+                ($this->page * $this->per_page) + 1,
+                $this->per_page
+            );
+        }
+        return $link;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return array See {@link PageableModel#nextLabel()}.
+     */
+    public function nextLabel() {
+        return "Next";
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return array See {@link PageableModel#previous()}.
+     */
+    public function previous() {
+        $link = "";
+        if ($this->album && $this->page > 1) {
+            $link = $this->generateLink(
+                $this->album,
+                ((($this->page - 1) * $this->per_page) - $this->per_page) + 1,
+                $this->per_page
+            );
+        }
+        return $link;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return array See {@link PageableModel#previousLabel()}.
+     */
+    public function previousLabel() {
+        return "Previous";
+    }
+
+    /**
      * Get the list of albums from Flickr.
      *
      * @return array The list of albums.
      */
     public function albums() {
-        $albums = array();
-        foreach ($this->_flickr->getAlbums() as $album) {
-            $album['link'] = '/photos/' . $album['short_title'];
-            $albums[] = $album;
-        }
-        return $albums;
+        return $this->_flickr->getAlbums();
     }
 
     /**
@@ -119,12 +166,7 @@ extends PageableModel
      * @return array A list of the photos in that album.
      */
     public function photos($album) {
-        $photos = $this->_flickr->getPhotos($album);
-        foreach ($photos as $photo) {
-            $idx = $photo['index'];
-            $photos[$idx]['link'] = "/photos/$album/" . ($idx + 1) . "/1";
-        }
-        return $photos;
+        return $this->_flickr->getPhotos($this->_flickr->getAlbum($album));
     }
 
     /**
@@ -133,13 +175,32 @@ extends PageableModel
      * @return array See {@link PageableModel#link()}.
      */
     protected function link() {
+        return $this->generateLink(
+            $this->album,
+            (($this->page - 1) * $this->per_page) + 1,
+            $this->per_page
+        );
+    }
+
+    /**
+     * Create a link
+     *
+     * @param string $album    The album to link to, if appropriate.
+     * @param int    $page     The page to link to, if appropriate.
+     * @param int    $per_page The number of results per page on the
+     *                         destination page, if apppropriate.
+     *
+     * @return string A relative URL to the page requested.
+     */
+    private function generateLink($album, $page, $per_page) {
+        if ($page == 1) {
+            $page = null;
+        }
+        if ($per_page == $this->getDefaultPerPage()) {
+            $per_page = null;
+        }
         $parts = array_filter(
-            array(
-                'photos',
-                $this->album,
-                (($this->page - 1) * $this->per_page) + 1,
-                $this->per_page
-            )
+            array('photos', $album, $page, $per_page)
         );
         return '/' . join('/', $parts);
     }
