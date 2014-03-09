@@ -136,69 +136,10 @@ GET /photos/IsleOfManEasterShootApr2009/9/1
 GET /pics/me.jpg
 GET /robots.txt
 GET /shooting/ 301
-GET /shooting/clubs/locations/
-GET /shooting/clubs/locations/gpx.php
-GET /shooting/clubs/locations/gpx.php?club=All
-GET /shooting/clubs/locations/gpx.php?club=BRC+Sporting+Club
-GET /shooting/clubs/locations/gpx.php?club=Ballyhoura+Rifle+and+Pistol+Range
-GET /shooting/clubs/locations/gpx.php?club=Bishops+Mountain+Shooting+Centre
-GET /shooting/clubs/locations/gpx.php?club=Castlebridge+Pistol+Club
-GET /shooting/clubs/locations/gpx.php?club=Comber+Rifle+Club+%28Indoor%29
-GET /shooting/clubs/locations/gpx.php?club=Comber+Rifle+Club+%28Outdoor%29
-GET /shooting/clubs/locations/gpx.php?club=Comber+Rifle+Club+(Indoor)
-GET /shooting/clubs/locations/gpx.php?club=Comber+Rifle+Club+(Outdoor)
-GET /shooting/clubs/locations/gpx.php?club=Courtlough+Shooting+Grounds
-GET /shooting/clubs/locations/gpx.php?club=Dublin+Rifle+Club
-GET /shooting/clubs/locations/gpx.php?club=Dublin+Target+Sports+Club
-GET /shooting/clubs/locations/gpx.php?club=Dublin+University+Rifle+Club
-GET /shooting/clubs/locations/gpx.php?club=East+Coast+Shooting+Club+-+Arklow
-GET /shooting/clubs/locations/gpx.php?club=East+Coast+Shooting+Club+-+Roundwood
-GET /shooting/clubs/locations/gpx.php?club=Fermoy+Rifle+Club
-GET /shooting/clubs/locations/gpx.php?club=Fingal+Target+Shooting+Club
-GET /shooting/clubs/locations/gpx.php?club=Harbour+House+Shooting
-GET /shooting/clubs/locations/gpx.php?club=Hilltop+Quad+and+Sporting+Club
-GET /shooting/clubs/locations/gpx.php?club=Isle+of+Man+Shooting+Club
-GET /shooting/clubs/locations/gpx.php?club=Lough+Bo+Shooting+Centre
-GET /shooting/clubs/locations/gpx.php?club=Mallow+Rifle+and+Pistol+Club
-GET /shooting/clubs/locations/gpx.php?club=Midlands+National+Shooting+Centre
-GET /shooting/clubs/locations/gpx.php?club=Mourne+Shooting+Grounds
-GET /shooting/clubs/locations/gpx.php?club=Naul+Clay+Pigeon+Shooting+Club
-GET /shooting/clubs/locations/gpx.php?club=Peveril+Rifle+Club
-GET /shooting/clubs/locations/gpx.php?club=Rathdrum+Rifle+and+Pistol+Club
-GET /shooting/clubs/locations/gpx.php?club=University+College+Dublin+Rifle+Club
-GET /shooting/clubs/locations/gpx.php?club=Wilkinstown+Target+Shooting+Club
-GET /shooting/clubs/locations/kml.php?club=All
-GET /shooting/clubs/locations/kml.php?club=BRC+Sporting+Club
-GET /shooting/clubs/locations/kml.php?club=Ballyhoura+Rifle+and+Pistol+Range
-GET /shooting/clubs/locations/kml.php?club=Bishops+Mountain+Shooting+Centre
-GET /shooting/clubs/locations/kml.php?club=Bishops+Mountain+Shooting+Centre&ge_fileext=.kml
-GET /shooting/clubs/locations/kml.php?club=Castlebridge+Pistol+Club
-GET /shooting/clubs/locations/kml.php?club=Comber+Rifle+Club+%28Indoor%29
-GET /shooting/clubs/locations/kml.php?club=Comber+Rifle+Club+%28Outdoor%29
-GET /shooting/clubs/locations/kml.php?club=Comber+Rifle+Club+(Indoor)
-GET /shooting/clubs/locations/kml.php?club=Comber+Rifle+Club+(Outdoor)
-GET /shooting/clubs/locations/kml.php?club=Courtlough+Shooting+Grounds
-GET /shooting/clubs/locations/kml.php?club=Dublin+Rifle+Club
-GET /shooting/clubs/locations/kml.php?club=Dublin+Target+Sports+Club
-GET /shooting/clubs/locations/kml.php?club=Dublin+University+Rifle+Club
-GET /shooting/clubs/locations/kml.php?club=East+Coast+Shooting+Club+-+Arklow
-GET /shooting/clubs/locations/kml.php?club=East+Coast+Shooting+Club+-+Roundwood
-GET /shooting/clubs/locations/kml.php?club=Fermoy+Rifle+Club
-GET /shooting/clubs/locations/kml.php?club=Fingal+Target+Shooting+Club
-GET /shooting/clubs/locations/kml.php?club=Harbour+House+Shooting
-GET /shooting/clubs/locations/kml.php?club=Hilltop+Quad+and+Sporting+Club
-GET /shooting/clubs/locations/kml.php?club=Isle+of+Man+Shooting+Club
-GET /shooting/clubs/locations/kml.php?club=Lough+Bo+Shooting+Centre
-GET /shooting/clubs/locations/kml.php?club=Mallow+Rifle+and+Pistol+Club
-GET /shooting/clubs/locations/kml.php?club=Midlands%20National%20Shooting%20Centre&t=h&z=14
-GET /shooting/clubs/locations/kml.php?club=Midlands+National+Shooting+Centre
-GET /shooting/clubs/locations/kml.php?club=Midlands+National+Shooting+Centre&ge_fileext=.kml
-GET /shooting/clubs/locations/kml.php?club=Midlands+National+Shooting+Centre&t=h&z=14
-GET /shooting/clubs/locations/kml.php?club=Midlands+Rifle+Club
-GET /shooting/clubs/locations/kml.php?club=Mourne+Shooting+Grounds
-GET /shooting/clubs/locations/kml.php?club=Naul+Clay+Pigeon+Shooting+Club
-GET /shooting/clubs/locations/kml.php?club=Peveril+Rifle+Club
-GET /shooting/clubs/locations/kml.php?club=Rathdrum+Rifle+and+Pistol+Club
-GET /shooting/clubs/locations/kml.php?club=University+College+Dublin+Rifle+Club
-GET /shooting/clubs/locations/kml.php?club=Wilkinstown+Target+Shooting+Club
-GET /shooting/clubs/locations/rss.php 404
+GET /shooting/clubs/locations/ 301
+GET /shooting/clubs/locations/gpx.php 301
+GET /shooting/clubs/locations/gpx.php?club=All 301
+GET /shooting/clubs/locations/gpx.php?club=BRC+Sporting+Club 301
+GET /shooting/clubs/locations/kml.php?club=All 301
+GET /shooting/clubs/locations/kml.php?club=BRC+Sporting+Club 301
+GET /shooting/clubs/locations/rss.php 301

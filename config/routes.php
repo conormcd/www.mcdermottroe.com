@@ -31,16 +31,13 @@ $blog_route_regex = preg_replace('/\s+/', '', $blog_route_regex);
 $ROUTES = array(
     '@^/contact(?:\.php|/)?$' => array('redirect' => '/about'),
     '@^/computer-stuff(?P<suffix>.*)' => array('redirect' => '/tech'),
-    '@^/shooting/?$' => array('redirect' => '/shooting/clubs/locations/'),
+    '@^/shooting(/.*)?' => array('redirect' => 'http://www.shooting.ie/'),
     '/' => 'FrontPageController',
     $blog_route_regex => 'BlogController',
     '/photos/[:album]/[i:start]/[i:perpage]/?' => 'PhotosController',
     '/photos/[:album]/[i:start]/?' => 'PhotosController',
     '/photos/[:album]/?' => 'PhotosController',
     '/photos/?' => 'PhotosController',
-    '/shooting/clubs/locations/map.php' => 'ShootingClubMapRedirectController',
-    '/shooting/clubs/locations/[|gpx|kml:format][.php]?' =>
-        'ShootingClubsController',
     '/[about|tech:action]/?' => 'Controller',
     '@/(?:css|js).*' => 'StaticFileController',
 );
