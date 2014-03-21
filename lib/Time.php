@@ -55,10 +55,8 @@ class Time {
             return $day_number . 'nd';
         } else if (in_array($day_number, array(3, 23))) {
             return $day_number . 'rd';
-        } else if ($day_number >= 4 && $day_number < 31) {
-            return $day_number . 'th';
         } else {
-            throw new Exception("Invalid day: $day_number");
+            return $day_number . 'th';
         }
     }
 }
