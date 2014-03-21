@@ -31,28 +31,39 @@ extends Controller
         $uri = $this->request->uri();
         $public_dir = realpath(dirname(__DIR__) . '/public');
         $localpath = realpath("$public_dir$uri");
-        $filetypes = array(
-            'css' => 'text/css',
-            'js' => 'application/javascript',
-            'jpg' => 'image/jpeg',
-        );
 
-        if (file_exists($localpath)) {
-            if (preg_match("#^$public_dir#", $localpath)) {
-                foreach ($filetypes as $ext => $mime_type) {
-                    if (preg_match("/\.$ext$/", $localpath)) {
-                        $content_type = $mime_type;
-                    }
-                }
-
-                if ($content_type) {
-                    $this->response->header('Content-Type', $content_type);
-                }
-                print file_get_contents($localpath);
+        if (is_file($localpath) && preg_match("#^$public_dir#", $localpath)) {
+            $content_type = $this->detectMimeType($localpath);
+            if ($content_type) {
+                $this->response->header('Content-Type', $content_type);
             }
-        } else {
-            throw new Exception('File not found', 404);
+            $content = file_get_contents($localpath);
+            $this->response->header('Content-Length', strlen($content));
+            $this->response->body($content);
+            return $this->response;
         }
+        throw new Exception('File not found: ' . $uri, 404);
+    }
+
+    /**
+     * Detect the MIME type of a file, if possible.
+     *
+     * @param string $file The path to the file to check the type of.
+     *
+     * @return string The MIME type for the file, if known. Null otherwise.
+     */
+    private function detectMimeType($file) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $type = finfo_file($finfo, $file);
+        finfo_close($finfo);
+        if ($type === 'text/plain') {
+            switch (pathinfo($file, PATHINFO_EXTENSION)) {
+                case 'css':
+                    $type = 'text/css';
+                    break;
+            }
+        }
+        return $type === false ? null : $type;
     }
 }
 

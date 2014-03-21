@@ -39,7 +39,7 @@ $ROUTES = array(
     '/photos/[:album]/?' => 'PhotosController',
     '/photos/?' => 'PhotosController',
     '/[about|tech:action]/?' => 'Controller',
-    '@/(?:css|js).*' => 'StaticFileController',
+    '@/(?:(?:css|js)/.*|favicon.ico)$' => 'StaticFileController',
 );
 
 ?>
