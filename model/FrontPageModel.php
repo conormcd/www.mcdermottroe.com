@@ -42,7 +42,7 @@ extends PageableModel
             $all[$blog_entry->timestamp()] = $blog_entry;
         }
 
-        // Mix in the photos from Flickr
+        // Mix in the photo albums
         $photos = new PhotosModel(null, 1, -1);
         foreach ($photos->albums() as $album) {
             $all[$album->timestamp()] = $album;

@@ -5,16 +5,33 @@
  *
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
-class Flickr {
+class Flickr
+extends PhotoProvider
+{
     private $_api_key;
 
     private $_api_secret;
 
     private $_username;
 
+    private $_http_client;
+
+    /**
+     * Get an instance of this class, configured from the environment.
+     *
+     * @return Flickr A working Flickr instance.
+     */
+    public static function getInstance() {
+        return new Flickr(
+            Environment::get('FLICKR_API_KEY'),
+            Environment::get('FLICKR_API_SECRET'),
+            Environment::get('FLICKR_API_USER')
+        );
+    }
+
     /**
      * Create a new Flickr interface. You can find the credentials in the
-     * environment if you include environment.php.
+     * environment.
      *
      * @param string $key    The API key for Flickr.
      * @param string $secret The API secret for Flickr.
@@ -24,12 +41,13 @@ class Flickr {
         $this->_api_key = $key;
         $this->_api_secret = $secret;
         $this->_username = $user;
+        $this->_http_client = HTTPClient::getInstance();
     }
 
     /**
-     * Get a list of the sets owned by the current user.
+     * {@inheritdoc}
      *
-     * @return An array of arrays, each of which contains album details.
+     * @return array See {@link PhotoProvider#getAlbum()}
      */
     public function getAlbums() {
         $key = 'FLICKR_ALBUMS';
@@ -54,11 +72,11 @@ class Flickr {
     }
 
     /**
-     * Get a single set by name.
+     * {@inheritdoc}
      *
-     * @param string $album_short_name The short name of the set to fetch.
+     * @param string $album_short_name See {@link PhotoProvider#getAlbum()}
      *
-     * @return Return a single entry from getAlbums, searched by short name.
+     * @return PhotoAlbumModel See {@link PhotoProvider#getAlbum()}
      */
     public function getAlbum($album_short_name) {
         $albums = $this->getAlbums();
@@ -74,17 +92,15 @@ class Flickr {
     }
 
     /**
-     * Get a list of the photos in a set.
+     * {@inheritdoc}
      *
-     * @param PhotoAlbumModel $album The album from which to retrieve the
-     *                               photos.
+     * @param string $album See {@link PhotoProvider#getAlbum()}
      *
-     * @return array An array of PhotoModel objects.
+     * @return array See {@link PhotoProvider#getAlbum()}
      */
     public function getPhotos($album) {
         $key = 'FLICKR_PHOTOS_' . $album->slug();
         $photos = Cache::get($key);
-        $photos = null;
         if (!$photos) {
             $photos = array();
             $index = 0;
@@ -144,7 +160,7 @@ class Flickr {
         $key = 'FLICKR_API_REQUEST' . md5($url);
         $result = Cache::get($key);
         if (!$result) {
-            $result = JSON::decode(file_get_contents($url), true);
+            $result = JSON::decode($this->_http_client->get($url));
             if ($result !== null) {
                 if ($result['stat'] == 'fail') {
                     throw new Exception(

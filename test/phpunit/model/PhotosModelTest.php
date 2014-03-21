@@ -26,7 +26,7 @@ extends PageableModelTestCase
             $per_page = PhotosModel::PHOTOS_PER_PAGE;
         }
         $start = (($page - 1) * $per_page) + 1;
-        $album = 'IsleOfManEasterShootApr2009';
+        $album = FakeFlickr::albumSlugForTesting();
         return new PhotosModel($album, $start, $per_page);
     }
 
@@ -39,6 +39,17 @@ extends PageableModelTestCase
         $model = new PhotosModel();
         $this->assertEquals($model->albums(), $model->all());
         $this->assertEquals($model->albums(), $model->page());
+    }
+
+    /**
+     * Check the link is fiddled to work with the photo URL style.
+     *
+     * @return void
+     */
+    public function testLink() {
+        $photos = $this->createTestObject();
+        $album = FakeFlickr::albumSlugForTesting();
+        $this->assertEquals("/photos/$album", $photos->link());
     }
 }
 

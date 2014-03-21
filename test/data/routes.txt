@@ -91,48 +91,30 @@ GET /photos/
 GET /photos/Graduation 404
 GET /photos/Graduation/ 404
 GET /photos/Graduation/0/1 404
-GET /photos/Graduation/0/12 404
-GET /photos/Graduation/1/1 404
-GET /photos/Graduation/2/1 404
-GET /photos/Graduation/3/1 404
-GET /photos/Graduation/4/1 404
-GET /photos/Graduation/5/1 404
-GET /photos/Graduation/6/1 404
-GET /photos/Graduation/7/1 404
-GET /photos/Graduation/8/1 404
-GET /photos/Graduation/9/1 404
-GET /photos/IsleOfManEasterShootApr2009
-GET /photos/IsleOfManEasterShootApr2009/
-GET /photos/IsleOfManEasterShootApr2009/0/1
-GET /photos/IsleOfManEasterShootApr2009/0/12
-GET /photos/IsleOfManEasterShootApr2009/1/1
-GET /photos/IsleOfManEasterShootApr2009/10/1
-GET /photos/IsleOfManEasterShootApr2009/11/1
-GET /photos/IsleOfManEasterShootApr2009/12/1
-GET /photos/IsleOfManEasterShootApr2009/12/12
-GET /photos/IsleOfManEasterShootApr2009/13/1
-GET /photos/IsleOfManEasterShootApr2009/14/1
-GET /photos/IsleOfManEasterShootApr2009/15/1
-GET /photos/IsleOfManEasterShootApr2009/16/1
-GET /photos/IsleOfManEasterShootApr2009/16/12
-GET /photos/IsleOfManEasterShootApr2009/17/1
-GET /photos/IsleOfManEasterShootApr2009/18/1
-GET /photos/IsleOfManEasterShootApr2009/19/1
-GET /photos/IsleOfManEasterShootApr2009/2/1
-GET /photos/IsleOfManEasterShootApr2009/20/1
-GET /photos/IsleOfManEasterShootApr2009/21/1
-GET /photos/IsleOfManEasterShootApr2009/22/1
-GET /photos/IsleOfManEasterShootApr2009/23/1
-GET /photos/IsleOfManEasterShootApr2009/24/1 404
-GET /photos/IsleOfManEasterShootApr2009/3/1
-GET /photos/IsleOfManEasterShootApr2009/4/1
-GET /photos/IsleOfManEasterShootApr2009/4/12
-GET /photos/IsleOfManEasterShootApr2009/5/1
-GET /photos/IsleOfManEasterShootApr2009/5/12
-GET /photos/IsleOfManEasterShootApr2009/6/1
-GET /photos/IsleOfManEasterShootApr2009/7/1
-GET /photos/IsleOfManEasterShootApr2009/8/1
-GET /photos/IsleOfManEasterShootApr2009/9/1
+GET /photos/AFakePhotoAlbum
+GET /photos/AFakePhotoAlbum/
+GET /photos/AFakePhotoAlbum/0/1
+GET /photos/AFakePhotoAlbum/0/12
+GET /photos/AFakePhotoAlbum/1/1
+GET /photos/AFakePhotoAlbum/10/1
+GET /photos/AFakePhotoAlbum/11/1
+GET /photos/AFakePhotoAlbum/12/1
+GET /photos/AFakePhotoAlbum/12/12
+GET /photos/AFakePhotoAlbum/13/1
+GET /photos/AFakePhotoAlbum/14/1
+GET /photos/AFakePhotoAlbum/15/1
+GET /photos/AFakePhotoAlbum/16/1 404
+GET /photos/AFakePhotoAlbum/16/12
+GET /photos/AFakePhotoAlbum/2/1
+GET /photos/AFakePhotoAlbum/3/1
+GET /photos/AFakePhotoAlbum/4/1
+GET /photos/AFakePhotoAlbum/4/12
+GET /photos/AFakePhotoAlbum/5/1
+GET /photos/AFakePhotoAlbum/5/12
+GET /photos/AFakePhotoAlbum/6/1
+GET /photos/AFakePhotoAlbum/7/1
+GET /photos/AFakePhotoAlbum/8/1
+GET /photos/AFakePhotoAlbum/9/1
 GET /pics/me.jpg
 GET /robots.txt
 GET /shooting/ 301

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Model for wrapping accesses to Flickr.
+ * Model for wrapping accesses to our photo provider.
  *
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
@@ -17,11 +17,11 @@ extends PageableModel
     /** The name of the album to show. */
     public $album;
 
-    /** The photo provider we're using for a backend is Flickr. */
-    private $_flickr;
+    /** The photo provider we're using. */
+    private $_provider;
 
     /**
-     * Create a facade over Flickr.
+     * Manipulate the photo provider.
      *
      * @param string $album    The name of the album to fetch, null if you want
      *                         to receive a page of thumbnails for albums.
@@ -42,11 +42,7 @@ extends PageableModel
         }
         parent::__construct($page, $per_page);
         $this->album = $album;
-        $this->_flickr = new Flickr(
-            $_ENV['FLICKR_API_KEY'],
-            $_ENV['FLICKR_API_SECRET'],
-            $_ENV['FLICKR_API_USER']
-        );
+        $this->_provider = PhotoProvider::getInstance();
     }
 
     /**
@@ -124,12 +120,12 @@ extends PageableModel
     }
 
     /**
-     * Get the list of albums from Flickr.
+     * Get the list of albums from the photo provider.
      *
      * @return array The list of albums.
      */
     public function albums() {
-        return $this->_flickr->getAlbums();
+        return $this->_provider->getAlbums();
     }
 
     /**
@@ -140,7 +136,7 @@ extends PageableModel
      * @return array A list of the photos in that album.
      */
     public function photos($album) {
-        return $this->_flickr->getPhotos($this->_flickr->getAlbum($album));
+        return $this->_provider->getPhotos($this->_provider->getAlbum($album));
     }
 
     /**
@@ -148,7 +144,7 @@ extends PageableModel
      *
      * @return array See {@link PageableModel#link()}.
      */
-    protected function link() {
+    public function link() {
         return $this->generateLink(
             $this->album,
             (($this->page - 1) * $this->per_page) + 1,
