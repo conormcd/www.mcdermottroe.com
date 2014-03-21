@@ -16,15 +16,49 @@ extends PHPUnit_Framework_TestCase
     public function setUp() {
         date_default_timezone_set('Europe/Dublin');
 
+        // Mark the environment as loaded.
+        Environment::load();
+
+        // Now kill everything in the environment since we need to not assume
+        // any particular environment variables.
+        foreach (array_keys($_ENV) as $var) {
+            unset($_ENV[$var]);
+        }
+
         // Dummy Amazon Affiliate data
         $_ENV['AMAZON_AFFILIATE_TAG'] = 'affiliate_tag';
         $_ENV['AMAZON_AFFILIATE_LINK_CODE'] = 'affiliate_link_code';
         $_ENV['AMAZON_AFFILIATE_CAMP'] = 1234566789;
         $_ENV['AMAZON_AFFILIATE_CREATIVE'] = 26667;
 
-        // Get rid of the SENTRY_DSN so that test failures don't end up in
-        // Sentry.
-        $_ENV['SENTRY_DSN'] = null;
+        // Disable all caching
+        $_ENV['CACHE_ENABLE'] = false;
+
+        // Dummy Flickr credentials
+        $_ENV['FLICKR_API_KEY'] = md5(rand());
+        $_ENV['FLICKR_API_SECRET'] = md5(rand());
+        $_ENV['FLICKR_API_USER'] = md5(rand());
+
+        // Dummy Instagram credentials.
+        $_ENV['INSTAGRAM_CLIENT_ID'] = 'fake fake fake';
+        $_ENV['INSTAGRAM_CLIENT_SECRET'] = 'fake fake fake';
+        $_ENV['INSTAGRAM_USER_ID'] = 123456;
+
+        // Use fakes for the external service providers.
+        $_ENV['EXCEPTION_TRACKER'] = 'FakeSentry';
+        $_ENV['HTTP_CLIENT_CLASS'] = 'FakeHTTPClient';
+        $_ENV['INSTAGRAM_CLASS'] = 'FakeInstagram';
+        $_ENV['PHOTO_PROVIDER'] = 'FakeFlickr';
+    }
+
+    /**
+     * Common teardown for all tests.
+     *
+     * @return void
+     */
+    public function tearDown() {
+        FakeHTTPClient::reset();
+        Cache::clear();
     }
 
     /**

@@ -134,7 +134,7 @@ class Controller {
      *
      * @return string The name of the template to render.
      */
-    protected function view() {
+    public function view() {
         if ($this->output_format) {
             return $this->action . '_' . $this->output_format;
         } else {

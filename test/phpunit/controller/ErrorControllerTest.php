@@ -19,10 +19,11 @@ extends ControllerTestCase
      * @return object An instance of ErrorController.
      */
     public function sampleController($exception = null) {
-        return $this->create(
-            function ($klein, $req, $res) use ($exception) {
-                return new ErrorController($klein, $req, $res, $exception);
-            }
+        return new ErrorController(
+            $this->klein(),
+            $this->req(),
+            $this->res(),
+            $exception
         );
     }
 
@@ -40,10 +41,10 @@ extends ControllerTestCase
             $exception = $e;
         }
 
-        $result = $this->runController($this->sampleController($exception));
+        $res = $this->sampleController($exception)->get();
 
-        $this->assertEquals(503, $result['status']);
-        $this->assertNotNull($result['output']);
+        $this->assertEquals(503, $res->status()->getCode());
+        $this->assertNotNull($res->body());
     }
 
     /**
@@ -60,10 +61,10 @@ extends ControllerTestCase
             $exception = $e;
         }
 
-        $result = $this->runController($this->sampleController($exception));
+        $res = $this->sampleController($exception)->get();
 
-        $this->assertEquals(500, $result['status']);
-        $this->assertNotNull($result['output']);
+        $this->assertEquals(500, $res->status()->getCode());
+        $this->assertNotNull($res->body());
     }
 }
 

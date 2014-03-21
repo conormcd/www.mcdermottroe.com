@@ -16,8 +16,9 @@ extends TestCase
      * @return void
      */
     public function testGetReturnsSomeContent() {
-        $result = $this->runController($this->sampleController());
-        $this->assertNotNull($result['output']);
+        $controller = $this->sampleController();
+        $res = $controller->get();
+        $this->assertNotNull($res->body());
     }
 
     /**
@@ -27,113 +28,160 @@ extends TestCase
      * @return void
      */
     public function testGetCreatesContentLengthHeader() {
-        $result = $this->runController($this->sampleController());
+        $controller = $this->sampleController();
+        $res = $controller->get();
 
-        $this->assertNotNull($result['output']);
-        $this->assertArrayHasKey('content-length', $result['headers']);
+        $this->assertNotNull($res->body());
+        $this->assertNotNull($res->headers());
+        $this->assertTrue($res->headers()->exists('Content-Length'));
         $this->assertEquals(
-            strlen($result['output']),
-            $result['headers']['content-length']
+            strlen($res->body()),
+            $res->headers()->get('Content-Length')
         );
     }
 
     /**
-     * Make sure that any overrides/extensions of the constructor don't break
-     * the checking of the constructor parameters.
+     * Test that the constructor detects a bad \Klein\Klein object.
      *
      * @return void
      */
-    public function testConstructorValidatesParameters() {
-        $req = new \Klein\Request();
-        $req->action = 'error';
-
-        // Both not null
-        $exception_thrown = false;
-        try {
-            new Controller(new \Klein\Klein(), $req, new \Klein\Response());
-        } catch (Exception $e) {
-            $exception_thrown = true;
-        }
-        $this->assertFalse(
-            $exception_thrown,
-            "Threw an exception even when request and response OK."
+    public function testControllerBadKlein() {
+        $controller_name = $this->controllerName();
+        $this->assertException(
+            function () use ($controller_name) {
+                new $controller_name(null, $this->req(), $this->res());
+            }
         );
+    }
 
-        // Request null
-        $exception_thrown = false;
-        try {
-            new Controller(null, new \Klein\Response());
-        } catch (Exception $e) {
-            $exception_thrown = true;
-        }
-        $this->assertTrue(
-            $exception_thrown,
-            "Failed to detect bad request object."
+    /**
+     * Test that the constructor detects a bad \Klein\Request object.
+     *
+     * @return void
+     */
+    public function testControllerBadRequest() {
+        $controller_name = $this->controllerName();
+        $this->assertException(
+            function () use ($controller_name) {
+                new $controller_name($this->klein(), null, $this->res());
+            }
         );
+    }
 
-        // Response null
-        $exception_thrown = false;
-        try {
-            new Controller($req, null);
-        } catch (Exception $e) {
-            $exception_thrown = true;
-        }
-        $this->assertTrue(
-            $exception_thrown,
-            "Failed to detect bad response object."
+    /**
+     * Test that the constructor detects a bad \Klein\Response object.
+     *
+     * @return void
+     */
+    public function testControllerBadResponse() {
+        $controller_name = $this->controllerName();
+        $this->assertException(
+            function () use ($controller_name) {
+                new $controller_name($this->klein(), $this->req(), null);
+            }
         );
+    }
 
-        // Both null
-        $exception_thrown = false;
-        try {
-            new Controller(null, null);
-        } catch (Exception $e) {
-            $exception_thrown = true;
-        }
-        $this->assertTrue(
-            $exception_thrown,
-            "Failed to detect bad request/response object."
-        );
+    /**
+     * Test the onError method.
+     *
+     * @param int $exception_code The code for the test exception.
+     * @param int $http_status    The expected resulting HTTP status.
+     *
+     * @return void
+     */
+    protected function onErrorTest($exception_code = 404, $http_status = 404) {
+        $controller = $this->sampleController();
 
-        // Request with no action
-        unset($req->action);
-        $exception_thrown = false;
+        $res = $this->res();
+        $type = "Exception";
+        $message = "This is a test.";
         try {
-            new Controller(new \Klein\Request(), new \Klein\Response());
+            throw new $type($message, $exception_code);
         } catch (Exception $e) {
-            $exception_thrown = true;
+            $res = $controller->onError($res, $message, $type, $e);
         }
-        $this->assertTrue(
-            $exception_thrown,
-            "Failed to detect bad request with no action."
-        );
+
+        $this->assertNotNull($res);
+        $this->assertNotNull($res->body());
+        $this->assertRegexp("/$message/", $res->body());
+        $this->assertEquals($http_status, $res->status()->getCode());
+    }
+
+    /**
+     * Test the onError method with a 404.
+     *
+     * @return void
+     */
+    public function testOnError404() {
+        $this->onErrorTest();
+    }
+
+    /**
+     * Test the onError method with a non-HTTP error code which should cause a
+     * 500.
+     *
+     * @return void
+     */
+    public function testOnError500() {
+        $this->onErrorTest(3, 500);
+    }
+
+    /**
+     * Test onError uses the exception tracker.
+     *
+     * @return void
+     */
+    public function testOnErrorExceptionTracker() {
+        $tracker = ExceptionTracker::getInstance();
+
+        $this->onErrorTest(7, 500);
+        $this->assertNotNull($tracker->lastException);
+        $this->assertEquals(7, $tracker->lastException->getCode());
+    }
+
+    /**
+     * Test the view method.
+     *
+     * @return void.
+     */
+    public function testView() {
+        $controller = new TestController($this->klein(), $this->req(), $this->res());
+        $this->assertNotNull($controller->view());
+        $this->assertEquals('test', $controller->view());
+    }
+
+    /**
+     * Test the view method when there's an output format specified.
+     *
+     * @return void.
+     */
+    public function testViewWithOutputFormat() {
+        $req = $this->req();
+        $req->output_format = 'xml';
+        $controller = new TestController($this->klein(), $req, $this->res());
+        $this->assertNotNull($controller->view());
+        $this->assertEquals('test_xml', $controller->view());
     }
 
     /**
      * A wrapper for instantiating controllers in a useful form for testing.
      *
-     * @param mixed  $controller Either a string specifying the controller class to
-     *                           create or a callable which takes two objects -
-     *                           the request and response objects - and returns
-     *                           an instance of the controller under test.
-     * @param object $req        The klein \Klein\Request object.
-     * @param object $res        The klein \Klein\Response object.
-     * @param object $klein      The klein \Klein\Klein object.
+     * @param object $klein The klein \Klein\Klein object.
+     * @param object $req   The klein \Klein\Request object.
+     * @param object $res   The klein \Klein\Response object.
      *
      * @return object A controller instance.
      */
-    protected function create($controller, $req = null, $res = null, $klein = null) {
+    protected function create($klein = null, $req = null, $res = null) {
+        $controller = $this->controllerName();
         $req = $this->req($req);
         $res = $this->res($res);
         $klein = $this->klein($klein);
         if (!$req->action) {
             $req->action = 'error';
         }
-        if (is_string($controller)) {
-            return new $controller($klein, $req, $res);
-        } else {
-            return call_user_func_array($controller, array($klein, $req, $res));
-        }
+        return new $controller($klein, $req, $res);
     }
 
     /**
@@ -142,32 +190,8 @@ extends TestCase
      *
      * @return object The controller on which to run some of the tests.
      */
-    protected abstract function sampleController();
-
-    /**
-     * Run a controller and capture the results.
-     *
-     * @param object $controller The controller to run.
-     * @param object $method     The HTTP method to send to it.
-     *
-     * @return array An associative array with four members: 'output' which is
-     *               a string with the body of the HTTP response, 'status'
-     *               which is the HTTP status code returned, 'headers' which is
-     *               an associative array containing all of the headers output
-     *               by the controller and 'response' which is the
-     *               \Klein\Response object from the controller.
-     */
-    protected function runController($controller, $method = 'get') {
-        ob_start();
-        $response = call_user_func(array($controller, $method));
-        $output = ob_get_contents();
-        ob_end_clean();
-        return array(
-            'output' => $output,
-            'status' => $response->status()->getCode(),
-            'headers' => $response->headers()->all(),
-            'response' => $response,
-        );
+    protected function sampleController() {
+        return $this->create();
     }
 
     /**
@@ -178,7 +202,7 @@ extends TestCase
      *
      * @return object A \Klein\Klein object.
      */
-    private function klein($klein) {
+    protected function klein($klein = null) {
         if ($klein && !($klein instanceof \Klein\Klein)) {
             throw new Exception(
                 var_export($klein, true) . " is not an instance of \Klein\Klein"
@@ -195,7 +219,7 @@ extends TestCase
      *
      * @return object A \Klein\Request object.
      */
-    private function req($req) {
+    protected function req($req = null) {
         if ($req && !($req instanceof \Klein\Request)) {
             throw new Exception(
                 var_export($req, true) . " is not an instance of \Klein\Request"
@@ -212,13 +236,44 @@ extends TestCase
      *
      * @return object A \Klein\Response object.
      */
-    private function res($res) {
+    protected function res($res = null) {
         if ($res && !($res instanceof \Klein\Response)) {
             throw new Exception(
                 var_export($res, true) . " is not an instance of \Klein\Response"
             );
         }
         return ($res ? $res : new \Klein\Response());
+    }
+
+    /**
+     * The name of the controller under test.
+     *
+     * @return string The name of the controller under test.
+     */
+    protected function controllerName() {
+        return preg_replace('/Test$/', '', get_class($this));
+    }
+}
+
+/**
+ * A dummy controller for testing things that are otherwise hard to reach.
+ *
+ * @author Conor McDermottroe <conor@mcdermottroe.com>
+ */
+class TestController
+extends Controller
+{
+    /**
+     * Init.
+     *
+     * @param object $klein    See parent class.
+     * @param object $request  See parent class.
+     * @param object $response See parent class.
+     */
+    public function __construct($klein, $request, $response) {
+        $this->action = 'test';
+        parent::__construct($klein, $request, $response);
+        $this->output_format = $request->output_format;
     }
 }
 

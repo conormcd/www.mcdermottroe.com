@@ -13,9 +13,10 @@ class Router {
      * Load the routes into the router.
      *
      * @param array $routes The routes that should be loaded and executed.
+     * @param Klein $klein  The klein instance to use for dispatching routes.
      */
-    public function __construct($routes) {
-        $this->_klein = new \Klein\Klein();
+    public function __construct($routes, $klein = null) {
+        $this->_klein = $klein ? $klein : new \Klein\Klein();
         $this->loadRoutes($routes);
     }
 

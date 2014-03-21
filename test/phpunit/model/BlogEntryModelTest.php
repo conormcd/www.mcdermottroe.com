@@ -8,7 +8,7 @@ require_once dirname(dirname(dirname(__DIR__))) . '/lib/autoloader.php';
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
 class BlogEntryModelTest
-extends TestCase
+extends ModelTestCase
 {
     /**
      * Test the case where the markdown file does not exist.
@@ -242,6 +242,16 @@ MARKDOWN
         );
 
         unlink($file);
+    }
+
+    /**
+     * Check that isBlogEntry() returns true.
+     *
+     * @return void
+     */
+    public function testIsBlogEntry() {
+        $post = new BlogEntryModel($this->generateTestFile(""));
+        $this->assertTrue($post->isBlogEntry());
     }
 
     /**

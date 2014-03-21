@@ -8,7 +8,7 @@ require_once dirname(dirname(dirname(__DIR__))) . '/lib/autoloader.php';
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
 abstract class PageableModelTestCase
-extends TestCase
+extends ModelTestCase
 {
     /**
      * Proxy for the constructor for the class being tested.
@@ -18,7 +18,10 @@ extends TestCase
      *
      * @return object       The object to run tests against.
      */
-    protected abstract function createTestObject($page = null, $per_page = null);
+    protected function createTestObject($page = null, $per_page = null) {
+        $model_name = preg_replace('/Test$/', '', get_class($this));
+        return new $model_name($page, $per_page);
+    }
 
     /**
      * Check that the default page is the first page of results.
@@ -53,6 +56,26 @@ extends TestCase
     public function testPreviousIsEmptyForFirstPage() {
         $page = $this->createTestObject();
         $this->assertEmpty($page->previous());
+    }
+
+    /**
+     * Make sure there's a label for the next link.
+     *
+     * @return void
+     */
+    public function testNextLabel() {
+        $page = $this->createTestObject();
+        $this->assertNotEmpty($page->nextLabel());
+    }
+
+    /**
+     * Make sure there's a label for the previous link.
+     *
+     * @return void
+     */
+    public function testPreviousLabel() {
+        $page = $this->createTestObject();
+        $this->assertNotEmpty($page->previousLabel());
     }
 
     /**

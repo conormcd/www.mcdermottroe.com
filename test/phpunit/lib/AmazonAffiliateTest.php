@@ -53,10 +53,13 @@ extends TestCase
      * @return void
      */
     public function testBugContainsData() {
+        $affiliate_tag = Environment::get('AMAZON_AFFILIATE_TAG');
+        $affiliate_link_code = Environment::get('AMAZON_AFFILIATE_LINK_CODE');
+
         $bug = AmazonAffiliate::bug(array('', 'My_Test_ASIN'));
         $this->assertRegexp("/My_Test_ASIN/", $bug);
-        $this->assertRegexp("/{$_ENV['AMAZON_AFFILIATE_TAG']}/", $bug);
-        $this->assertRegexp("/{$_ENV['AMAZON_AFFILIATE_LINK_CODE']}/", $bug);
+        $this->assertRegexp("/$affiliate_tag/", $bug);
+        $this->assertRegexp("/$affiliate_link_code/", $bug);
     }
 
     /**
@@ -66,11 +69,10 @@ extends TestCase
      */
     private function amazonEnvValues() {
         $ret = array();
-        foreach ($_ENV as $key => $value) {
-            if (preg_match('/^AMAZON_/', $key)) {
-                $ret[] = $value;
-            }
-        }
+        $ret[] = Environment::get('AMAZON_AFFILIATE_TAG');
+        $ret[] = Environment::get('AMAZON_AFFILIATE_LINK_CODE');
+        $ret[] = Environment::get('AMAZON_AFFILIATE_CAMP');
+        $ret[] = Environment::get('AMAZON_AFFILIATE_CREATIVE');
         return $ret;
     }
 }

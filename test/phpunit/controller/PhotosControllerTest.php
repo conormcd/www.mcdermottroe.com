@@ -11,30 +11,18 @@ class PhotosControllerTest
 extends ControllerTestCase
 {
     /**
-     * A sample instance of the controller under test
-     *
-     * @return object An instance of PhotosController.
-     */
-    protected function sampleController() {
-        return $this->create('PhotosController');
-    }
-
-    /**
      * Make sure the controller works when you pass it an album.
      *
      * @return void
      */
     public function testWithAlbumSpecified() {
-        $controller = $this->create(
-            function ($klein, $req, $res) {
-                $req->album = 'ISSFWorldCupGranadaJul2013';
-                return new PhotosController($klein, $req, $res);
-            }
-        );
-        $result = $this->runController($controller);
+        $req = $this->req();
+        $req->album = FakeFlickr::albumSlugForTesting();
+        $controller = $this->create(null, $req);
+        $res = $controller->get();
 
-        $this->assertEquals(200, $result['status']);
-        $this->assertNotNull($result['output']);
+        $this->assertEquals(200, $res->status()->getCode());
+        $this->assertNotNull($res->body());
     }
 }
 

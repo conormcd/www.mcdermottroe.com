@@ -8,7 +8,7 @@ require_once dirname(dirname(dirname(__DIR__))) . '/lib/autoloader.php';
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
 class ModelTest
-extends TestCase
+extends ModelTestCase
 {
     /**
      * Test that methods using the cache method from Model work as expected.

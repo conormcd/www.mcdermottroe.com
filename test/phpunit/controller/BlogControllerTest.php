@@ -11,32 +11,23 @@ class BlogControllerTest
 extends ControllerTestCase
 {
     /**
-     * A sample instance of the controller under test
-     *
-     * @return object An instance of Controller.
-     */
-    protected function sampleController() {
-        return $this->create('BlogController');
-    }
-
-    /**
      * Ensure that it outputs Atom when asked to.
      *
      * @return void
      */
     public function testAtomOutput() {
-        $req = new \Klein\Request();
+        $req = $this->req();
         $req->format = 'atom';
-        $controller = $this->create('BlogController', $req);
+        $controller = $this->create(null, $req);
 
-        $result = $this->runController($controller);
+        $res = $controller->get();
 
-        $this->assertNotNull($result['output']);
-        $this->assertRegexp('#^<\?xml.*</feed>$#s', $result['output']);
-        $this->assertArrayHasKey('content-type', $result['headers']);
+        $this->assertNotNull($res->body());
+        $this->assertRegexp('#^<\?xml.*</feed>$#s', $res->body());
+        $this->assertTrue($res->headers()->exists('Content-Type'));
         $this->assertEquals(
             'application/atom+xml',
-            $result['headers']['content-type']
+            $res->headers()->get('Content-Type')
         );
     }
 
@@ -46,18 +37,18 @@ extends ControllerTestCase
      * @return void
      */
     public function testRSSOutput() {
-        $req = new \Klein\Request();
+        $req = $this->req();
         $req->format = 'rss';
-        $controller = $this->create('BlogController', $req);
+        $controller = $this->create(null, $req);
 
-        $result = $this->runController($controller);
+        $res = $controller->get();
 
-        $this->assertNotNull($result['output']);
-        $this->assertRegexp('#^<\?xml.*</rss>$#s', $result['output']);
-        $this->assertArrayHasKey('content-type', $result['headers']);
+        $this->assertNotNull($res->body());
+        $this->assertRegexp('#^<\?xml.*</rss>$#s', $res->body());
+        $this->assertTrue($res->headers()->exists('Content-Type'));
         $this->assertEquals(
             'application/rss+xml',
-            $result['headers']['content-type']
+            $res->headers()->get('Content-Type')
         );
     }
 }
