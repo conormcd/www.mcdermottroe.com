@@ -75,7 +75,7 @@ class Controller {
     public function get() {
         $content = Mustache::render($this->view(), $this->model());
         $this->response->header('Content-Length', strlen($content));
-        echo $content;
+        $this->response->body($content);
         return $this->response;
     }
 
@@ -104,23 +104,29 @@ class Controller {
      */
     public function onError($response, $msg, $type, $exception) {
         // Set the appropriate HTTP status code
-        switch ($exception->getCode()) {
-            case 404:
-                $response->header('HTTP/1.1 404 Not Found');
-                break;
-            default:
-                $response->header('HTTP/1.1 500 Internal Server Error');
-                break;
+        $code = $exception->getCode();
+        if ($code >= 400 && $code < 600) {
+            $response->code($exception->getCode());
+        } else {
+            $response->code(500);
         }
 
         // Now render the error
-        echo Mustache::render(
-            'error',
-            array('message' => $msg, 'type' => $type)
+        $response->body(
+            Mustache::render(
+                'error',
+                array(
+                    'message' => $msg,
+                    'type' => $type,
+                    'trace' => $exception->getTraceAsString()
+                )
+            )
         );
 
         // Track the exception
         ExceptionTracker::getInstance()->captureException($exception);
+
+        return $response;
     }
 
     /**
