@@ -17,13 +17,10 @@ class Cache {
     public static function get($key) {
         $result = null;
         $success = false;
-        if (function_exists('apc_fetch')) {
+        if (Environment::get('CACHE_ENABLE') && function_exists('apc_fetch')) {
             $result = apc_fetch($key, $success);
         }
-        if (!$success) {
-            return null;
-        }
-        return $result;
+        return $success ? $result : null;
     }
 
     /**
@@ -36,8 +33,19 @@ class Cache {
      * @return void
      */
     public static function set($key, $value, $ttl) {
-        if (function_exists('apc_store')) {
+        if (Environment::get('CACHE_ENABLE') && function_exists('apc_store')) {
             apc_store($key, $value, $ttl);
+        }
+    }
+
+    /**
+     * Empty the cache.
+     *
+     * @return void
+     */
+    public static function clear() {
+        if (Environment::get('CACHE_ENABLE') && function_exists('apc_clear_cache')) {
+            apc_clear_cache('user');
         }
     }
 }

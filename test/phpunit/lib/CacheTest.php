@@ -11,6 +11,16 @@ class CacheTest
 extends TestCase
 {
     /**
+     * Turn on caching for this test suite.
+     *
+     * @return void
+     */
+    public function setUp() {
+        parent::setUp();
+        $_ENV['CACHE_ENABLE'] = true;
+    }
+
+    /**
      * Ensure that fetching a key that doesn't exist returns null.
      *
      * @return void
