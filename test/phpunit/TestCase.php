@@ -1,7 +1,5 @@
 <?php
 
-require_once dirname(dirname(__DIR__)) . '/config/environment.php';
-
 /**
  * Generic test case for adding more assertions.
  *

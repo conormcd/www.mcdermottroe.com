@@ -3,9 +3,6 @@
 // This is where the site is notionally based.
 date_default_timezone_set('Europe/Dublin');
 
-// We need this for the config for loading Sentry (if appropriate)
-require_once dirname(__DIR__) . '/config/environment.php';
-
 // Load Sentry for trapping exceptions and errors
 if (isset($_ENV['SENTRY_DSN'])) {
     // Include all the necessary bits for Sentry

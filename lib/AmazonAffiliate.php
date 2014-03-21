@@ -1,7 +1,5 @@
 <?php
 
-require_once dirname(__DIR__) . '/config/environment.php';
-
 /**
  * Utilities for dealing with Amazon affiliate links.
  *
@@ -22,10 +20,10 @@ class AmazonAffiliate {
         $link = '';
         $params = array(
             'ie' => 'UTF8',
-            'tag' => $_ENV['AMAZON_AFFILIATE_TAG'],
-            'linkCode' => $_ENV['AMAZON_AFFILIATE_LINK_CODE'],
-            'camp' => $_ENV['AMAZON_AFFILIATE_CAMP'],
-            'creative' => $_ENV['AMAZON_AFFILIATE_CREATIVE'],
+            'tag' => Environment::get('AMAZON_AFFILIATE_TAG'),
+            'linkCode' => Environment::get('AMAZON_AFFILIATE_LINK_CODE'),
+            'camp' => Environment::get('AMAZON_AFFILIATE_CAMP'),
+            'creative' => Environment::get('AMAZON_AFFILIATE_CREATIVE'),
             'creativeASIN' => $asin
         );
         foreach ($params as $k => $v) {
@@ -48,8 +46,8 @@ class AmazonAffiliate {
         $asin = $matches[1];
         $link = '';
         $params = array(
-            't' => $_ENV['AMAZON_AFFILIATE_TAG'],
-            'l' => $_ENV['AMAZON_AFFILIATE_LINK_CODE'],
+            't' => Environment::get('AMAZON_AFFILIATE_TAG'),
+            'l' => Environment::get('AMAZON_AFFILIATE_LINK_CODE'),
             'o' => 1,
             'a' => $asin
         );
