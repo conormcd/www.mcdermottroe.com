@@ -27,6 +27,8 @@ $loader = function ($name) use ($root) {
             strtolower($match[1]),
             $name
         );
+    } else if (preg_match('/^Fake.*/', $name)) {
+        $file = "$root/test/phpunit/fakes/$name.php";
     } else if (file_exists("$root/lib/$name.php")) {
         $file = "$root/lib/$name.php";
     } else if (file_exists("$root/test/phpunit/$name.php")) {
