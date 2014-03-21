@@ -125,10 +125,8 @@ class Controller {
             array('message' => $msg, 'type' => $type)
         );
 
-        // Send the data to Sentry
-        if (isset($_ENV['SENTRY'])) {
-            $_ENV['SENTRY']->captureException($exception);
-        }
+        // Track the exception
+        ExceptionTracker::getInstance()->captureException($exception);
     }
 
     /**
