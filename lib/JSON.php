@@ -42,9 +42,6 @@ class JSON {
         set_error_handler(array('JSON', 'errorHandler'));
         $string = json_encode($object);
         restore_error_handler();
-        if ($string === false) {
-            return self::errorHandler();
-        }
 
         // The JSON spec says that the top level must be an array or object but
         // the PHP encoder is a bit more lenient. We reject any out-of-spec

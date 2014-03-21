@@ -87,13 +87,7 @@ class Controller {
      */
     protected function model() {
         if (!$this->model) {
-            $model_name = $this->action_name . 'Model';
-            $model_file = dirname(__DIR__) . "/model/$model_name.php";
-            if (file_exists($model_file)) {
-                $this->model = new $model_name();
-            } else {
-                $this->model = $this->response;
-            }
+            $this->model = $this->response;
         }
         return $this->model;
     }
