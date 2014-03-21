@@ -7,6 +7,24 @@
  */
 class Instagram {
     /**
+     * Get an instance of this class.
+     *
+     * @return Instagram An instance of this class.
+     */
+    public static function getInstance() {
+        try {
+            $class_name = Environment::get('INSTAGRAM_CLASS');
+        } catch (Exception $e) {
+            $class_name = get_class();
+        }
+        return new $class_name(
+            Environment::get('INSTAGRAM_CLIENT_ID'),
+            Environment::get('INSTAGRAM_CLIENT_SECRET'),
+            Environment::get('INSTAGRAM_USER_ID')
+        );
+    }
+
+    /**
      * Create a new facade over Instagram.
      *
      * @param string $client_id     The Instagram client ID.
@@ -17,6 +35,7 @@ class Instagram {
         $this->_client_id = $client_id;
         $this->_client_secret = $client_secret;
         $this->_user_id = $user_id;
+        $this->_http_client = HTTPClient::getInstance();
     }
 
     /**
@@ -34,8 +53,13 @@ class Instagram {
         $images = Cache::get($key);
         if (!$images) {
             $images = array();
-            $stream = JSON::decode(file_get_contents($url), true);
-            if ($stream !== null) {
+            try {
+                $stream = JSON::decode($this->_http_client->get($url));
+            } catch (Exception $e) {
+                ExceptionTracker::getInstance()->captureException($e);
+                return $images;
+            }
+            if ($stream !== null && array_key_exists('data', $stream)) {
                 foreach ($stream['data'] as $image) {
                     $images[] = array(
                         'timestamp' => $image['created_time'],

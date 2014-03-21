@@ -49,11 +49,7 @@ extends PageableModel
         }
 
         // Mix in the photos from Instagram
-        $instagram = new Instagram(
-            $_ENV['INSTAGRAM_CLIENT_ID'],
-            $_ENV['INSTAGRAM_CLIENT_SECRET'],
-            $_ENV['INSTAGRAM_USER_ID']
-        );
+        $instagram = Instagram::getInstance();
         foreach ($instagram->getStream() as $photo) {
             $all[$photo['timestamp']] = $photo;
         }
