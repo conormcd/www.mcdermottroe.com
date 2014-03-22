@@ -20,6 +20,7 @@
     <!-- Run the PHPUnit tests. -->
     <target name="phpunit">
         <exec executable="phpunit" failonerror="true">
+            <arg value="--verbose" />
             <arg value="--stderr" />
             <arg path="test/phpunit" />
         </exec>
