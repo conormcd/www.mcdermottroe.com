@@ -9,7 +9,7 @@ require_once __DIR__ . '/FactoryTestCase.php';
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
 class InstagramTest
-extends TestCase
+extends FactoryTestCase
 {
     /**
      * Basic setup.

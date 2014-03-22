@@ -39,6 +39,9 @@ extends PHPUnit_Framework_TestCase
         $_ENV['FLICKR_API_SECRET'] = md5(rand());
         $_ENV['FLICKR_API_USER'] = md5(rand());
 
+        // Dummy GitHub info
+        $_ENV['GITHUB_USER'] = 'fake_github_user';
+
         // Dummy Instagram credentials.
         $_ENV['INSTAGRAM_CLIENT_ID'] = 'fake fake fake';
         $_ENV['INSTAGRAM_CLIENT_SECRET'] = 'fake fake fake';
@@ -46,6 +49,7 @@ extends PHPUnit_Framework_TestCase
 
         // Use fakes for the external service providers.
         $_ENV['EXCEPTION_TRACKER'] = 'FakeSentry';
+        $_ENV['GITHUB_CLASS'] = 'FakeGitHub';
         $_ENV['HTTP_CLIENT_CLASS'] = 'FakeHTTPClient';
         $_ENV['INSTAGRAM_CLASS'] = 'FakeInstagram';
         $_ENV['PHOTO_PROVIDER'] = 'FakeFlickr';

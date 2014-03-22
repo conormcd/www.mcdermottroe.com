@@ -1,0 +1,12 @@
+{{> head}}
+<p>Any code that I make public is available 
+   <a href="https://github.com/conormcd">on GitHub</a> and are listed
+   below.
+</p>
+<dl>
+{{#gitHubRepos}}
+<dt><a href="{{{url}}}">{{name}}</a></dt>
+<dd>{{description}}</dd>
+{{/gitHubRepos}}
+</dl>
+{{> tail}}

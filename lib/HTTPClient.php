@@ -34,6 +34,7 @@ class HTTPClient {
             CURLOPT_HTTPGET => true,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_USERAGENT => 'www.mcdermottroe.com',
         );
 
         $curl = curl_init();
