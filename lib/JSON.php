@@ -43,6 +43,11 @@ class JSON {
         $string = json_encode($object);
         restore_error_handler();
 
+        // Detect a bad encode that *didn't* throw an error.
+        if ($string === false && json_last_error() != JSON_ERROR_NONE) {
+            return self::errorHandler();
+        }
+
         // The JSON spec says that the top level must be an array or object but
         // the PHP encoder is a bit more lenient. We reject any out-of-spec
         // values here.
