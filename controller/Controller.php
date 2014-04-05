@@ -74,6 +74,7 @@ class Controller {
      */
     public function get() {
         $content = Mustache::render($this->view(), $this->model());
+        $this->setCacheHeaders();
         $this->response->header('Content-Length', strlen($content));
         $this->response->body($content);
         return $this->response;
@@ -140,6 +141,51 @@ class Controller {
         } else {
             return $this->action;
         }
+    }
+
+    /**
+     * Set the Cache-Control and Expires headers.
+     *
+     * @return void
+     */
+    protected function setCacheHeaders() {
+        $headers = array();
+        $cache_control = $this->cacheControl();
+
+        // Make sure that max-age exists and is less than 1 year from now.
+        if (!array_key_exists('max-age', $cache_control)) {
+            $cache_control['max-age'] = 0;
+        }
+        $cache_control['max-age'] = min($cache_control['max-age'], 31536000);
+
+        // Format the headers
+        $headers['Expires'] = date('r', time() + $cache_control['max-age']);
+        $headers['Cache-Control'] = '';
+        foreach ($cache_control as $k => $v) {
+            $headers['Cache-Control'] .= ($k === 'max-age' ? " $k=$v" : " $k");
+        }
+
+        // Set the headers on the response object.
+        foreach ($headers as $header => $value) {
+            $this->response->header($header, trim($value));
+        }
+    }
+
+    /**
+     * Get the necessary values for setting the Cache-Control and Expires
+     * headers.
+     *
+     * @return array An associative array where the keys are Cache-Control
+     *               directives. Only the value for "max-age" will be included,
+     *               all others will simply be present in the header if the key
+     *               is persent in this array.
+     */
+    protected function cacheControl() {
+        $max_age = 0;
+        if (method_exists($this->model(), 'ttl')) {
+            $max_age = $this->model()->ttl();
+        }
+        return array('public' => true, 'max-age' => $max_age);
     }
 }
 

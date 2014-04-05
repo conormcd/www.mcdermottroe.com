@@ -7,6 +7,17 @@
  */
 abstract class Model {
     /**
+     * The maximum amount of time this model may be cached for.
+     *
+     * @return int The maximum number of seconds this model should be cached
+     *             for. Only positive integers will be used as cache lifetimes,
+     *             anything else will result in instantaneous expiration.
+     */
+    public function ttl() {
+        return 0;
+    }
+
+    /**
      * Wrap a chunk of code in some caching.
      *
      * @param string   $key      The key for the cache entry.

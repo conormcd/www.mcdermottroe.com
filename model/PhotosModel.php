@@ -153,6 +153,16 @@ extends PageableModel
     }
 
     /**
+     * Trigger some caching.
+     *
+     * @return int The maximum number of seconds pages using this model should
+     *             be cached for.
+     */
+    public function ttl() {
+        return 3600;
+    }
+
+    /**
      * Create a link
      *
      * @param string $album    The album to link to, if appropriate.

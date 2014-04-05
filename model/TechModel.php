@@ -25,6 +25,16 @@ extends Model
     public function gitHubRepos() {
         return $this->_github->repos();
     }
+
+    /**
+     * Trigger some caching.
+     *
+     * @return int The maximum number of seconds pages using this model should
+     *             be cached for.
+     */
+    public function ttl() {
+        return 3600;
+    }
 }
 
 ?>

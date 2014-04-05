@@ -39,10 +39,23 @@ extends Controller
             }
             $content = file_get_contents($localpath);
             $this->response->header('Content-Length', strlen($content));
+            $this->setCacheHeaders();
             $this->response->body($content);
             return $this->response;
         }
         throw new Exception('File not found: ' . $uri, 404);
+    }
+
+    /**
+     * Expire static resources in the future.
+     *
+     * @return array See Controller->cacheControl().
+     */
+    protected function cacheControl() {
+        return array(
+            'public' => true,
+            'max-age' => 3600,
+        );
     }
 
     /**

@@ -57,6 +57,16 @@ extends PageableModel
         krsort($all);
         return array_values($all);
     }
+
+    /**
+     * Trigger some caching.
+     *
+     * @return int The maximum number of seconds pages using this model should
+     *             be cached for.
+     */
+    public function ttl() {
+        return 300;
+    }
 }
 
 ?>

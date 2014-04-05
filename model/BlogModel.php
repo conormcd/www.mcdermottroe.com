@@ -151,6 +151,15 @@ extends PageableModel
     }
 
     /**
+     * Trigger some caching.
+     *
+     * @return int How many seconds blog pages should be cached for.
+     */
+    public function ttl() {
+        return 86400;
+    }
+
+    /**
      * Construct the pattern to match file names of blog posts.
      *
      * @return string A regular expression which can be used to match blog
