@@ -124,4 +124,3 @@ GET /shooting/clubs/locations/gpx.php?club=All 301
 GET /shooting/clubs/locations/gpx.php?club=BRC+Sporting+Club 301
 GET /shooting/clubs/locations/kml.php?club=All 301
 GET /shooting/clubs/locations/kml.php?club=BRC+Sporting+Club 301
-GET /shooting/clubs/locations/rss.php 301

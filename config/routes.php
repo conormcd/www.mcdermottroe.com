@@ -31,7 +31,26 @@ $blog_route_regex = preg_replace('/\s+/', '', $blog_route_regex);
 $ROUTES = array(
     '@^/contact(?:\.php|/)?$' => array('redirect' => '/about'),
     '@^/computer-stuff(?P<suffix>.*)' => array('redirect' => '/tech'),
-    '@^/shooting(/.*)?' => array('redirect' => 'http://www.shooting.ie/'),
+    '/shooting/clubs/locations/gpx.php' => array(
+      'redirect' => 'http://www.shooting.ie/feed/clubs_and_ranges/',
+      'params' => array(
+          'format' => 'gpx',
+          'club' => 'req->club',
+      )
+    ),
+    '/shooting/clubs/locations/kml.php' => array(
+      'redirect' => 'http://www.shooting.ie/feed/clubs_and_ranges/',
+      'params' => array(
+          'format' => 'kml',
+          'club' => 'req->club',
+      )
+    ),
+    '/shooting/clubs/locations/?' => array(
+        'redirect' => 'http://www.shooting.ie/',
+        'fragment' => 'req->club',
+    ),
+    '/shooting/clubs/?' => array('redirect' => 'http://www.shooting.ie/'),
+    '/shooting/?' => array('redirect' => 'http://www.shooting.ie/'),
     '/' => 'FrontPageController',
     $blog_route_regex => 'BlogController',
     '/photos/[:album]/[i:start]/[i:perpage]/?' => 'PhotosController',

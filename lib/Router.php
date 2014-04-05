@@ -72,21 +72,35 @@ class Router {
     /**
      * Load a redirection route.
      *
-     * @param string $route       The Klein route specification.
-     * @param string $destination Where it should be redirected to.
+     * @param string $route  The Klein route specification.
+     * @param string $dest   Where it should be redirected to.
+     * @param array  $params Additional URL parameters that can be appended to
+     *                       the dest URL.
+     * @param string $frag   A URL fragment to add to the URL if necessary.
      *
      * @return void
      */
-    public function loadRedirectRoute($route, $destination) {
+    public function loadRedirectRoute($route, $dest, $params, $frag) {
+        $indirect = function ($request, $redirect_parameter) {
+            if (preg_match('/^req->(.*)/', $redirect_parameter, $matches)) {
+                $member = $matches[1];
+                return $request->$member;
+            }
+            return $redirect_parameter;
+        };
         $this->_klein->respond(
             'GET',
             $route,
-            function ($request, $response) use ($destination) {
-                $response->redirect(
-                    $destination . $request->suffix,
-                    301,
-                    false
-                );
+            function ($request, $response) use ($dest, $params, $frag, $indirect) {
+                $target_url = '';
+                foreach ($params as $k => $v) {
+                    $target_url .= $target_url ? "&" : "?";
+                    $v = $indirect($request, $v);
+                    $target_url .= "$k=$v";
+                }
+                $target_url = $dest . $request->suffix . $target_url;
+                $target_url .= ($frag) ? ('#' . $indirect($request, $frag)) : "";
+                $response->redirect($target_url, 301, false);
             }
         );
     }
@@ -108,7 +122,18 @@ class Router {
             }
 
             if (array_key_exists('redirect', $controller)) {
-                $this->loadRedirectRoute($route, $controller['redirect']);
+                if (!array_key_exists('params', $controller)) {
+                    $controller['params'] = array();
+                }
+                if (!array_key_exists('fragment', $controller)) {
+                    $controller['fragment'] = array();
+                }
+                $this->loadRedirectRoute(
+                    $route,
+                    $controller['redirect'],
+                    $controller['params'],
+                    $controller['fragment']
+                );
             } else {
                 $this->loadRoute($route, $controller);
             }
