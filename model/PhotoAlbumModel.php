@@ -86,7 +86,7 @@ class PhotoAlbumModel {
                 "/($mon $year) - $mon $year$/" => array(1),
                 "/($mon)(?:\/| - )$mon ($year)$/" => array(1, 2),
                 "/\b($mon $year)$/" => array(1),
-                "/\b$year$/" => array(1)
+                "/\b($year)$/" => array(1)
             );
 
             $title_time = false;
