@@ -224,7 +224,7 @@ extends FactoryTestCase
      * @return void
      */
     private function fakeFlickrAPI($method, $params, $response) {
-        $url  = "http://api.flickr.com/services/rest/";
+        $url  = "https://api.flickr.com/services/rest/";
         $url .= "?api_key={$_ENV['FLICKR_API_KEY']}";
         $url .= "&format=json&nojsoncallback=1";
         $url .= "&method=$method";

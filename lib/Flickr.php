@@ -199,7 +199,7 @@ extends PhotoProvider
         $api_key = preg_replace('/^[^0-9a-fA-F]+$/', '', $this->_api_key);
         $method = preg_replace('/^\W$/', '', $method);
 
-        $url  = "http://api.flickr.com/services/rest/";
+        $url  = "https://api.flickr.com/services/rest/";
         $url .= "?api_key=$api_key";
         $url .= "&format=json";
         $url .= "&nojsoncallback=1";
