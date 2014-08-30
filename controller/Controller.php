@@ -104,23 +104,25 @@ class Controller {
     /**
      * Handle exceptions thrown anywhere (via klein's error handling).
      *
-     * @param object $response  The response object to use for output.
+     * @param object $klein     The Klein object handling the error.
      * @param string $msg       The message portion of the exception.
      * @param string $type      The type of the exception.
      * @param object $exception The exception originally thrown.
      *
      * @return void
      */
-    public function onError($response, $msg, $type, $exception) {
+    public function onError($klein, $msg, $type, $exception) {
+        // Track the exception
+        ExceptionTracker::getInstance()->captureException($exception);
+
         // Set the appropriate HTTP status code
         $code = $exception->getCode();
-        if ($code >= 400 && $code < 600) {
-            $response->code($exception->getCode());
-        } else {
-            $response->code(500);
+        if ($code < 400 || $code >= 600) {
+            $code = 500;
         }
 
         // Now render the error
+        $response = $klein->response();
         $response->body(
             Mustache::render(
                 'error',
@@ -131,11 +133,7 @@ class Controller {
                 )
             )
         );
-
-        // Track the exception
-        ExceptionTracker::getInstance()->captureException($exception);
-
-        return $response;
+        $klein->abort($code);
     }
 
     /**

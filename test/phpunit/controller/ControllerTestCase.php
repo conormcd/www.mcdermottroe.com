@@ -90,18 +90,22 @@ extends TestCase
      *
      * @return void
      */
-    protected function onErrorTest($exception_code = 404, $http_status = 404) {
+    protected function onErrorTest($exception_code, $http_status) {
+        $message = 'This is a test';
+
         $controller = $this->sampleController();
+        $klein = new \Klein\Klein();
+        $klein->onError(array($controller, 'onError'));
+        $klein->respond(
+            '*',
+            function () use ($message, $exception_code) {
+                throw new Exception($message, $exception_code);
+            }
+        );
 
-        $res = $this->res();
-        $type = "Exception";
-        $message = "This is a test.";
-        try {
-            throw new $type($message, $exception_code);
-        } catch (Exception $e) {
-            $res = $controller->onError($res, $message, $type, $e);
-        }
+        $klein->dispatch(null, null, false);
 
+        $res = $klein->response();
         $this->assertNotNull($res);
         $this->assertNotNull($res->body());
         $this->assertRegexp("/$message/", $res->body());
@@ -114,7 +118,7 @@ extends TestCase
      * @return void
      */
     public function testOnError404() {
-        $this->onErrorTest();
+        $this->onErrorTest(404, 404);
     }
 
     /**
