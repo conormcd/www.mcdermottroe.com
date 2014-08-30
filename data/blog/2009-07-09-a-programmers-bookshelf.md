@@ -12,7 +12,7 @@ get any kind of programming/software development job?"
 <img
     style="float: left; margin-right: 10px;"
     title="bookshelf"
-    src="http://www.mcdermottroe.com/blog/wp-content/uploads/2009/07/bookshelf.jpg"
+    src="http://www.mcdermottroe.com/images/blog/bookshelf.jpg"
     alt="bookshelf"
     width="300"
     height="219"
