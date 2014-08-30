@@ -34,6 +34,11 @@ extends PageableModel
      *               of data we fetch from.
      */
     public function all() {
+        $key = 'FRONT_PAGE_DATA';
+        $all = Cache::get($key);
+        if ($all) {
+            return $all;
+        }
         $all = array();
 
         // Mix in the blog
@@ -55,7 +60,10 @@ extends PageableModel
         }
 
         krsort($all);
-        return array_values($all);
+        $all = array_values($all);
+        Cache::set($key, $all, $this->ttl());
+
+        return $all;
     }
 
     /**
