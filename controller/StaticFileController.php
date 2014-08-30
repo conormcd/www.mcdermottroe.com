@@ -20,30 +20,17 @@ extends Controller
     public function __construct($klein, $request, $response) {
         $this->action = 'staticfile';
         parent::__construct($klein, $request, $response);
+
+        $this->model = new StaticFileModel($this->request->uri());
     }
 
     /**
-     * Process GET requests.
+     * Render the contents of the file.
      *
-     * @return void
+     * @return string The contents of the file.
      */
-    public function get() {
-        $uri = $this->request->uri();
-        $public_dir = realpath(dirname(__DIR__) . '/public');
-        $localpath = realpath("$public_dir$uri");
-
-        if (is_file($localpath) && preg_match("#^$public_dir#", $localpath)) {
-            $content_type = $this->detectMimeType($localpath);
-            if ($content_type) {
-                $this->response->header('Content-Type', $content_type);
-            }
-            $content = file_get_contents($localpath);
-            $this->response->header('Content-Length', strlen($content));
-            $this->setCacheHeaders();
-            $this->response->body($content);
-            return $this->response;
-        }
-        throw new Exception('File not found: ' . $uri, 404);
+    protected function content() {
+        return file_get_contents($this->model()->path());
     }
 
     /**
@@ -56,27 +43,6 @@ extends Controller
             'public' => true,
             'max-age' => 3600,
         );
-    }
-
-    /**
-     * Detect the MIME type of a file, if possible.
-     *
-     * @param string $file The path to the file to check the type of.
-     *
-     * @return string The MIME type for the file, if known. Null otherwise.
-     */
-    private function detectMimeType($file) {
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $type = finfo_file($finfo, $file);
-        finfo_close($finfo);
-        if ($type === 'text/plain') {
-            switch (pathinfo($file, PATHINFO_EXTENSION)) {
-                case 'css':
-                    $type = 'text/css';
-                    break;
-            }
-        }
-        return $type === false ? null : $type;
     }
 }
 

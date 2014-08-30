@@ -81,11 +81,19 @@ class Controller {
      * @return void
      */
     public function get() {
-        $content = Mustache::render($this->view(), $this->model());
-        $this->setCacheHeaders();
-        $this->response->header('Content-Length', strlen($content));
+        $content = $this->content();
+        $this->setHeaders(strlen($content));
         $this->response->body($content);
         return $this->response;
+    }
+
+    /**
+     * Render the contents of the model.
+     *
+     * @return string The rendered view of the model.
+     */
+    protected function content() {
+        return Mustache::render($this->view(), $this->model());
     }
 
     /**
@@ -146,6 +154,34 @@ class Controller {
             return $this->action . '_' . $this->output_format;
         } else {
             return $this->action;
+        }
+    }
+
+    /**
+     * Set all the headers that we can.
+     *
+     * @param int $content_length The number of bytes which will be output.
+     *
+     * @return void
+     */
+    protected function setHeaders($content_length = null) {
+        $this->setCacheHeaders();
+        if ($content_length !== null) {
+            $this->response->header('Content-Length', $content_length);
+        }
+
+        $model = $this->model();
+        $model_headers = array(
+            'mimeType' => 'Content-Type',
+            'lastModified' => 'Last-Modified',
+        );
+        foreach ($model_headers as $method => $header) {
+            if (method_exists($model, $method)) {
+                $value = $model->$method();
+                if ($value) {
+                    $this->response->header($header, $value);
+                }
+            }
         }
     }
 
