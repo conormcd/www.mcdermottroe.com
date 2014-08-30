@@ -90,14 +90,16 @@ class PhotoAlbumModel {
             );
 
             $title_time = false;
-            foreach ($patterns as $pattern => $groups) {
-                if (preg_match($pattern, $this->_title, $match)) {
-                    $groups_text = array();
-                    foreach ($groups as $group_number) {
-                        $groups_text[] = $match[$group_number];
+            if ($this->_timestamp_create < strtotime('2014-01-01')) {
+                foreach ($patterns as $pattern => $groups) {
+                    if (preg_match($pattern, $this->_title, $match)) {
+                        $groups_text = array();
+                        foreach ($groups as $group_number) {
+                            $groups_text[] = $match[$group_number];
+                        }
+                        $title_time = strtotime(join(' ', $groups_text));
+                        break;
                     }
-                    $title_time = strtotime(join(' ', $groups_text));
-                    break;
                 }
             }
 

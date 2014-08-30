@@ -63,7 +63,7 @@ extends ModelTestCase
             PhotoProvider::getInstance(),
             $instance->albumID(),
             "My Holiday Photos - Jun 2008",
-            time(),
+            strtotime('2013-01-01'),
             $instance->thumbnail()->photoID()
         );
         $this->assertEquals(
