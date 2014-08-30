@@ -20,8 +20,6 @@ class YouTubeEmbed {
 <iframe
     class="youtube-player"
     type="text/html"
-    width="640"
-    height="385"
     src="http://www.youtube.com/embed/$yt_id"
     allowfullscreen
     frameborder="0"

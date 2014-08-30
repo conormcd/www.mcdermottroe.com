@@ -1,0 +1,63 @@
+h2, h3 {
+  font-size: inherit;
+}
+
+pre {
+  margin-left: inherit;
+  overflow: scroll;
+}
+
+#title h1 {
+  font-size: 25px;
+}
+
+#body {
+  width: 100%;
+  margin: inherit;
+  border: 0;
+  padding: 0;
+}
+
+#bodycontent {
+  max-width: inherit;
+  padding: 5px;
+}
+
+.youtube-player {
+  width: 90%;
+  height: inherit;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.photogrid {
+  width: inherit;
+}
+
+.photogrid .photo {
+  width: 90%;
+  height: inherit;
+}
+
+.photogrid .photo img {
+  width: 100%;
+  height: 100%;
+}
+
+.photo.fullsize img {
+  width: 90%;
+}
+
+.photo.frontpage img {
+  width: 90%;
+}
+
+.instagramphoto img {
+  width: 90%;
+  height: 90%;
+}
+
+.instagramphoto .caption {
+  width: 90%;
+}

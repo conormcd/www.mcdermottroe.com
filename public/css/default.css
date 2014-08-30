@@ -81,11 +81,12 @@ code {
 }
 
 .pager {
-  width: 20em;
+  width: 15em;
   height: 1em;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 1em;
 }
 
 .blogentry {
@@ -109,6 +110,8 @@ code {
 }
 
 .youtube-player {
+  width: 640px;
+  height: 385px;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -132,6 +135,10 @@ code {
   margin: 3.5%;
   float: left;
   margin-bottom: 50px;
+}
+
+.photogrid .photo:last-child {
+  margin-bottom: 0px;
 }
 
 .photo a {
