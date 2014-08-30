@@ -46,8 +46,8 @@ extends Model
     public function body() {
         $replacements = array(
             '#<h1>.*?</h1>#s' => '',
-            '#{{amazon_link:(.*?)}}#s' => array('AmazonAffiliate', 'link'),
-            '#{{amazon_bug:(.*?)}}#s' => array('AmazonAffiliate', 'bug'),
+            '#{{amazonlink:(.*?)}}#s' => array('AmazonAffiliate', 'link'),
+            '#{{amazonbug:(.*?)}}#s' => array('AmazonAffiliate', 'bug'),
             '#{{youtube:(.*?)}}#s' => array('YouTubeEmbed', 'embed'),
             '#<pre><code>{{lang:(.*?)}}(.*?)</code></pre>#s' => array(
                 'SyntaxHighlighter',

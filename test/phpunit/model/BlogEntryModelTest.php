@@ -141,7 +141,7 @@ MARKDOWN
 <<<MARKDOWN
 # Title
 
-<a href="{{amazon_link:ABCD1234}}">Link</a>
+<a href="{{amazonlink:ABCD1234}}">Link</a>
 MARKDOWN
         );
         $post = new BlogEntryModel($file);
@@ -168,7 +168,7 @@ MARKDOWN
 <<<MARKDOWN
 # Title
 
-{{amazon_bug:ABCD1234}}
+{{amazonbug:ABCD1234}}
 MARKDOWN
         );
         $post = new BlogEntryModel($file);

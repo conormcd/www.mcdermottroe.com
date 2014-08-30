@@ -28,25 +28,25 @@ programmer and why? I [answered on the
 thread](http://www.boards.ie/vbulletin/showpost.php?p=60955924) but I figured
 I should expand on my choices here:
 
-[**The Pragmatic Programmer: From Journeyman to Master**]({{amazon_link:020161622X}})
-{{amazon_bug:020161622X}} - It's pretty much a collection of good advice to
+[**The Pragmatic Programmer: From Journeyman to Master**]({{amazonlink:020161622X}})
+{{amazonbug:020161622X}} - It's pretty much a collection of good advice to
 programmers who are trying to improve themselves professionally. Most of the
 advice is stuff you'll learn sooner or later but it's worth seeing it written
 down and in an easily readable form. The authors have [branched out into
 publishing](http://www.pragprog.com/titles) a whole load of other books (none
 of which I've read yet) and their [podcast](http://pragprog.com/podcasts)
 
-[**Programming Pearls**]({{amazon_link:0201657880}})
-{{amazon_bug:0201657880}} - A collection of small, but tricky problems and
+[**Programming Pearls**]({{amazonlink:0201657880}})
+{{amazonbug:0201657880}} - A collection of small, but tricky problems and
 really nice worked solutions for them. The chapters were once articles in the
 Communications of the ACM and each one is arranged around a theme with sample
 problems at the end (there are solutions at the back of the book). You could
-think of this book as a sort of "[Knuth]({{amazon_link:0201485419}})-lite"
-{{amazon_bug:0201485419}}. I find reading it makes me want to open an editor
+think of this book as a sort of "[Knuth]({{amazonlink:0201485419}})-lite"
+{{amazonbug:0201485419}}. I find reading it makes me want to open an editor
 and start cranking out code.
 
-[**Design Patterns: Elements of Reusable Object-Oriented Software**]({{amazon_link:0201633612}})
-{{amazon_bug:0201633612}} (a.k.a. "the [Gang of
+[**Design Patterns: Elements of Reusable Object-Oriented Software**]({{amazonlink:0201633612}})
+{{amazonbug:0201633612}} (a.k.a. "the [Gang of
 Four](http://catb.org/jargon/html/G/Gang-of-Four.html) book") - A lot of
 object-oriented problems seem to reoccur over and over again so it's worth
 being able to spot those and know some high-level solutions for them. You get
@@ -56,16 +56,16 @@ it again. On reading it the 2nd and subsequent times, I've found myself saying
 Rosetta Stone for communicating with senior developers who are full of
 themselves.
 
-[**The Mythical Man-Month**]({{amazon_link:0201835959}})
-{{amazon_bug:0201835959}} - This is a pretty old collection of essays, but if
+[**The Mythical Man-Month**]({{amazonlink:0201835959}})
+{{amazonbug:0201835959}} - This is a pretty old collection of essays, but if
 you look past the antiquated bits (like punch cards and paper manuals) you'll
 find a lot of wisdom. It's more a book on project management than software
 development but it's well worth a read, after all every software developer is
 at least partly a project manager. File this book under "learn from the
 mistakes of others".
 
-[**Joel on Software**]({{amazon_link:1590593898}})
-{{amazon_bug:1590593898}} - I don't actually own a copy of this, I borrowed it
+[**Joel on Software**]({{amazonlink:1590593898}})
+{{amazonbug:1590593898}} - I don't actually own a copy of this, I borrowed it
 from a friend. All the essays that make up the book are available on
 [http://www.joelonsoftware.com](http://www.joelonsoftware.com/) so there's no
 need to buy the book unless you feel like supporting the author.  It's a mixed
