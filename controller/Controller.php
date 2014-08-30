@@ -65,6 +65,14 @@ class Controller {
         }
 
         $this->klein->onError(array($this, 'onError'));
+
+        if (extension_loaded('newrelic')) {
+            newrelic_name_transaction(
+                preg_replace("/Controller$/", "", get_class()) .
+                '/' .
+                $this->action_name
+            );
+        }
     }
 
     /**

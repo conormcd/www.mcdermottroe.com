@@ -7,6 +7,32 @@
  */
 abstract class Model {
     /**
+     * The New Relic JavaScript monitoring code to be inserted in the footer.
+     *
+     * @return string The JavaScript to be inserted in the footer or an empty
+     *                string if the New Relic extension is not loaded.
+     */
+    public function newRelicJSFooter() {
+        if (extension_loaded('newrelic')) {
+            return newrelic_get_browser_timing_footer();
+        }
+        return '';
+    }
+
+    /**
+     * The New Relic JavaScript monitoring code to be inserted in the header.
+     *
+     * @return string The JavaScript to be inserted in the header or an empty
+     *                string if the New Relic extension is not loaded.
+     */
+    public function newRelicJSHeader() {
+        if (extension_loaded('newrelic')) {
+            return newrelic_get_browser_timing_header();
+        }
+        return '';
+    }
+
+    /**
      * The maximum amount of time this model may be cached for.
      *
      * @return int The maximum number of seconds this model should be cached
