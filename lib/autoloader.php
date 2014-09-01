@@ -33,9 +33,6 @@ $loader = function ($name) use ($root) {
         $file = "$root/lib/$name.php";
     } else if (file_exists("$root/test/phpunit/$name.php")) {
         $file = "$root/test/phpunit/$name.php";
-    } else if (preg_match("#^Klein\\\\#", $name, $match)) {
-        $class = preg_replace('/\\\\/', '/', $name);
-        $file = "$root/lib/klein/src/$class.php";
     }
     if ($file) {
         if (file_exists($file) && is_readable($file)) {

@@ -1,8 +1,5 @@
 <?php
 
-require_once __DIR__ . '/mustache/src/Mustache/Autoloader.php';
-Mustache_Autoloader::register();
-
 /**
  * A facade over Mustache.
  *
