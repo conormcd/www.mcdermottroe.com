@@ -17,6 +17,7 @@ class Router {
      */
     public function __construct($routes, $klein = null) {
         $this->_klein = $klein ? $klein : new \Klein\Klein();
+        $this->_klein->onError(array($this, 'onError'));
         $this->loadRoutes($routes);
     }
 
@@ -52,19 +53,10 @@ class Router {
         $this->_klein->respond(
             strtoupper($method),
             $route,
-            function ($req, $res, $srv, $app, $klein) use ($class, $method) {
+            function ($req, $res, $srv, $app) use ($class, $method) {
                 assert($srv !== null);
                 assert($app !== null);
-                try {
-                    call_user_func(
-                        array(
-                            new $class($klein, $req, $res),
-                            $method
-                        )
-                    );
-                } catch (Exception $e) {
-                    (new ErrorController($klein, $req, $res, $e))->get();
-                }
+                call_user_func(array(new $class($req, $res), $method));
             }
         );
     }
@@ -106,6 +98,31 @@ class Router {
     }
 
     /**
+     * An error handler to redirect errors into the ErrorController.
+     *
+     * @param \Klein\Klein $klein     The Klein object which is routing the
+     *                                request.
+     * @param string       $message   The message of the exception.
+     * @param string       $type      The type of the exception.
+     * @param Exception    $exception The exception to be tracked.
+     *
+     * @return void
+     */
+    public function onError($klein, $message, $type, $exception) {
+        assert($message !== null);
+        assert($type !== null);
+
+        // Track the exception
+        ExceptionTracker::getInstance()->captureException($exception);
+
+        (new ErrorController(
+            $klein->request(),
+            $klein->response(),
+            $exception
+        ))->get();
+    }
+
+    /**
      * Load the routes into Klein
      *
      * @param array $routes The routes to be loaded into Klein.
@@ -142,10 +159,10 @@ class Router {
         // Make sure we have a 404 handler.
         $this->_klein->respond(
             '404',
-            function ($req, $res, $srv, $app, $klein) {
+            function ($req, $res, $srv, $app) {
                 assert($srv !== null);
                 assert($app !== null);
-                (new ErrorController($klein, $req, $res))->get();
+                (new ErrorController($req, $res))->get();
             }
         );
     }

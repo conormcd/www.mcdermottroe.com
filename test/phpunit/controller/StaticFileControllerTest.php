@@ -26,7 +26,7 @@ extends ControllerTestCase
             array(),
             array('REQUEST_URI' => $file)
         );
-        return $this->create(null, $req);
+        return $this->create($req);
     }
 
     /**
