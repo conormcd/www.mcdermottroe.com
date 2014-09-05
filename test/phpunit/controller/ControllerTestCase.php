@@ -41,20 +41,6 @@ extends TestCase
     }
 
     /**
-     * Test that the constructor detects a bad \Klein\Klein object.
-     *
-     * @return void
-     */
-    public function testControllerBadKlein() {
-        $controller_name = $this->controllerName();
-        $this->assertException(
-            function () use ($controller_name) {
-                new $controller_name(null, $this->req(), $this->res());
-            }
-        );
-    }
-
-    /**
      * Test that the constructor detects a bad \Klein\Request object.
      *
      * @return void
@@ -63,7 +49,7 @@ extends TestCase
         $controller_name = $this->controllerName();
         $this->assertException(
             function () use ($controller_name) {
-                new $controller_name($this->klein(), null, $this->res());
+                new $controller_name(null, $this->res());
             }
         );
     }
@@ -77,71 +63,9 @@ extends TestCase
         $controller_name = $this->controllerName();
         $this->assertException(
             function () use ($controller_name) {
-                new $controller_name($this->klein(), $this->req(), null);
+                new $controller_name($this->req(), null);
             }
         );
-    }
-
-    /**
-     * Test the onError method.
-     *
-     * @param int $exception_code The code for the test exception.
-     * @param int $http_status    The expected resulting HTTP status.
-     *
-     * @return void
-     */
-    protected function onErrorTest($exception_code, $http_status) {
-        $message = 'This is a test';
-
-        $controller = $this->sampleController();
-        $klein = new \Klein\Klein();
-        $klein->onError(array($controller, 'onError'));
-        $klein->respond(
-            '*',
-            function () use ($message, $exception_code) {
-                throw new Exception($message, $exception_code);
-            }
-        );
-
-        $klein->dispatch(null, null, false);
-
-        $res = $klein->response();
-        $this->assertNotNull($res);
-        $this->assertNotNull($res->body());
-        $this->assertRegexp("/$message/", $res->body());
-        $this->assertEquals($http_status, $res->status()->getCode());
-    }
-
-    /**
-     * Test the onError method with a 404.
-     *
-     * @return void
-     */
-    public function testOnError404() {
-        $this->onErrorTest(404, 404);
-    }
-
-    /**
-     * Test the onError method with a non-HTTP error code which should cause a
-     * 500.
-     *
-     * @return void
-     */
-    public function testOnError500() {
-        $this->onErrorTest(3, 500);
-    }
-
-    /**
-     * Test onError uses the exception tracker.
-     *
-     * @return void
-     */
-    public function testOnErrorExceptionTracker() {
-        $tracker = ExceptionTracker::getInstance();
-
-        $this->onErrorTest(7, 500);
-        $this->assertNotNull($tracker->lastException);
-        $this->assertEquals(7, $tracker->lastException->getCode());
     }
 
     /**
@@ -150,7 +74,7 @@ extends TestCase
      * @return void.
      */
     public function testView() {
-        $controller = new TestController($this->klein(), $this->req(), $this->res());
+        $controller = new TestController($this->req(), $this->res());
         $this->assertNotNull($controller->view());
         $this->assertEquals('test', $controller->view());
     }
@@ -163,7 +87,7 @@ extends TestCase
     public function testViewWithOutputFormat() {
         $req = $this->req();
         $req->output_format = 'xml';
-        $controller = new TestController($this->klein(), $req, $this->res());
+        $controller = new TestController($req, $this->res());
         $this->assertNotNull($controller->view());
         $this->assertEquals('test_xml', $controller->view());
     }
@@ -171,21 +95,19 @@ extends TestCase
     /**
      * A wrapper for instantiating controllers in a useful form for testing.
      *
-     * @param object $klein The klein \Klein\Klein object.
-     * @param object $req   The klein \Klein\Request object.
-     * @param object $res   The klein \Klein\Response object.
+     * @param object $req The klein \Klein\Request object.
+     * @param object $res The klein \Klein\Response object.
      *
      * @return object A controller instance.
      */
-    protected function create($klein = null, $req = null, $res = null) {
+    protected function create($req = null, $res = null) {
         $controller = $this->controllerName();
         $req = $this->req($req);
         $res = $this->res($res);
-        $klein = $this->klein($klein);
         if (!$req->action) {
             $req->action = 'error';
         }
-        return new $controller($klein, $req, $res);
+        return new $controller($req, $res);
     }
 
     /**
@@ -196,23 +118,6 @@ extends TestCase
      */
     protected function sampleController() {
         return $this->create();
-    }
-
-    /**
-     * A wrapper for getting a \Klein\Klein object without needing null and
-     * type checking.
-     *
-     * @param object $klein A \Klein\Klein object or null.
-     *
-     * @return object A \Klein\Klein object.
-     */
-    protected function klein($klein = null) {
-        if ($klein && !($klein instanceof \Klein\Klein)) {
-            throw new Exception(
-                var_export($klein, true) . " is not an instance of \Klein\Klein"
-            );
-        }
-        return ($klein ? $klein : new \Klein\Klein());
     }
 
     /**
@@ -270,13 +175,12 @@ extends Controller
     /**
      * Init.
      *
-     * @param object $klein    See parent class.
      * @param object $request  See parent class.
      * @param object $response See parent class.
      */
-    public function __construct($klein, $request, $response) {
+    public function __construct($request, $response) {
         $this->action = 'test';
-        parent::__construct($klein, $request, $response);
+        parent::__construct($request, $response);
         $this->output_format = $request->output_format;
     }
 }

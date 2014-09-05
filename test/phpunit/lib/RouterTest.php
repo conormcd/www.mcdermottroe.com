@@ -70,6 +70,64 @@ extends TestCase
     }
 
     /**
+     * Test Router#onError with an exception producing a 404 error.
+     *
+     * @return void
+     */
+    public function testOnError404() {
+        $this->onErrorTest('TextException404Controller', 404);
+    }
+
+    /**
+     * Test Router#onError with an exception producing a 500 error.
+     *
+     * @return void
+     */
+    public function testOnError500() {
+        $this->onErrorTest('TextException500Controller', 500);
+    }
+
+    /**
+     * Test exception tracking in the onError function.
+     *
+     * @return void
+     */
+    public function testOnErrorExceptionTracking() {
+        $tracker = ExceptionTracker::getInstance();
+        $tracker->lastException = null;
+        $this->onErrorTest('TextException8000Controller', 500);
+        $this->assertNotNull($tracker->lastException);
+        $this->assertEquals(8000, $tracker->lastException->getCode());
+    }
+
+    /**
+     * Test Router#onError.
+     *
+     * @param string $controller    The name of the controller to test.
+     * @param int    $expected_code The expected HTTP status code.
+     *
+     * @return void
+     */
+    private function onErrorTest($controller, $expected_code) {
+        $router = new Router(array('/' => $controller));
+        $req = new \Klein\Request(
+            array(),
+            array(),
+            array(),
+            array(
+                'REQUEST_METHOD' => 'GET',
+                'REQUEST_URI' => '/'
+            )
+        );
+        $res = new \Klein\Response();
+
+        $router->dispatch($req, $res, false);
+
+        $this->assertRegexp("/" . $controller . "/", $res->body());
+        $this->assertEquals($expected_code, $res->code());
+    }
+
+    /**
      * Check that a route exists and has the right method.
      *
      * @param \Klein\Klein $klein  The instance of Klein behind Router.
@@ -82,9 +140,9 @@ extends TestCase
     private function assertRoute($klein, $path, $method = 'GET') {
         $found_route = false;
         foreach ($klein->routes() as $route) {
-            if ($route->getPath() === $path) {
+            if ($route[1] === $path) {
                 $found_route = true;
-                $this->assertEquals($method, $route->getMethod());
+                $this->assertEquals($method, $route[0]);
             }
         }
         $this->assertTrue($found_route);
@@ -92,43 +150,74 @@ extends TestCase
 }
 
 /**
- * A simple fake Klein object to allow us to test #dispatch.
+ * A dummy controller which will always raise an exception.
  *
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
-class FakeKlein
-extends \Klein\Klein
+class TestExceptionController
+extends Controller
 {
     /**
-     * A dummy dispatch which just returns its arguments.
+     * See Controller::__construct for details.
      *
-     * @param \Klein\Request          $request       See \Klein\Klein#dispatch.
-     * @param \Klein\AbstractResponse $response      See \Klein\Klein#dispatch.
-     * @param boolean                 $send_response See \Klein\Klein#dispatch.
-     * @param int                     $capture       See \Klein\Klein#dispatch.
-     *
-     * @return The arguments that are passed to it.
+     * @param \Klein\Request  $req The Klein request object.
+     * @param \Klein\Response $res The Klein response object.
      */
-    public function dispatch(
-        \Klein\Request $request = null,
-        \Klein\AbstractResponse $response = null,
-        $send_response = true,
-        $capture = \Klein\Klein::DISPATCH_NO_CAPTURE
-    ) {
-        if (!($request === null || $request instanceof \Klein\Request)) {
-            throw new Exception("Bad request for dispatch.");
-        }
-        if (!($response === null || $response instanceof \Klein\AbstractResponse)) {
-            throw new Exception("Bad response for dispatch.");
-        }
-        if (!is_bool($send_response)) {
-            throw new Exception("Bad send_response for dispatch.");
-        }
-        if (!is_int($capture)) {
-            throw new Exception("Bad capture for dispatch.");
-        }
-        return func_get_args();
+    public function __construct($req, $res) {
+        $this->action = 'dummy';
+        parent::__construct($req, $res);
     }
+
+    /**
+     * Throw an exception to make the get method barf.
+     *
+     * @return void
+     */
+    protected function content() {
+        throw new Exception(get_class($this), $this->code());
+    }
+
+    /**
+     * Figure out which code should be used for the exception.
+     *
+     * @return The number that's in the name of the class.
+     */
+    protected function code() {
+        return preg_replace('/\D+/', '', get_class($this));
+    }
+}
+
+/**
+ * A dummy controller which will always raise an exception with a status code
+ * of 404.
+ *
+ * @author Conor McDermottroe <conor@mcdermottroe.com>
+ */
+class TextException404Controller
+extends TestExceptionController
+{
+}
+
+/**
+ * A dummy controller which will always raise an exception with a status code
+ * of 500.
+ *
+ * @author Conor McDermottroe <conor@mcdermottroe.com>
+ */
+class TextException500Controller
+extends TestExceptionController
+{
+}
+
+/**
+ * A dummy controller which will always raise an exception with a status code
+ * of 8000 which should result in a HTTP 500.
+ *
+ * @author Conor McDermottroe <conor@mcdermottroe.com>
+ */
+class TextException8000Controller
+extends TestExceptionController
+{
 }
 
 ?>

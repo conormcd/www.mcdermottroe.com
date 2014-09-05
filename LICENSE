@@ -25,14 +25,3 @@ copyright notice and license.
     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
     POSSIBILITY OF SUCH DAMAGE.
 
-The only exceptions to this are the libraries included as git submodules in the
-following directories:
-
-- lib/geshi
-- lib/klein
-- lib/markdown
-- lib/mustache
-- lib/raven-php
-
-The software in those directories is subject to the licenses of their various
-authors.

@@ -1,8 +1,5 @@
 <?php
 
-require_once dirname(__DIR__) . '/lib/autoloader.php';
-require_once dirname(__DIR__) . '/lib/markdown/markdown.php';
-
 /**
  * Wrap a blog entry.
  *
@@ -161,7 +158,7 @@ extends Model
             'blog_html_' . md5($markdown),
             0,
             function () use ($markdown) {
-                return Markdown($markdown);
+                return \Michelf\MarkdownExtra::defaultTransform($markdown);
             }
         );
     }

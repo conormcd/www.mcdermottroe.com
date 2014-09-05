@@ -18,9 +18,6 @@ class Controller {
     /** The model object to render. */
     protected $model;
 
-    /** The Klein main object for this app. */
-    protected $klein;
-
     /** The klein Request object for the current page request. */
     protected $request;
 
@@ -33,14 +30,10 @@ class Controller {
     /**
      * Initialise this controller.
      *
-     * @param object $klein    The Klein main object.
      * @param object $request  The Request object from klein.
      * @param object $response The Response object from klein.
      */
-    public function __construct($klein, $request, $response) {
-        if (!($klein instanceof \Klein\Klein)) {
-            throw new Exception("Bad Klein object provided.");
-        }
+    public function __construct($request, $response) {
         if (!($request instanceof \Klein\Request)) {
             throw new Exception("Bad request object provided.");
         }
@@ -54,7 +47,6 @@ class Controller {
         if (!$this->action) {
             $this->action = $request->action;
         }
-        $this->klein = $klein;
         $this->request = $request;
         $this->response = $response;
         $this->output_format = null;
@@ -63,8 +55,6 @@ class Controller {
         foreach (explode('-', $this->action) as $part) {
             $this->action_name .= ucfirst($part);
         }
-
-        $this->klein->onError(array($this, 'onError'));
 
         if (extension_loaded('newrelic')) {
             newrelic_name_transaction(
@@ -107,41 +97,6 @@ class Controller {
             $this->model = $this->response;
         }
         return $this->model;
-    }
-
-    /**
-     * Handle exceptions thrown anywhere (via klein's error handling).
-     *
-     * @param object $klein     The Klein object handling the error.
-     * @param string $msg       The message portion of the exception.
-     * @param string $type      The type of the exception.
-     * @param object $exception The exception originally thrown.
-     *
-     * @return void
-     */
-    public function onError($klein, $msg, $type, $exception) {
-        // Track the exception
-        ExceptionTracker::getInstance()->captureException($exception);
-
-        // Set the appropriate HTTP status code
-        $code = $exception->getCode();
-        if ($code < 400 || $code >= 600) {
-            $code = 500;
-        }
-
-        // Now render the error
-        $response = $klein->response();
-        $response->body(
-            Mustache::render(
-                'error',
-                array(
-                    'message' => $msg,
-                    'type' => $type,
-                    'trace' => $exception->getTraceAsString()
-                )
-            )
-        );
-        $klein->abort($code);
     }
 
     /**

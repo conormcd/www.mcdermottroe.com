@@ -19,12 +19,7 @@ extends ControllerTestCase
      * @return object An instance of ErrorController.
      */
     public function sampleController($exception = null) {
-        return new ErrorController(
-            $this->klein(),
-            $this->req(),
-            $this->res(),
-            $exception
-        );
+        return new ErrorController($this->req(), $this->res(), $exception);
     }
 
     /**

@@ -1,8 +1,5 @@
 <?php
 
-require_once __DIR__ . '/mustache/src/Mustache/Autoloader.php';
-Mustache_Autoloader::register();
-
 /**
  * A facade over Mustache.
  *
@@ -10,7 +7,7 @@ Mustache_Autoloader::register();
  */
 class Mustache {
     /** The Mustache_Engine we're using for loading templates. */
-    private static $engine = null;
+    private static $_engine = null;
 
     /**
      * Render a template with some data.
@@ -30,10 +27,10 @@ class Mustache {
      * @return object The current instance of Mustache_Engine being used.
      */
     public static function getEngine() {
-        if (self::$engine === null) {
+        if (self::$_engine === null) {
             self::setEngine(self::getDefaultEngine());
         }
-        return self::$engine;
+        return self::$_engine;
     }
 
     /**
@@ -44,7 +41,7 @@ class Mustache {
      * @return void
      */
     public static function setEngine($engine) {
-        self::$engine = $engine;
+        self::$_engine = $engine;
     }
 
     /**

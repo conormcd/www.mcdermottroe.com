@@ -21,7 +21,7 @@ extends ControllerTestCase
         $res = $this->res();
         $req->action = 'about';
 
-        $controller = $this->create(null, $req, $res);
+        $controller = $this->create($req, $res);
         $res = $controller->get();
 
         $this->assertNotNull($res->body());
@@ -37,7 +37,7 @@ extends ControllerTestCase
         $controller_name = $this->controllerName();
         $this->assertException(
             function () use ($controller_name) {
-                new $controller_name($this->klein(), $this->req(), $this->res());
+                new $controller_name($this->req(), $this->res());
             }
         );
     }

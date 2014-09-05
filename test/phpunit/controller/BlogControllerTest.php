@@ -18,7 +18,7 @@ extends ControllerTestCase
     public function testAtomOutput() {
         $req = $this->req();
         $req->format = 'atom';
-        $controller = $this->create(null, $req);
+        $controller = $this->create($req);
 
         $res = $controller->get();
 
@@ -39,7 +39,7 @@ extends ControllerTestCase
     public function testRSSOutput() {
         $req = $this->req();
         $req->format = 'rss';
-        $controller = $this->create(null, $req);
+        $controller = $this->create($req);
 
         $res = $controller->get();
 

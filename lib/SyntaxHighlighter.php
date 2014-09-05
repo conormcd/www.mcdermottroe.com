@@ -1,7 +1,5 @@
 <?php
 
-require_once __DIR__ . '/geshi/geshi.php';
-
 /**
  * A facade over GeSHi
  *

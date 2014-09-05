@@ -25,10 +25,6 @@ extends ExceptionTracker
      * @param string $dsn The Sentry DSN to connect to.
      */
     public function __construct($dsn) {
-        $raven_lib = dirname(__DIR__) . '/lib/raven-php/lib';
-        include_once "$raven_lib/Raven/Autoloader.php";
-        Raven_Autoloader::register();
-
         $this->_raven_client = new Raven_Client($dsn);
     }
 

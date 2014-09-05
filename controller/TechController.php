@@ -11,13 +11,12 @@ extends Controller
     /**
      * Initialize.
      *
-     * @param object $klein    The Klein main object.
      * @param object $request  The Request object from klein.
      * @param object $response The Response object from klein.
      */
-    public function __construct($klein, $request, $response) {
+    public function __construct($request, $response) {
         $this->action = 'tech';
-        parent::__construct($klein, $request, $response);
+        parent::__construct($request, $response);
 
         $this->model = new TechModel();
     }

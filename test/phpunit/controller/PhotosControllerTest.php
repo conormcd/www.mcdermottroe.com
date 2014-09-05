@@ -18,7 +18,7 @@ extends ControllerTestCase
     public function testWithAlbumSpecified() {
         $req = $this->req();
         $req->album = FakeFlickr::albumSlugForTesting();
-        $controller = $this->create(null, $req);
+        $controller = $this->create($req);
         $res = $controller->get();
 
         $this->assertEquals(200, $res->status()->getCode());
