@@ -26,7 +26,7 @@ extends Model
      * @return string The last modified time of the file, in HTTP date format.
      */
     public function lastModified() {
-        return gmdate('D, d M Y H:i:s T', filemtime($this->path()));
+        return Time::http(filemtime($this->path()));
     }
 
     /**

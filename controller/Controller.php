@@ -150,7 +150,7 @@ class Controller {
         $cache_control['max-age'] = min($cache_control['max-age'], 31536000);
 
         // Format the headers
-        $headers['Expires'] = date('r', time() + $cache_control['max-age']);
+        $headers['Expires'] = Time::http(time() + $cache_control['max-age']);
         $headers['Cache-Control'] = '';
         foreach ($cache_control as $k => $v) {
             $headers['Cache-Control'] .= ($k === 'max-age' ? " $k=$v" : " $k");

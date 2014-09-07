@@ -41,6 +41,17 @@ class Time {
     }
 
     /**
+     * Format a timestamp the way HTTP headers expect them to look.
+     *
+     * @param int $timestamp A UNIX epoch time.
+     *
+     * @return string A HTTP-formatted date and time.
+     */
+    public static function http($timestamp) {
+        return gmdate('D, d M Y H:i:s T', $timestamp);
+    }
+
+    /**
      * Get the English ordinal form of a day number.
      *
      * @param int $day_number The day of the month.
