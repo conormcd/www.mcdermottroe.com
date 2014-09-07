@@ -42,6 +42,9 @@ class HTTPClient {
         $response = curl_exec($curl);
 
         $info = curl_getinfo($curl);
+        if ($info['http_code'] == 0) {
+            throw new Exception("Could not fetch $url.");
+        }
         if ($info['http_code'] >= 400) {
             throw new Exception("$url returned {$info['http_code']}");
         }
