@@ -13,10 +13,7 @@ abstract class Model {
      *                string if the New Relic extension is not loaded.
      */
     public function newRelicJSFooter() {
-        if (extension_loaded('newrelic')) {
-            return newrelic_get_browser_timing_footer();
-        }
-        return '';
+        return NewRelic::javaScriptFooter();
     }
 
     /**
@@ -26,10 +23,7 @@ abstract class Model {
      *                string if the New Relic extension is not loaded.
      */
     public function newRelicJSHeader() {
-        if (extension_loaded('newrelic')) {
-            return newrelic_get_browser_timing_header();
-        }
-        return '';
+        return NewRelic::javaScriptHeader();
     }
 
     /**

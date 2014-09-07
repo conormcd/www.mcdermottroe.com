@@ -56,13 +56,7 @@ class Controller {
             $this->action_name .= ucfirst($part);
         }
 
-        if (extension_loaded('newrelic')) {
-            newrelic_name_transaction(
-                preg_replace("/Controller$/", "", get_class()) .
-                '/' .
-                $this->action_name
-            );
-        }
+        NewRelic::transaction($this, $this->action_name);
     }
 
     /**
