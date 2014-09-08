@@ -21,6 +21,18 @@ extends ModelTestCase
         $this->assertNotNull($repos);
         $this->assertNotEmpty($repos);
     }
+
+    /**
+     * Make sure we're setting a non-zero TTL to help with caching.
+     *
+     * @return void
+     */
+    public function testTtl() {
+        $instance = new TechModel();
+        $ttl = $instance->ttl();
+        $this->assertNotNull($ttl);
+        $this->assertGreaterThan(0, $ttl);
+    }
 }
 
 ?>
