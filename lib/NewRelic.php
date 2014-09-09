@@ -6,27 +6,6 @@
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
 class NewRelic {
-    private static $_disabled = false;
-
-    /**
-     * Enable New Relic. New Relic is on by default so you don't need to call
-     * this unless you previously called disable.
-     *
-     * @return void
-     */
-    public static function enable() {
-        self::$_disabled = false;
-    }
-
-    /**
-     * Disable New Relic.
-     *
-     * @return void
-     */
-    public static function disable() {
-        self::$_disabled = true;
-    }
-
     /**
      * Return the text of the JavaScript used at the start of a page for
      * measuring the front-end performance of the page.
@@ -36,10 +15,7 @@ class NewRelic {
      *                disabled.
      */
     public static function javaScriptHeader() {
-        if (self::enabled()) {
-            return newrelic_get_browser_timing_header();
-        }
-        return '';
+        return self::call('newrelic_get_browser_timing_header');
     }
 
     /**
@@ -51,10 +27,7 @@ class NewRelic {
      *                disabled.
      */
     public static function javaScriptFooter() {
-        if (self::enabled()) {
-            return newrelic_get_browser_timing_footer();
-        }
-        return '';
+        return self::call('newrelic_get_browser_timing_footer');
     }
 
     /**
@@ -67,22 +40,27 @@ class NewRelic {
      * @return void
      */
     public static function transaction($controller, $action) {
-        if (self::enabled()) {
-            newrelic_name_transaction(
-                preg_replace('/Controller$/', '', get_class($controller)) .
-                '/' .
-                $action
-            );
-        }
+        self::call(
+            'newrelic_name_transaction',
+            preg_replace('/Controller$/', '', get_class($controller)) .
+            '/' .
+            $action
+        );
     }
 
     /**
-     * Check if New Relic is enabled.
+     * Call a New Relic function if it exists.
      *
-     * @return boolean True if New Relic is both enabled and available.
+     * @return mixed The return value of the function or empty string if the 
+     *               function does not exist.
      */
-    private static function enabled() {
-        return !self::$_disabled && extension_loaded('newrelic');
+    private static function call() {
+        $args = func_get_args();
+        $function_name = array_shift($args);
+        if (function_exists($function_name)) {
+            return call_user_func_array($function_name, $args);
+        }
+        return '';
     }
 }
 
