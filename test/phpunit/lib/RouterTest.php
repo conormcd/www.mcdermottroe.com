@@ -70,6 +70,102 @@ extends TestCase
     }
 
     /**
+     * Simple test of loadRedirectRoute.
+     *
+     * @return void
+     */
+    public function testLoadRedirectRoute() {
+        $klein = new \Klein\Klein();
+        $router = new Router(array(), $klein);
+        $router->loadRedirectRoute(
+            '/',
+            '/about'
+        );
+        $this->assertRedirectRoute($klein, '/', '/about');
+    }
+
+    /**
+     * Test of loadRedirectRoute with parameters passed to the redirected URL.
+     *
+     * @return void
+     */
+    public function testLoadRedirectParams() {
+        $klein = new \Klein\Klein();
+        $router = new Router(array(), $klein);
+        $router->loadRedirectRoute(
+            '/',
+            '/about',
+            array('foo' => 'bar')
+        );
+        $this->assertRedirectRoute($klein, '/', '/about?foo=bar');
+    }
+
+    /**
+     * Test of loadRedirectRoute with parameters from the request passed to the 
+     * redirected URL.
+     *
+     * @return void
+     */
+    public function testLoadRedirectReqParams() {
+        $klein = new \Klein\Klein();
+        $router = new Router(array(), $klein);
+        $router->loadRedirectRoute(
+            '/',
+            '/about',
+            array('foo' => 'req->foo')
+        );
+        $this->assertRedirectRoute($klein, '/?foo=bar&baz=quux', '/about?foo=bar');
+    }
+
+    /**
+     * Test of loadRedirectRoute with a URL fragment sent to the redirected 
+     * URL.
+     *
+     * @return void
+     */
+    public function testLoadRedirectFragment() {
+        $klein = new \Klein\Klein();
+        $router = new Router(array(), $klein);
+        $router->loadRedirectRoute(
+            '/',
+            '/about',
+            null,
+            'req->foo'
+        );
+        $this->assertRedirectRoute($klein, '/?foo=bar', '/about#bar');
+    }
+
+    /**
+     * Test loadRoutes with a simple route.
+     *
+     * @return void
+     */
+    public function testLoadRoutesSimple() {
+        $this->assertLoadRoutes(
+            array('/' => 'TechController'),
+            '/',
+            200,
+            '/GitHub/'
+        );
+    }
+
+    /**
+     * Test loadRoutes with a redirect route.
+     *
+     * @return void
+     */
+    public function testLoadRoutesRedirect() {
+        $this->assertLoadRoutes(
+            array(
+                '/' => array('redirect' => 'http://www.shooting.ie/')
+            ),
+            '/',
+            301,
+            '/www.shooting.ie/'
+        );
+    }
+
+    /**
      * Test Router#onError with an exception producing a 404 error.
      *
      * @return void
@@ -110,18 +206,9 @@ extends TestCase
      */
     private function onErrorTest($controller, $expected_code) {
         $router = new Router(array('/' => $controller));
-        $req = new \Klein\Request(
-            array(),
-            array(),
-            array(),
-            array(
-                'REQUEST_METHOD' => 'GET',
-                'REQUEST_URI' => '/'
-            )
-        );
         $res = new \Klein\Response();
 
-        $router->dispatch($req, $res, false);
+        $router->dispatch($this->constructRequest('/'), $res, false);
 
         $this->assertRegexp("/" . $controller . "/", $res->body());
         $this->assertEquals($expected_code, $res->code());
@@ -146,6 +233,82 @@ extends TestCase
             }
         }
         $this->assertTrue($found_route);
+    }
+
+    /**
+     * Ensure that a redirection route does the right thing and sets the
+     * Location and returns a 301.
+     *
+     * @param \Klein\Klein $klein       The instance of Klein behind Router.
+     * @param string       $path        The URI to fetch to trigger the
+     *                                  redirect.
+     * @param string       $destination The location that the redirect should
+     *                                  point to.
+     *
+     * @return void
+     */
+    private function assertRedirectRoute($klein, $path, $destination) {
+        $req = $this->constructRequest($path);
+        $res = new \Klein\Response();
+        $klein->dispatch($req, $res, false);
+        $this->assertEquals(301, $res->status()->getCode());
+        $this->assertEquals($destination, $res->headers()->get('Location'));
+    }
+
+    /**
+     * Test loadRoutes by passing an array of Routes to a fresh copy of Router 
+     * and then exercising that Router. Look for a successful response and that 
+     * the body matches the supplied pattern.
+     *
+     * @param array  $routes  The routes to load.
+     * @param string $path    The path to request when testing.
+     * @param int    $status  The expected status.
+     * @param string $pattern A pattern to match against the body or against 
+     *                        the Location header if the expected status is 301 
+     *                        or 304.
+     *
+     * @return void
+     */
+    private function assertLoadRoutes($routes, $path, $status, $pattern) {
+        $klein = new \Klein\Klein();
+        $router = new Router($routes, $klein);
+        $this->assertNotNull($router);
+        $res = new \Klein\Response();
+        $klein->dispatch($this->constructRequest($path), $res, false);
+        $this->assertEquals($status, $res->status()->getCode());
+        if ($status == 301 || $status == 304) {
+            $this->assertRegexp($pattern, $res->headers()->get('Location'));
+        } else {
+            $this->assertRegexp($pattern, $res->body());
+        }
+    }
+
+    /**
+     * Construct a \Klein\Request from a URL.
+     *
+     * @param string $url A URL path, optionally with query parameters.
+     *
+     * @return \Klein\Request A \Klein\Request object initialised to match the 
+     *                        supplied URL.
+     */
+    private function constructRequest($url) {
+        $url = parse_url($url);
+        $query_params = array();
+        if (array_key_exists('query', $url)) {
+            foreach (explode('&', $url['query']) as $param) {
+                list($key, $value) = explode('=', $param, 2);
+                $query_params[$key] = $value;
+            }
+        }
+        return new \Klein\Request(
+            $query_params,
+            array(),
+            array(),
+            array(
+                'REQUEST_METHOD' => 'GET',
+                'REQUEST_URI' => $url['path']
+            )
+        );
     }
 }
 
