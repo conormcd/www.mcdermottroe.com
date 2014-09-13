@@ -159,6 +159,11 @@ extends PageableModel
      *             be cached for.
      */
     public function ttl() {
+        if ($this->per_page == 1) {
+            return 86400 * 30;
+        } else if ($this->album) {
+            return 86400;
+        }
         return 3600;
     }
 
