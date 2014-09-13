@@ -24,18 +24,10 @@ extends \Klein\Klein
         $send_response = true,
         $capture = \Klein\Klein::DISPATCH_NO_CAPTURE
     ) {
-        if (!($request === null || $request instanceof \Klein\Request)) {
-            throw new Exception("Bad request for dispatch.");
-        }
-        if (!($response === null || $response instanceof \Klein\Response)) {
-            throw new Exception("Bad response for dispatch.");
-        }
-        if (!is_bool($send_response)) {
-            throw new Exception("Bad send_response for dispatch.");
-        }
-        if (!is_int($capture)) {
-            throw new Exception("Bad capture for dispatch.");
-        }
+        assert($request === null || $request instanceof \Klein\Request);
+        assert($response === null || $response instanceof \Klein\Response);
+        assert(is_bool($send_response));
+        assert(is_int($capture));
         return func_get_args();
     }
 

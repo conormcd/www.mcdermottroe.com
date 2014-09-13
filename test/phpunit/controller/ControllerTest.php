@@ -43,6 +43,29 @@ extends ControllerTestCase
     }
 
     /**
+     * Test setCacheHeaders.
+     *
+     * @return void
+     */
+    public function testSetCacheHeaders() {
+        $req = $this->req();
+        $res = $this->res();
+
+        $model = new TestHeadersModel();
+        $controller = new TestHeadersController($req, $res, $model);
+        $controller->get();
+
+        $this->assertEquals(
+            'public max-age=0',
+            $res->headers()->get('Cache-Control')
+        );
+        $this->assertRegexp(
+            '/^\w{3}, \d\d \w{3} \d{4} \d\d:\d\d:\d\d GMT$/',
+            $res->headers()->get('Expires')
+        );
+    }
+
+    /**
      * Ensure that Content-Type and Last-Modified headers can be set from the
      * model.
      *
@@ -77,13 +100,25 @@ extends Controller
      *
      * @param \Klein\Request  $request  The Klein request object.
      * @param \Klein\Response $response The Klein response object.
-     * @param Model           $model    The model to use. (Should be an 
+     * @param Model           $model    The model to use. (Should be an
      *                                  instance of TestHeadersModel.)
      */
     public function __construct($request, $response, $model) {
         $this->action = 'error';
         $this->model = $model;
         parent::__construct($request, $response);
+    }
+
+    /**
+     * Deliberately break the cache control method to ensure that a minimum
+     * value of max-age=0 is set.
+     *
+     * @return See Controller->cacheControl().
+     */
+    public function cacheControl() {
+        $cache_control = parent::cacheControl();
+        unset($cache_control['max-age']);
+        return $cache_control;
     }
 }
 

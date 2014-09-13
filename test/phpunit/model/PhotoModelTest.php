@@ -77,6 +77,16 @@ extends ModelTestCase
     }
 
     /**
+     * Get a test copy of PhotoModel.
+     *
+     * @return PhotoModel An instance of PhotoModel which can be tested.
+     */
+    protected function createTestObject() {
+        $photos = $this->samplePhotos();
+        return $photos[0];
+    }
+
+    /**
      * Generate some test photo objects.
      *
      * @return array An array of PhotoModel objects.

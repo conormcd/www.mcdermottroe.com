@@ -16,7 +16,7 @@ extends ModelTestCase
      * @return void
      */
     public function testAlbumID() {
-        $this->assertEquals(1234, $this->sampleInstance()->albumID());
+        $this->assertEquals(1234, $this->createTestObject()->albumID());
     }
 
     /**
@@ -25,7 +25,7 @@ extends ModelTestCase
      * @return void
      */
     public function testIsPhotoAlbum() {
-        $this->assertTrue($this->sampleInstance()->isPhotoAlbum());
+        $this->assertTrue($this->createTestObject()->isPhotoAlbum());
     }
 
     /**
@@ -36,7 +36,7 @@ extends ModelTestCase
     public function testTitle() {
         $this->assertEquals(
             'A fake photo album',
-            $this->sampleInstance()->title()
+            $this->createTestObject()->title()
         );
     }
 
@@ -48,7 +48,7 @@ extends ModelTestCase
     public function testTimestamp() {
         $this->assertGreaterThanOrEqual(
             time() - (7 * 86400),
-            $this->sampleInstance()->timestamp()
+            $this->createTestObject()->timestamp()
         );
     }
 
@@ -58,7 +58,7 @@ extends ModelTestCase
      * @return void
      */
     public function testTimestampFromTitle() {
-        $instance = $this->sampleInstance();
+        $instance = $this->createTestObject();
         $instance = new PhotoAlbumModel(
             PhotoProvider::getInstance(),
             $instance->albumID(),
@@ -78,7 +78,7 @@ extends ModelTestCase
      * @return void
      */
     public function testPhotos() {
-        $photos = $this->sampleInstance()->photos();
+        $photos = $this->createTestObject()->photos();
         $this->assertNotNull($photos);
         $this->assertTrue(count($photos) > 0);
         foreach ($photos as $photo) {
@@ -94,7 +94,7 @@ extends ModelTestCase
     public function testSlug() {
         $this->assertEquals(
             'AFakePhotoAlbum',
-            $this->sampleInstance()->slug()
+            $this->createTestObject()->slug()
         );
     }
 
@@ -104,7 +104,7 @@ extends ModelTestCase
      * @return void
      */
     public function testThumbnail() {
-        $thumbnail = $this->sampleInstance()->thumbnail();
+        $thumbnail = $this->createTestObject()->thumbnail();
         $this->assertNotNull($thumbnail);
         $this->assertInstanceOf('PhotoModel', $thumbnail);
     }
@@ -115,7 +115,7 @@ extends ModelTestCase
      * @return void.
      */
     public function testThumbnailWithBadThumbnailID() {
-        $instance = $this->sampleInstance();
+        $instance = $this->createTestObject();
         $instance = new PhotoAlbumModel(
             PhotoProvider::getInstance(),
             $instance->albumID(),
@@ -135,7 +135,7 @@ extends ModelTestCase
      *
      * @return PhotoAlbumModel An instance that can be tested.
      */
-    private function sampleInstance() {
+    protected function createTestObject() {
         $provider = PhotoProvider::getInstance();
         return $provider->albumForTesting();
     }

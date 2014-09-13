@@ -94,6 +94,21 @@ extends TestCase
             $this->assertEquals($output, Time::dateRSS($input));
         }
     }
+
+    /**
+     * Test Time::http()
+     *
+     * @return void
+     */
+    public function testHttp() {
+        $test_data = array(
+            1388577600 => 'Wed, 01 Jan 2014 12:00:00 GMT',
+            1401624000 => 'Sun, 01 Jun 2014 12:00:00 GMT',
+        );
+        foreach ($test_data as $input => $output) {
+            $this->assertEquals($output, Time::http($input));
+        }
+    }
 }
 
 ?>

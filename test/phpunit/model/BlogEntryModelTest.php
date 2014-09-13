@@ -11,6 +11,28 @@ class BlogEntryModelTest
 extends ModelTestCase
 {
     /**
+     * Initialise the list of temporary files to be cleaned up.
+     *
+     * @return void
+     */
+    public function setUp() {
+        parent::setUp();
+        $this->_test_files = array();
+    }
+
+    /**
+     * Clean up temporary files.
+     *
+     * @return void
+     */
+    public function tearDown() {
+        foreach ($this->_test_files as $file) {
+            unlink($file);
+        }
+        parent::tearDown();
+    }
+
+    /**
      * Test the case where the markdown file does not exist.
      *
      * @return void
@@ -34,8 +56,7 @@ extends ModelTestCase
      * @return void
      */
     public function testEmptyBlogPost() {
-        $file = $this->generateTestFile('');
-        $post = new BlogEntryModel($file);
+        $post = $this->generateTestPost('');
 
         $this->assertException(array($post, 'title'));
         $this->assertEquals($post->date(), '1st January 2012');
@@ -43,8 +64,6 @@ extends ModelTestCase
         $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 00:00:00 +0000');
         $this->assertEmpty($post->body());
         $this->assertEmpty($post->summary());
-
-        unlink($file);
     }
 
     /**
@@ -53,12 +72,11 @@ extends ModelTestCase
      * @return void
      */
     public function testBlogPostWithTitle() {
-        $file = $this->generateTestFile(
+        $post = $this->generateTestPost(
 <<<MARKDOWN
 # Title Goes Here
 MARKDOWN
         );
-        $post = new BlogEntryModel($file);
 
         $this->assertEquals($post->title(), 'Title Goes Here');
         $this->assertEquals($post->date(), '1st January 2012');
@@ -66,8 +84,6 @@ MARKDOWN
         $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 00:00:00 +0000');
         $this->assertEmpty($post->body());
         $this->assertEmpty($post->summary());
-
-        unlink($file);
     }
 
     /**
@@ -76,8 +92,7 @@ MARKDOWN
      * @return void
      */
     public function testDateTakenFromFileName() {
-        $file = $this->generateTestFile('', '2012-06-01-');
-        $post = new BlogEntryModel($file);
+        $post = $this->generateTestPost('', '2012-06-01-');
 
         $this->assertException(array($post, 'title'));
         $this->assertEquals($post->date(), '1st June 2012');
@@ -85,8 +100,6 @@ MARKDOWN
         $this->assertEquals($post->dateRSS(), 'Fri, 01 Jun 2012 00:00:00 +0100');
         $this->assertEmpty($post->body());
         $this->assertEmpty($post->summary());
-
-        unlink($file);
     }
 
     /**
@@ -95,15 +108,12 @@ MARKDOWN
      * @return void
      */
     public function testFileNameWithNoDate() {
-        $file = $this->generateTestFile('', 'not-a-date-');
-        $post = new BlogEntryModel($file);
+        $post = $this->generateTestPost('', 'not-a-date-');
 
         $this->assertException(array($post, 'title'));
         $this->assertException(array($post, 'date'));
         $this->assertEmpty($post->body());
         $this->assertEmpty($post->summary());
-
-        unlink($file);
     }
 
     /**
@@ -112,14 +122,13 @@ MARKDOWN
      * @return void
      */
     public function testBlogPostWithTitleAndBody() {
-        $file = $this->generateTestFile(
+        $post = $this->generateTestPost(
 <<<MARKDOWN
 # Title
 
 Body
 MARKDOWN
         );
-        $post = new BlogEntryModel($file);
 
         $this->assertEquals($post->title(), 'Title');
         $this->assertEquals($post->date(), '1st January 2012');
@@ -127,8 +136,6 @@ MARKDOWN
         $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 00:00:00 +0000');
         $this->assertEquals($post->body(), '<p>Body</p>');
         $this->assertEquals($post->summary(), 'Body');
-
-        unlink($file);
     }
 
     /**
@@ -137,14 +144,13 @@ MARKDOWN
      * @return void
      */
     public function testBlogPostWithAnAmazonLink() {
-        $file = $this->generateTestFile(
+        $post = $this->generateTestPost(
 <<<MARKDOWN
 # Title
 
 <a href="{{amazonlink:ABCD1234}}">Link</a>
 MARKDOWN
         );
-        $post = new BlogEntryModel($file);
 
         $this->assertEquals($post->title(), 'Title');
         $this->assertEquals($post->date(), '1st January 2012');
@@ -154,8 +160,6 @@ MARKDOWN
             '#http://[^/]*amazon\.com/.*ABCD1234#',
             $post->body()
         );
-
-        unlink($file);
     }
 
     /**
@@ -164,14 +168,13 @@ MARKDOWN
      * @return void
      */
     public function testBlogPostWithAnAmazonBug() {
-        $file = $this->generateTestFile(
+        $post = $this->generateTestPost(
 <<<MARKDOWN
 # Title
 
 {{amazonbug:ABCD1234}}
 MARKDOWN
         );
-        $post = new BlogEntryModel($file);
 
         $this->assertEquals($post->title(), 'Title');
         $this->assertEquals($post->date(), '1st January 2012');
@@ -181,8 +184,6 @@ MARKDOWN
             '#<img.*src=.http://[^/]*amazon\.com/.*ABCD1234#s',
             $post->body()
         );
-
-        unlink($file);
     }
 
     /**
@@ -191,7 +192,7 @@ MARKDOWN
      * @return void
      */
     public function testBlogPostWithCodeBlock() {
-        $file = $this->generateTestFile(
+        $post = $this->generateTestPost(
 <<<MARKDOWN
 # Title
 
@@ -200,7 +201,6 @@ MARKDOWN
     }
 MARKDOWN
         );
-        $post = new BlogEntryModel($file);
 
         $this->assertEquals($post->title(), 'Title');
         $this->assertEquals($post->date(), '1st January 2012');
@@ -210,8 +210,6 @@ MARKDOWN
             '#<pre><code>if \(true\) \{.*print "Woo!";.*\}.*</code></pre>#s',
             $post->body()
         );
-
-        unlink($file);
     }
 
     /**
@@ -220,7 +218,7 @@ MARKDOWN
      * @return void
      */
     public function testBlogPostWithSyntaxHighlightedCodeBlock() {
-        $file = $this->generateTestFile(
+        $post = $this->generateTestPost(
 <<<MARKDOWN
 # Title
 
@@ -230,7 +228,6 @@ MARKDOWN
     }
 MARKDOWN
         );
-        $post = new BlogEntryModel($file);
 
         $this->assertEquals($post->title(), 'Title');
         $this->assertEquals($post->date(), '1st January 2012');
@@ -240,8 +237,6 @@ MARKDOWN
             '#^<pre class="php codeblock" #',
             $post->body()
         );
-
-        unlink($file);
     }
 
     /**
@@ -250,26 +245,36 @@ MARKDOWN
      * @return void
      */
     public function testIsBlogEntry() {
-        $post = new BlogEntryModel($this->generateTestFile(""));
+        $post = $this->generateTestPost('');
         $this->assertTrue($post->isBlogEntry());
     }
 
     /**
-     * Create a temporary file which contains some test content.
+     * Create a BlogEntryModel for the common tests.
      *
-     * @param string $content     The contents of the file.
-     * @param string $name_prefix The prefix for the file name.
-     *
-     * @return string             The full path to a file containing that
-     *                            content.
+     * @return BlogEntryModel A test object.
      */
-    private function generateTestFile($content, $name_prefix = '2012-01-01-') {
+    protected function createTestObject() {
+        return $this->generateTestPost('');
+    }
+
+    /**
+     * Create a BlogEntryModel from some test data.
+     *
+     * @param string $content     The contents of the backing file.
+     * @param string $name_prefix The prefix for the backing file name.
+     *
+     * @return BlogEntryModel An instance of BlogEntryModel that can be used to
+     *                        run tests.
+     */
+    private function generateTestPost($content, $name_prefix = '2012-01-01-') {
         $filename = tempnam(sys_get_temp_dir(), $name_prefix);
         if (($file = fopen($filename, 'w')) !== false) {
             fwrite($file, $content);
             fclose($file);
         }
-        return $filename;
+        $this->_test_files[] = $filename;
+        return new BlogEntryModel($filename);
     }
 }
 

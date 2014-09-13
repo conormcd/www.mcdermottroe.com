@@ -72,7 +72,10 @@ class Router {
      *
      * @return void
      */
-    public function loadRedirectRoute($route, $dest, $params, $frag) {
+    public function loadRedirectRoute($route, $dest, $params = null, $frag = null) {
+        if ($params === null) {
+            $params = array();
+        }
         $indirect = function ($request, $redirect_parameter) {
             if (preg_match('/^req->(.*)/', $redirect_parameter, $matches)) {
                 $member = $matches[1];
