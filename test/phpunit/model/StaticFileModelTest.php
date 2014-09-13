@@ -11,7 +11,7 @@ class StaticFileModelTest
 extends ModelTestCase
 {
     /**
-     * Test that the Last Modified header will be set and appropriately 
+     * Test that the Last Modified header will be set and appropriately
      * formatted.
      *
      * @return void
@@ -54,7 +54,7 @@ extends ModelTestCase
     }
 
     /**
-     * Test that the path method correctly calculates the path of a file in the 
+     * Test that the path method correctly calculates the path of a file in the
      * public directory.
      *
      * @return void

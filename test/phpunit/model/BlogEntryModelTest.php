@@ -264,7 +264,7 @@ MARKDOWN
      * @param string $content     The contents of the backing file.
      * @param string $name_prefix The prefix for the backing file name.
      *
-     * @return BlogEntryModel An instance of BlogEntryModel that can be used to 
+     * @return BlogEntryModel An instance of BlogEntryModel that can be used to
      *                        run tests.
      */
     private function generateTestPost($content, $name_prefix = '2012-01-01-') {

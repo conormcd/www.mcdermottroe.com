@@ -51,7 +51,7 @@ class NewRelic {
     /**
      * Call a New Relic function if it exists.
      *
-     * @return mixed The return value of the function or empty string if the 
+     * @return mixed The return value of the function or empty string if the
      *               function does not exist.
      */
     private static function call() {

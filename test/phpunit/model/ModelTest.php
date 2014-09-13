@@ -64,7 +64,7 @@ extends Model
     /**
      * A sample cached method.
      *
-     * @return float The time with fractional microseconds when the method was 
+     * @return float The time with fractional microseconds when the method was
      *               called. This value will be cached for 10 seconds.
      */
     public function methodWhichIsCached() {
@@ -80,7 +80,7 @@ extends Model
     /**
      * A sample uncached method.
      *
-     * @return float The time with fractional microseconds when the method was 
+     * @return float The time with fractional microseconds when the method was
      *               called.
      */
     public function methodWhichIsNotCached() {

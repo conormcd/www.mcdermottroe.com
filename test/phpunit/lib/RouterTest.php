@@ -101,7 +101,7 @@ extends TestCase
     }
 
     /**
-     * Test of loadRedirectRoute with parameters from the request passed to the 
+     * Test of loadRedirectRoute with parameters from the request passed to the
      * redirected URL.
      *
      * @return void
@@ -118,7 +118,7 @@ extends TestCase
     }
 
     /**
-     * Test of loadRedirectRoute with a URL fragment sent to the redirected 
+     * Test of loadRedirectRoute with a URL fragment sent to the redirected
      * URL.
      *
      * @return void
@@ -256,15 +256,15 @@ extends TestCase
     }
 
     /**
-     * Test loadRoutes by passing an array of Routes to a fresh copy of Router 
-     * and then exercising that Router. Look for a successful response and that 
+     * Test loadRoutes by passing an array of Routes to a fresh copy of Router
+     * and then exercising that Router. Look for a successful response and that
      * the body matches the supplied pattern.
      *
      * @param array  $routes  The routes to load.
      * @param string $path    The path to request when testing.
      * @param int    $status  The expected status.
-     * @param string $pattern A pattern to match against the body or against 
-     *                        the Location header if the expected status is 301 
+     * @param string $pattern A pattern to match against the body or against
+     *                        the Location header if the expected status is 301
      *                        or 304.
      *
      * @return void
@@ -288,7 +288,7 @@ extends TestCase
      *
      * @param string $url A URL path, optionally with query parameters.
      *
-     * @return \Klein\Request A \Klein\Request object initialised to match the 
+     * @return \Klein\Request A \Klein\Request object initialised to match the
      *                        supplied URL.
      */
     private function constructRequest($url) {
