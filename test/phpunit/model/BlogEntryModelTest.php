@@ -250,12 +250,22 @@ MARKDOWN
     }
 
     /**
+     * Create a BlogEntryModel for the common tests.
+     *
+     * @return BlogEntryModel A test object.
+     */
+    protected function createTestObject() {
+        return $this->generateTestPost('');
+    }
+
+    /**
      * Create a BlogEntryModel from some test data.
      *
      * @param string $content     The contents of the backing file.
      * @param string $name_prefix The prefix for the backing file name.
      *
-     * @return BlogEntryModel An instance of BlogEntryModel that can be used to run tests.
+     * @return BlogEntryModel An instance of BlogEntryModel that can be used to 
+     *                        run tests.
      */
     private function generateTestPost($content, $name_prefix = '2012-01-01-') {
         $filename = tempnam(sys_get_temp_dir(), $name_prefix);

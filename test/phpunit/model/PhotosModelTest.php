@@ -51,18 +51,6 @@ extends PageableModelTestCase
         $album = FakeFlickr::albumSlugForTesting();
         $this->assertEquals("/photos/$album", $photos->link());
     }
-
-    /**
-     * Make sure we're setting a non-zero TTL to help with caching.
-     *
-     * @return void
-     */
-    public function testTtl() {
-        $instance = $this->createTestObject();
-        $ttl = $instance->ttl();
-        $this->assertNotNull($ttl);
-        $this->assertGreaterThan(0, $ttl);
-    }
 }
 
 ?>

@@ -5,7 +5,9 @@
  *
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
-class PhotoAlbumModel {
+class PhotoAlbumModel
+extends Model
+{
     private $_provider;
 
     private $_album_id;

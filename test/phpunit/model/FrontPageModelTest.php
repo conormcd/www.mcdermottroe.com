@@ -20,6 +20,20 @@ extends PageableModelTestCase
         $entries = $page->entries();
         $this->assertNotEmpty($entries);
     }
+
+    /**
+     * Test FrontPageModel.entries is cached.
+     *
+     * @return void
+     */
+    public function testEntriesCached() {
+        $_ENV['CACHE_ENABLE'] = true;
+        $page = $this->createTestObject();
+        $first = $page->entries();
+        $second = $page->entries();
+        $this->assertEquals($first, $second);
+        $_ENV['CACHE_ENABLE'] = false;
+    }
 }
 
 ?>

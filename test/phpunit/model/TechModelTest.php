@@ -23,15 +23,12 @@ extends ModelTestCase
     }
 
     /**
-     * Make sure we're setting a non-zero TTL to help with caching.
+     * Get a copy of TechModel for testing.
      *
-     * @return void
+     * @return TechModel An instance which can be tested.
      */
-    public function testTtl() {
-        $instance = new TechModel();
-        $ttl = $instance->ttl();
-        $this->assertNotNull($ttl);
-        $this->assertGreaterThan(0, $ttl);
+    protected function createTestObject() {
+        return new TechModel('/css/default.css');
     }
 }
 

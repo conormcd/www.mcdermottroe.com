@@ -83,6 +83,15 @@ extends ModelTestCase
             }
         );
     }
+
+    /**
+     * Get a copy of StaticFileModel for testing.
+     *
+     * @return StaticFileModel An instance which can be tested.
+     */
+    protected function createTestObject() {
+        return new StaticFileModel('/css/default.css');
+    }
 }
 
 ?>
