@@ -26,9 +26,6 @@ extends TestCase
      * @return void
      */
     public function testGetBadKeyReturnsNull() {
-        if (!function_exists('apc_store')) {
-            $this->markTestIncomplete('APC is not installed/configured.');
-        }
         $this->assertNull(Cache::get('this-does-not-exist'));
     }
 
@@ -38,9 +35,6 @@ extends TestCase
      * @return void
      */
     public function testGetGoodKeyReturnsCorrectValue() {
-        if (!function_exists('apc_store')) {
-            $this->markTestIncomplete('APC is not installed/configured.');
-        }
         Cache::set('test-key', 'test-value', 1);
         $this->assertEquals('test-value', Cache::get('test-key'));
     }
