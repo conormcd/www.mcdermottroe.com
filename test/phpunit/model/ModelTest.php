@@ -11,14 +11,25 @@ class ModelTest
 extends ModelTestCase
 {
     /**
+     * Turn on caching for these tests.
+     *
+     * @return void
+     */
+    public function setUp() {
+        parent::setUp();
+        $_ENV['CACHE_ENABLE'] = true;
+    }
+
+    /**
      * Test that methods using the cache method from Model work as expected.
      *
      * @return void
      */
     public function testMethodWhichIsCached() {
         $testmodel = new TestModel();
-        $this->assertEquals('Cached', $testmodel->methodWhichIsCached());
-        $this->assertEquals('Cached', $testmodel->methodWhichIsCached());
+        $first = $testmodel->methodWhichIsCached();
+        $second = $testmodel->methodWhichIsCached();
+        $this->assertEquals($first, $second);
     }
 
     /**
@@ -28,7 +39,9 @@ extends ModelTestCase
      */
     public function testMethodWhichIsNotCached() {
         $testmodel = new TestModel();
-        $this->assertEquals('Not Cached', $testmodel->methodWhichIsNotCached());
+        $first = $testmodel->methodWhichIsNotCached();
+        $second = $testmodel->methodWhichIsNotCached();
+        $this->assertNotEquals($first, $second);
     }
 
     /**
@@ -78,14 +91,15 @@ extends Model
     /**
      * A sample cached method.
      *
-     * @return string The string "Cached".
+     * @return float The time with fractional microseconds when the method was 
+     *               called. This value will be cached for 10 seconds.
      */
     public function methodWhichIsCached() {
         return $this->cache(
             'cached_method',
-            1,
+            10,
             function () {
-                return 'Cached';
+                return microtime(true);
             }
         );
     }
@@ -93,10 +107,11 @@ extends Model
     /**
      * A sample uncached method.
      *
-     * @return string The string "Not Cached".
+     * @return float The time with fractional microseconds when the method was 
+     *               called.
      */
     public function methodWhichIsNotCached() {
-        return 'Not Cached';
+        return microtime(true);
     }
 }
 
