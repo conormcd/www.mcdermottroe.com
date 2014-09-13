@@ -94,12 +94,9 @@ class JSON {
      * @return void
      */
     private static function errorHandler($errno = null, $errstr = null) {
-        if ($errno === null && $errstr === null) {
+        $message = $errstr !== null ? $errstr : $errno;
+        if ($message === null) {
             $message = json_last_error_msg();
-        } else if ($errstr === null) {
-            $message = $errno;
-        } else {
-            $message = $errstr;
         }
         throw new Exception($message);
     }
