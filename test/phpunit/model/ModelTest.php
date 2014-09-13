@@ -30,6 +30,42 @@ extends ModelTestCase
         $testmodel = new TestModel();
         $this->assertEquals('Not Cached', $testmodel->methodWhichIsNotCached());
     }
+
+    /**
+     * Basic test for newRelicJSHeader().
+     *
+     * @return void
+     */
+    public function testNewRelicJSHeader() {
+        $testmodel = new TestModel();
+        $javascript = $testmodel->newRelicJSHeader();
+        $this->assertNotNull($javascript);
+        $this->assertTrue(is_string($javascript));
+    }
+
+    /**
+     * Basic test for newRelicJSFooter().
+     *
+     * @return void
+     */
+    public function testNewRelicJSFooter() {
+        $testmodel = new TestModel();
+        $javascript = $testmodel->newRelicJSFooter();
+        $this->assertNotNull($javascript);
+        $this->assertTrue(is_string($javascript));
+    }
+
+    /**
+     * Basic test for ttl().
+     *
+     * @return void
+     */
+    public function testTTL() {
+        $testmodel = new TestModel();
+        $ttl = $testmodel->ttl();
+        $this->assertNotNull($ttl);
+        $this->assertGreaterThanOrEqual(0, $ttl);
+    }
 }
 
 /**
