@@ -1,5 +1,5 @@
-<div class="instagramphoto">
-<h2><a href="{{link}}">{{title}}</a></h2>
-<a href="{{link}}"><img src="{{image}}" height="480" width="480" alt="{{caption}}" /></a>
-<div class="caption">{{caption}}</div>
+<div class="instagramphoto" itemscope itemtype="http://schema.org/Photograph">
+<h2><a href="{{link}}" itemprop="datePublished" content="{{dateISO8601}}">{{title}}</a></h2>
+<a href="{{link}}" itemprop="url" content="{{link}}"><img src="{{image}}" height="480" width="480" alt="{{caption}}" itemprop="image" content="{{image}}" /></a>
+<div class="caption" itemprop="description">{{caption}}</div>
 </div>

@@ -89,6 +89,11 @@ code {
   margin-bottom: 1em;
 }
 
+.repo h2 {
+  text-decoration: underline;
+  font-size: 100%;
+}
+
 .blogentry {
   margin-bottom: 50px;
 }

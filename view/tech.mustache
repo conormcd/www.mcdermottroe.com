@@ -1,12 +1,14 @@
 {{> head}}
-<p>Any code that I make public is available 
-   <a href="https://github.com/conormcd">on GitHub</a> and are listed
-   below.
+<p>Any code that I make public is available
+   <a href="https://github.com/conormcd">on GitHub</a> and all my public
+   repositories are listed below.
 </p>
-<dl>
 {{#gitHubRepos}}
-<dt><a href="{{{url}}}">{{name}}</a></dt>
-<dd>{{description}}</dd>
+<div class="repo" itemscope itemtype="http://schema.org/Code">
+<h2 style="text-decoration: underline; font-size: 100%" itemprop="name">
+<a href="{{{url}}}" itemprop="codeRepository url" content="{{{url}}}">{{name}}</a>
+</h2>
+<p itemprop="description">{{description}}</p>
+</div>
 {{/gitHubRepos}}
-</dl>
 {{> tail}}

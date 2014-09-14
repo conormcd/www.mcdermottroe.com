@@ -63,6 +63,7 @@ class Instagram {
                 foreach ($stream['data'] as $image) {
                     $images[] = array(
                         'timestamp' => $image['created_time'],
+                        'dateISO8601' => Time::dateISO8601($image['created_time']),
                         'link' => $image['link'],
                         'image' => $image['images']['standard_resolution']['url'],
                         'caption' => $image['caption']['text'],

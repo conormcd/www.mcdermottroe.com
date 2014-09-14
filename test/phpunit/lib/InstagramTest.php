@@ -63,6 +63,7 @@ extends FactoryTestCase
                 'caption' => 'Fake Instagram caption',
                 'title' => '1st January 2014',
                 'isInstagramPhoto' => true,
+                'dateISO8601' => '2014-01-01T00:00:00Z',
             ),
             $images[0]
         );

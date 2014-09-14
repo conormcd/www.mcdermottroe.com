@@ -1,7 +1,7 @@
-<div class="blogentry">
-<h2><a href="{{link}}">{{title}}</a></h2>
-<div class="date">{{date}}</div>
-<div class="blogbody">
+<div class="blogentry" itemscope itemtype="http://schema.org/BlogPosting">
+<h2 itemprop="name headline" content="{{title}}"><a href="{{link}}" itemprop="url" content="{{link}}">{{title}}</a></h2>
+<div class="date" itemprop="datePublished" content="{{dateISO8601}}">{{date}}</div>
+<div class="blogbody" itemProp="articleBody">
 {{{body}}}
 </div>
 </div>
