@@ -136,6 +136,59 @@ extends PageableModelTestCase
         $blog = new BlogModel(null, null, null, null, null, null);
         $this->assertRegexp('#/feed/rss/$#', $blog->rssLink());
     }
+
+    /**
+     * Test the title when there are no parameters to narrow it down.
+     *
+     * @return void
+     */
+    public function testTitleDefault() {
+        $blog = new BlogModel(null, null, null, null, null, null);
+        $this->assertNull($blog->title());
+    }
+
+    /**
+     * Test the title when we have just the year.
+     *
+     * @return void
+     */
+    public function testTitleYear() {
+        $blog = new BlogModel(2009, null, null, null, null, null);
+        $this->assertEquals('Blog posts from 2009', $blog->title());
+    }
+
+    /**
+     * Test the title when we have just the year and month.
+     *
+     * @return void
+     */
+    public function testTitleYearMonth() {
+        $blog = new BlogModel(2009, 3, null, null, null, null);
+        $this->assertEquals('Blog posts from March 2009', $blog->title());
+    }
+
+    /**
+     * Test the title when we have the year, month and day but not the slug.
+     *
+     * @return void
+     */
+    public function testTitleYearMonthDay() {
+        $blog = new BlogModel(2009, 3, 10, null, null, null);
+        $this->assertEquals(
+            'Blog posts from the 10th of March 2009',
+            $blog->title()
+        );
+    }
+
+    /**
+     * Test the title when we have the year, month, day and slug.
+     *
+     * @return void
+     */
+    public function testTitleYearMonthDaySlug() {
+        $blog = new BlogModel(2009, 3, 10, 'blogging', null, null);
+        $this->assertEquals('Blogging', $blog->title());
+    }
 }
 
 ?>

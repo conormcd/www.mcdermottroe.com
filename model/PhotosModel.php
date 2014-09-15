@@ -153,6 +153,33 @@ extends PageableModel
     }
 
     /**
+     * Generate a meaningful page title.
+     *
+     * @return string A good page title or null if none can be generated.
+     */
+    public function title() {
+        if ($this->album) {
+            $title = null;
+            foreach ($this->albums() as $album) {
+                if ($album->slug() === $this->album) {
+                    $title = $album->title();
+                    break;
+                }
+            }
+
+            if ($title !== null && $this->per_page == 1) {
+                $photos = $this->page();
+                if ($photos[0]->title()) {
+                    $title = join(' - ', array($title, $photos[0]->title()));
+                }
+            }
+
+            return $title;
+        }
+        return 'Photos';
+    }
+
+    /**
      * Trigger some caching.
      *
      * @return int The maximum number of seconds pages using this model should

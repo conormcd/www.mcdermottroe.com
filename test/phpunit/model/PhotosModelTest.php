@@ -51,6 +51,69 @@ extends PageableModelTestCase
         $album = FakeFlickr::albumSlugForTesting();
         $this->assertEquals("/photos/$album", $photos->link());
     }
+
+    /**
+     * Test the title with a default page.
+     *
+     * @return void
+     */
+    public function testTitle() {
+        $photos = new PhotosModel();
+        $this->assertEquals('Photos', $photos->title());
+    }
+
+    /**
+     * Test the title when we have an album.
+     *
+     * @return void
+     */
+    public function testTitleAlbum() {
+        $photos = $this->createTestObject();
+        $this->assertEquals('A fake photo album', $photos->title());
+    }
+
+    /**
+     * Test the title when we have an album and are showing one per page.
+     *
+     * @return void
+     */
+    public function testTitleOnePerPage() {
+        $photos = $this->createTestObject(1, 1);
+        $this->assertEquals(
+            'A fake photo album - Photo number 0 in the set.',
+            $photos->title()
+        );
+    }
+
+    /**
+     * Check the TTL of a default page.
+     *
+     * @return void
+     */
+    public function testTtl() {
+        $photos = new PhotosModel();
+        $this->assertGreaterThan(0, $photos->ttl());
+    }
+
+    /**
+     * Check the TTL when we have an album.
+     *
+     * @return void
+     */
+    public function testTtlAlbum() {
+        $photos = $this->createTestObject();
+        $this->assertGreaterThan(0, $photos->ttl());
+    }
+
+    /**
+     * Check the TTL when we have an album and are showing one per page.
+     *
+     * @return void
+     */
+    public function testTtlOnePerPage() {
+        $photos = $this->createTestObject(1, 1);
+        $this->assertGreaterThan(0, $photos->ttl());
+    }
 }
 
 ?>

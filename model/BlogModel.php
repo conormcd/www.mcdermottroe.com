@@ -20,12 +20,6 @@ extends PageableModel
     /** The URL-sanitized form of the blog post title. */
     public $slug;
 
-    /** The overall title of the blog. */
-    public $title;
-
-    /** A subtitle of the blog. Only really used in the feeds. */
-    public $subtitle;
-
     /** The last updated time. */
     public $updated;
 
@@ -57,8 +51,6 @@ extends PageableModel
         $this->day = $day;
         $this->slug = $slug;
 
-        $this->title = 'Conor McDermottroe';
-        $this->subtitle = 'This might be a blog some day.';
         $this->timestamp = 0;
         foreach ($this->entries() as $entry) {
             $this->timestamp = max($this->timestamp, $entry->timestamp());
@@ -157,6 +149,40 @@ extends PageableModel
      */
     public function ttl() {
         return 86400;
+    }
+
+    /**
+     * Construct a useful value for the page title.
+     *
+     * @return string The string that should be used for the page title.
+     */
+    public function title() {
+        $entries = $this->entries();
+        if (count($entries) == 1) {
+            return $entries[0]->title();
+        }
+
+        $day = null;
+        $month = null;
+        $year = $this->year;
+        if ($this->month) {
+            $month = preg_replace('/^0*/', '', $this->month);
+            $month = strftime("%B", mktime(0, 0, 0, $month, 15, $year));
+        }
+        if ($this->day) {
+            $day = preg_replace('/^0*/', '', $this->day);
+            $fmt = new NumberFormatter('en_US', NumberFormatter::ORDINAL);
+            $day = $fmt->format($day);
+        }
+        if ($day) {
+            return "Blog posts from the $day of $month $year";
+        } else if ($month) {
+            return "Blog posts from $month $year";
+        } else if ($year) {
+            return "Blog posts from $year";
+        }
+
+        return null; // Let the default take over in the view.
     }
 
     /**
