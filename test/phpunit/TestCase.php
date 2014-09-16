@@ -16,14 +16,14 @@ extends PHPUnit_Framework_TestCase
     public function setUp() {
         date_default_timezone_set('Europe/Dublin');
 
-        // Mark the environment as loaded.
-        Environment::load();
-
-        // Now kill everything in the environment since we need to not assume
+        // Kill everything in the environment since we need to not assume
         // any particular environment variables.
         foreach (array_keys($_ENV) as $var) {
             unset($_ENV[$var]);
         }
+
+        // Mark the environment as loaded.
+        $_ENV['ENVIRONMENT_CANARY'] = 'set';
 
         // Dummy Amazon Affiliate data
         $_ENV['AMAZON_AFFILIATE_TAG'] = 'affiliate_tag';

@@ -43,23 +43,6 @@ extends TestCase
     public function testConfigFiles() {
         $this->assertNotEmpty(Environment::configFiles());
     }
-
-    /**
-     * Test addConfigFile
-     *
-     * @return void
-     */
-    public function testAddConfigFile() {
-        $file = dirname(dirname(__DIR__)) . '/data/env.json';
-        $this->assertFileExists($file);
-        $this->assertException(
-            function () {
-                Environment::get('FOO');
-            }
-        );
-        Environment::addConfigFile($file);
-        $this->assertEquals('BAR', Environment::get('FOO'));
-    }
 }
 
 ?>

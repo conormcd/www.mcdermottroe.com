@@ -7,8 +7,6 @@
  */
 class Environment {
     /** Whether or not the .env files have been loaded. */
-    private static $_loaded = false;
-
     /** The config files to load. */
     private static $_config_files = array('/etc/www.mcdermottroe.com.env' => 1);
 
@@ -34,7 +32,7 @@ class Environment {
      * @return void
      */
     public static function load() {
-        if (!self::$_loaded) {
+        if (!array_key_exists('ENVIRONMENT_CANARY', $_ENV)) {
             foreach (self::configFiles() as $env_file) {
                 if (is_readable($env_file)) {
                     $env = JSON::decode(file_get_contents($env_file));
@@ -45,22 +43,8 @@ class Environment {
                     }
                 }
             }
-
-            self::$_loaded = true;
+            $_ENV['ENVIRONMENT_CANARY'] = 'set';
         }
-    }
-
-    /**
-     * Add a config file location where a JSON-encoded set of environment
-     * variables can be found.
-     *
-     * @param string $file THe path to the file to load.
-     *
-     * @return void
-     */
-    public static function addConfigFile($file) {
-        self::$_config_files[$file] = 1;
-        self::$_loaded = false;
     }
 
     /**
