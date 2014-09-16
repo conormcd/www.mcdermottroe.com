@@ -29,9 +29,9 @@ extends Controller
 
         if ($request->format === 'atom') {
             $this->output_format = 'atom';
-            $response->header('Content-Type', 'application/atom+xml');
+            $this->content_type = 'application/atom+xml';
         } else if ($request->format === '' || $request->format === 'rss') {
-            $response->header('Content-Type', 'application/rss+xml');
+            $this->content_type = 'application/rss+xml';
             $this->output_format = 'rss';
         }
     }

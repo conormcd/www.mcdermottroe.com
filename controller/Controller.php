@@ -28,6 +28,12 @@ class Controller {
     protected $output_format;
 
     /**
+     * The Content-Type to send for this controller's output if none is
+     * supplied by the model.
+     */
+    protected $content_type;
+
+    /**
      * Initialise this controller.
      *
      * @param object $request  The Request object from klein.
@@ -50,6 +56,7 @@ class Controller {
         $this->request = $request;
         $this->response = $response;
         $this->output_format = null;
+        $this->content_type = 'text/html';
 
         $this->action_name = '';
         foreach (explode('-', $this->action) as $part) {
@@ -120,16 +127,21 @@ class Controller {
         }
 
         $model = $this->model();
-        $model_headers = array(
-            'mimeType' => 'Content-Type',
-            'lastModified' => 'Last-Modified',
-        );
-        foreach ($model_headers as $method => $header) {
-            if (method_exists($model, $method)) {
-                $value = $model->$method();
-                if ($value) {
-                    $this->response->header($header, $value);
-                }
+
+        // Content-Type
+        if (method_exists($model, 'mimeType')) {
+            $content_type = $model->mimeType();
+            if ($content_type) {
+                $this->content_type = $content_type;
+            }
+        }
+        $this->response->header('Content-Type', $this->content_type);
+
+        // Last-Modified
+        if (method_exists($model, 'lastModified')) {
+            $last_modified = $model->lastModified();
+            if ($last_modified) {
+                $this->response->header('Last-Modified', $last_modified);
             }
         }
     }
