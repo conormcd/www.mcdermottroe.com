@@ -48,3 +48,7 @@ doc/phpmd.xml: test/phpmd.xml vendor/bin/phpmd
 
 doc/phpunit-coverage: vendor/bin/phpunit
 	vendor/bin/phpunit --coverage-xml doc/phpunit-coverage --verbose --stderr test/phpunit
+
+travis-env:
+	ruby -e 'require "json"; env = ENV.select{|k,v| ["AMAZON_AFFILIATE_TAG", "AMAZON_AFFILIATE_LINK_CODE", "AMAZON_AFFILIATE_CAMP", "AMAZON_AFFILIATE_CREATIVE", "CACHE_ENABLE", "EXCEPTION_TRACKER", "FLICKR_API_KEY", "FLICKR_API_SECRET", "FLICKR_API_USER", "GITHUB_USER", "INSTAGRAM_CLIENT_ID", "INSTAGRAM_CLIENT_SECRET", "INSTAGRAM_USER_ID", "PHOTO_PROVIDER", "SENTRY_DSN"].include? k}; File.write("www.mcdermottroe.com.env", JSON.dump(env))'
+	sudo mv www.mcdermottroe.com.env /etc/

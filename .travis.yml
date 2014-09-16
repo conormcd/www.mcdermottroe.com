@@ -7,4 +7,5 @@ before_script:
   - "if [ \"$TRAVIS_PHP_VERSION\" == \"5.4\" ]; then echo \"extension=apc.so\" >> ${PHP_INI}; fi"
   - "if [ \"$TRAVIS_PHP_VERSION\" == \"5.5\" ]; then printf \"\\n\" | pecl install apcu-beta; fi"
   - "echo \"apc.enable_cli = 1\" >> ${PHP_INI}"
+  - "make travis-env"
 script: make
