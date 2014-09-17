@@ -109,19 +109,19 @@ extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Make sure we have no egregiously slow requests.
+     * Make sure the requests are fast-ish on average.
      *
      * @return void
      */
     public function testSpeed() {
-        $threshold = 100;
-        foreach (IntegrationRequests::times() as $url => $time) {
-            $this->assertLessThan(
-                $threshold,
-                $time,
-                "$url took more than $threshold milliseconds to run"
-            );
+        $threshold = 50;
+        $sum = 0;
+        $count = 0;
+        foreach (array_values(IntegrationRequests::times()) as $time) {
+            $sum += $time;
+            $count++;
         }
+        $this->assertLessThan($threshold, $sum / $count);
     }
 }
 
