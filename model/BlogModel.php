@@ -143,6 +143,19 @@ extends PageableModel
     }
 
     /**
+     * The ETag value for this model.
+     *
+     * @return string The value to be used in the ETag header.
+     */
+    public function eTag() {
+        $tags = '';
+        foreach ($this->entries() as $entry) {
+            $tags .= $entry->eTag();
+        }
+        return md5($tags);
+    }
+
+    /**
      * Trigger some caching.
      *
      * @return int How many seconds blog pages should be cached for.

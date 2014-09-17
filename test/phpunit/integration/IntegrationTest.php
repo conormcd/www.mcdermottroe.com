@@ -114,7 +114,7 @@ extends PHPUnit_Framework_TestCase
      * @return void
      */
     public function testSpeed() {
-        $threshold = 250;
+        $threshold = 100;
         foreach (IntegrationRequests::times() as $url => $time) {
             $this->assertLessThan(
                 $threshold,

@@ -72,6 +72,15 @@ extends PageableModel
     }
 
     /**
+     * The ETag value for this model.
+     *
+     * @return string The value to be used in the ETag header.
+     */
+    public function eTag() {
+        return 'cafebabe';
+    }
+
+    /**
      * Get the root of a link to the pages of data.
      *
      * @return string The root of the link to the pages.

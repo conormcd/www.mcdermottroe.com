@@ -147,6 +147,15 @@ extends Model
     public function lastModified() {
         return 'Sun, 07 Sep 2014 08:31:54 +0100';
     }
+
+    /**
+     * The value for the ETag.
+     *
+     * @return string An ETag for this model.
+     */
+    public function eTag() {
+        return md5(__METHOD__);
+    }
 }
 
 ?>

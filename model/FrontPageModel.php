@@ -67,6 +67,23 @@ extends PageableModel
     }
 
     /**
+     * The ETag value for this model.
+     *
+     * @return string The value to be used in the ETag header.
+     */
+    public function eTag() {
+        $tags = '';
+        foreach ($this->all() as $item) {
+            if (method_exists($item, 'eTag')) {
+                $tags .= $item->eTag();
+            } else {
+                $tags .= var_export($item, true);
+            }
+        }
+        return md5($tags);
+    }
+
+    /**
      * Trigger some caching.
      *
      * @return int The maximum number of seconds pages using this model should

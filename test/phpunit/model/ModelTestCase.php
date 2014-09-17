@@ -39,6 +39,29 @@ extends TestCase
     }
 
     /**
+     * Basic test for eTag().
+     *
+     * @return void
+     */
+    public function testETag() {
+        $etag = $this->createTestObject()->eTag();
+        $this->assertNotNull($etag);
+        $this->assertGreaterThan(0, strlen($etag));
+    }
+
+    /**
+     * Check that the ETag is stable.
+     *
+     * @return void
+     */
+    public function testETagStable() {
+        $instance = $this->createTestObject();
+        $first = $instance->eTag();
+        $second = $instance->eTag();
+        $this->assertEquals($first, $second);
+    }
+
+    /**
      * Basic test for ttl().
      *
      * @return void

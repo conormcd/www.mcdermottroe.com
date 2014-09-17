@@ -35,6 +35,15 @@ extends Model
     public function ttl() {
         return 3600;
     }
+
+    /**
+     * The ETag value for this model.
+     *
+     * @return string The value to be used in the ETag header.
+     */
+    public function eTag() {
+        return md5(var_export($this->gitHubRepos(), true));
+    }
 }
 
 ?>

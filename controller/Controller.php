@@ -84,7 +84,23 @@ class Controller {
      * @return string The rendered view of the model.
      */
     protected function content() {
-        return Mustache::render($this->view(), $this->model());
+        $model = $this->model();
+        $view = $this->view();
+
+        // Deal with cacheable renders
+        if (method_exists($model, 'eTag')) {
+            $key = 'rendered_content_' . $model->eTag();
+            $content = Cache::get($key);
+            if (!$content) {
+                $content = Mustache::render($view, $model);
+                Cache::set($key, $content, 86400);
+            }
+            return $content;
+        }
+
+        // If we make it to here, we weren't able to cache a rendered copy of
+        // the content.
+        return Mustache::render($view, $model);
     }
 
     /**
@@ -137,11 +153,17 @@ class Controller {
         }
         $this->response->header('Content-Type', $this->content_type);
 
-        // Last-Modified
-        if (method_exists($model, 'lastModified')) {
-            $last_modified = $model->lastModified();
-            if ($last_modified) {
-                $this->response->header('Last-Modified', $last_modified);
+        // Other headers
+        $headers = array(
+            'ETag' => 'eTag',
+            'Last-Modified' => 'lastModified',
+        );
+        foreach ($headers as $header => $method) {
+            if (method_exists($model, $method)) {
+                $value = $model->$method();
+                if ($value) {
+                    $this->response->header($header, $value);
+                }
             }
         }
     }

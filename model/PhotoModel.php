@@ -99,6 +99,27 @@ extends Model
     public function thumbnail() {
         return $this->_images['thumbnail'];
     }
+
+    /**
+     * The ETag value for this model.
+     *
+     * @return string The value to be used in the ETag header.
+     */
+    public function eTag() {
+        return md5(
+            join(
+                '',
+                array(
+                    $this->fullsize(),
+                    $this->large(),
+                    $this->photoID(),
+                    $this->slug(),
+                    $this->thumbnail(),
+                    $this->title(),
+                )
+            )
+        );
+    }
 }
 
 ?>

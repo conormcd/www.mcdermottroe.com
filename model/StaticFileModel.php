@@ -65,6 +65,15 @@ extends Model
         }
         throw new Exception('File not found: ' . $this->_uri, 404);
     }
+
+    /**
+     * The ETag value for this model.
+     *
+     * @return string The value to be used in the ETag header.
+     */
+    public function eTag() {
+        return md5_file($this->path());
+    }
 }
 
 ?>

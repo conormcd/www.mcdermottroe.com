@@ -62,6 +62,15 @@ class TestModel
 extends Model
 {
     /**
+     * The ETag value for this model.
+     *
+     * @return string The value to be used in the ETag header.
+     */
+    public function eTag() {
+        return 'deadbeef';
+    }
+
+    /**
      * A sample cached method.
      *
      * @return float The time with fractional microseconds when the method was

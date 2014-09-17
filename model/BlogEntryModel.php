@@ -147,6 +147,23 @@ extends Model
     }
 
     /**
+     * The ETag value for this model.
+     *
+     * @return string The value to be used in the ETag header.
+     */
+    public function eTag() {
+        return md5(
+            join(
+                '',
+                array(
+                    $this->body(),
+                    $this->dateISO8601(),
+                )
+            )
+        );
+    }
+
+    /**
      * The full HTML of the entire blog post file. This will be modified
      * before being rendered.
      *
