@@ -138,6 +138,9 @@ extends PageableModel
                 }
             }
         }
+        if (count($files) == 0) {
+            throw new Exception('No such post', 404);
+        }
         rsort($files);
         return $files;
     }

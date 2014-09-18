@@ -36,7 +36,10 @@ extends ExceptionTracker
      * @return void
      */
     public function captureException($exception) {
-        $this->_raven_client->captureException($exception);
+        // We ignore 4xx errors
+        if ($exception->getCode() < 400 || $exception->getCode() >= 500) {
+            $this->_raven_client->captureException($exception);
+        }
     }
 
     /**

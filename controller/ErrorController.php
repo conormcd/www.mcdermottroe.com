@@ -19,15 +19,12 @@ extends Controller
         $this->action = 'error';
         parent::__construct($request, $response);
         if ($exception !== null) {
-            $code = $exception->getCode();
-            if ($code < 400 || $code >= 600) {
-                $code = 500;
-            }
-            $response->code($code);
-            $this->model = $exception;
+            $this->model = new ErrorModel($exception);
         } else {
-            $this->response->code(404);
+            $this->model = new ErrorModel('File not found', 404);
         }
+        $response->unlock();
+        $response->code($this->model->code());
     }
 }
 

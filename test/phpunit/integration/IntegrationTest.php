@@ -123,6 +123,29 @@ extends PHPUnit_Framework_TestCase
         }
         $this->assertLessThan($threshold, $sum / $count);
     }
+
+    /**
+     * Test URLs that should result in a 404.
+     *
+     * @return void
+     */
+    public function test404() {
+        $urls = array(
+            '/does_not_exist',             // No route
+            '/blog/2000/01/01/nope/',      // BlogModel throws 404
+            '/blog/?page=-1',              // PageableModel throws 404
+            '/blog/?page=1000000',         // PageableModel throws 404
+            '/css/does_not_exist.css',     // StaticFileModel throws 404
+        );
+        foreach ($urls as $url) {
+            $res = IntegrationRequests::get($url);
+            $this->assertEquals(404, $res->status()->getCode());
+            $this->assertEquals(
+                'public max-age=0',
+                $res->headers()->get('Cache-Control')
+            );
+        }
+    }
 }
 
 /**
@@ -177,12 +200,10 @@ class IntegrationRequests
             Environment::load();
 
             foreach (self::urls() as $url) {
-                $key = self::unparseURL($url);
-
                 for ($i = 0; $i < 2; $i++) {
                     $start = microtime(true);
-                    self::$_responses[$key] = self::get($url);
-                    self::$_times[$key] = (microtime(true) - $start) * 1000;
+                    self::$_responses[$url] = self::get($url);
+                    self::$_times[$url] = (microtime(true) - $start) * 1000;
                 }
             }
         }
@@ -195,8 +216,10 @@ class IntegrationRequests
      *
      * @return \Klein\Response The response returned by the site.
      */
-    private static function get($url) {
+    public static function get($url) {
         global $ROUTES;
+
+        $url = self::parseURL($url);
 
         $req = new \Klein\Request(
             $url['query'],
@@ -219,67 +242,41 @@ class IntegrationRequests
     /**
      * Get all the URLs to be tested.
      *
-     * @return array An array where each element is an array representing the
-     *               parsed form of the URL.
+     * @return array An array of URLs to be fetched.
      */
     private static function urls() {
         $sitemap = dirname(dirname(dirname(__DIR__))) . '/public/google-sitemap.xml';
         $sitemap = simplexml_load_file($sitemap);
         $urls = array();
         foreach ($sitemap->url as $url) {
-            $url = parse_url($url->loc);
-            if (array_key_exists('query', $url)) {
-                $query_params = array();
-                foreach (explode('&', $url['query']) as $param) {
-                    list($key, $value) = explode('=', $param, 2);
-                    $query_params[$key] = $value;
-                }
-                $url['query'] = $query_params;
-            } else {
-                $url['query'] = array();
-            }
-            $urls[] = $url;
+            $urls[] = "{$url->loc}";
         }
         return $urls;
     }
 
     /**
-     * The reverse of parse_url, or at least the parts of it that we use.
+     * A wrapper around parse_url which also expands the query parameters into
+     * an associative array.
      *
-     * @param array $url The output of parse_url.
+     * @param string $url The URL to parse.
      *
-     * @return string The assembled URL.
+     * @return array The exact sam structure as returned by parse_url except
+     *               that the 'query' element is now an associative array of
+     *               all the query parameters included in the original URL.
      */
-    private static function unparseURL($url) {
-        $result = '';
-        if (array_key_exists('host', $url)) {
-            $result = $url['host'];
-            if (array_key_exists('port', $url)) {
-                $result .= ":" . $url['port'];
-            }
-            if (array_key_exists('scheme', $url)) {
-                $result = $url['scheme'] . '://' . $result;
-            } else {
-                $result = 'http://' . $result;
-            }
-        }
-        if (array_key_exists('path', $url)) {
-            $result .= $url['path'];
-        }
+    private static function parseURL($url) {
+        $url = parse_url($url);
         if (array_key_exists('query', $url)) {
             $query_params = array();
-            foreach ($url['query'] as $key => $value) {
-                $query_params[] = $key . '=' . $value;
+            foreach (explode('&', $url['query']) as $param) {
+                list($key, $value) = explode('=', $param, 2);
+                $query_params[$key] = $value;
             }
-            if ($query_params) {
-                $query_params = join('&', $query_params);
-                $result .= '?' . $query_params;
-            }
+            $url['query'] = $query_params;
+        } else {
+            $url['query'] = array();
         }
-        if (array_key_exists('fragment', $url)) {
-            $result .= '#' . $url['fragment'];
-        }
-        return $result;
+        return $url;
     }
 }
 
