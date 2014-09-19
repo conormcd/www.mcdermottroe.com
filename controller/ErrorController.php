@@ -16,7 +16,6 @@ extends Controller
      * @param object $exception An optional exception to get error data from.
      */
     public function __construct($request, $response, $exception = null) {
-        $this->action = 'error';
         parent::__construct($request, $response);
         if ($exception !== null) {
             $this->model = new ErrorModel($exception);

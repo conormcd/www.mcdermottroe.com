@@ -17,9 +17,7 @@ extends Controller
      * @param object $response The Response object from klein.
      */
     public function __construct($request, $response) {
-        $this->action = 'staticfile';
         parent::__construct($request, $response);
-
         $this->model = new StaticFileModel($this->request->uri());
     }
 

@@ -104,9 +104,6 @@ extends TestCase
         $controller = $this->controllerName();
         $req = $this->req($req);
         $res = $this->res($res);
-        if (!$req->action) {
-            $req->action = 'error';
-        }
         return new $controller($req, $res);
     }
 
@@ -179,9 +176,9 @@ extends Controller
      * @param object $response See parent class.
      */
     public function __construct($request, $response) {
-        $this->action = 'test';
         parent::__construct($request, $response);
         $this->output_format = $request->output_format;
+        $this->view = 'test';
     }
 }
 

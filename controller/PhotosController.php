@@ -15,13 +15,15 @@ extends Controller
      * @param object $response The Response object from klein.
      */
     public function __construct($request, $response) {
-        $this->action = $request->perpage == 1 ? 'photo' : 'photos';
         parent::__construct($request, $response);
         $this->model = new PhotosModel(
             $request->album,
             $request->start,
             $request->perpage
         );
+        if ($request->perpage == 1) {
+            $this->view = 'photo';
+        }
     }
 }
 

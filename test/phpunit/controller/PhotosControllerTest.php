@@ -24,6 +24,23 @@ extends ControllerTestCase
         $this->assertEquals(200, $res->status()->getCode());
         $this->assertNotNull($res->body());
     }
+
+    /**
+     * Make sure the controller works when you pass it an album.
+     *
+     * @return void
+     */
+    public function testWithOnlyOnePhoto() {
+        $req = $this->req();
+        $req->album = FakeFlickr::albumSlugForTesting();
+        $req->perpage = 1;
+        $req->start = 1;
+        $controller = $this->create($req);
+        $res = $controller->get();
+
+        $this->assertEquals(200, $res->status()->getCode());
+        $this->assertNotNull($res->body());
+    }
 }
 
 ?>

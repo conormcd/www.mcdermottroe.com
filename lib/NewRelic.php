@@ -31,24 +31,6 @@ class NewRelic {
     }
 
     /**
-     * Name a transaction based on the controller and action.
-     *
-     * @param Controller $controller The controller being used for the current
-     *                               page.
-     * @param string     $action     The name of the action being executed.
-     *
-     * @return void
-     */
-    public static function transaction($controller, $action) {
-        self::call(
-            'newrelic_name_transaction',
-            preg_replace('/Controller$/', '', get_class($controller)) .
-            '/' .
-            $action
-        );
-    }
-
-    /**
      * Call a New Relic function if it exists.
      *
      * @return mixed The return value of the function or empty string if the

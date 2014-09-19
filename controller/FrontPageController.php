@@ -15,9 +15,8 @@ extends Controller
      * @param object $response The Response object from klein.
      */
     public function __construct($request, $response) {
-        $this->action = 'front_page';
-        $this->model = new FrontPageModel($request->page, $request->per_page);
         parent::__construct($request, $response);
+        $this->model = new FrontPageModel($request->page, $request->per_page);
     }
 }
 

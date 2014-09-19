@@ -37,15 +37,6 @@ extends TestCase
         // @codingStandardsIgnoreEnd
         $this->assertEquals('Dummy JavaScript', NewRelic::javaScriptFooter());
     }
-
-    /**
-     * Minimally exercise NewRelic::transaction.
-     *
-     * @return void
-     */
-    public function testTransaction() {
-        NewRelic::transaction(null, null);
-    }
 }
 
 ?>

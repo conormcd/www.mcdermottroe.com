@@ -1,22 +1,16 @@
 <?php
 
 /**
- * A default controller which can be used for most GET requests. This can be
- * extended in order to provide more specific handling of requests. Simply
- * extend this class and then modify the routing in public/index.php in order
- * to direct requests to your new controller.
+ * The common functionality for all controllers.
  *
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
-class Controller {
-    /** The first portion of the path part of the URL. */
-    protected $action;
-
-    /** Blog for /blog/*, etc. */
-    protected $action_name;
-
+abstract class Controller {
     /** The model object to render. */
     protected $model;
+
+    /** The main template to render. */
+    protected $view;
 
     /** The klein Request object for the current page request. */
     protected $request;
@@ -46,24 +40,23 @@ class Controller {
         if (!($response instanceof \Klein\Response)) {
             throw new Exception("Bad response object provided.");
         }
-        if (!($this->action || $request->action)) {
-            throw new Exception("No action provided.");
-        }
 
-        if (!$this->action) {
-            $this->action = $request->action;
-        }
         $this->request = $request;
         $this->response = $response;
         $this->output_format = null;
         $this->content_type = 'text/html';
-
-        $this->action_name = '';
-        foreach (explode('-', $this->action) as $part) {
-            $this->action_name .= ucfirst($part);
-        }
-
-        NewRelic::transaction($this, $this->action_name);
+        $this->view = join(
+            "_",
+            array_map(
+                "strtolower",
+                array_filter(
+                    preg_split(
+                        "/(?=[A-Z])/",
+                        preg_replace('/Controller$/', '', get_class($this))
+                    )
+                )
+            )
+        );
     }
 
     /**
@@ -87,32 +80,24 @@ class Controller {
         $model = $this->model();
         $view = $this->view();
 
-        // Deal with cacheable renders
-        if (method_exists($model, 'eTag')) {
-            $key = 'rendered_content_' . $model->eTag();
-            $content = Cache::get($key);
-            if (!$content) {
-                $content = Mustache::render($view, $model);
-                Cache::set($key, $content, 86400);
-            }
-            return $content;
+        $key = 'rendered_content_' . $view;
+        if ($model) {
+            $key .= $model->eTag();
         }
-
-        // If we make it to here, we weren't able to cache a rendered copy of
-        // the content.
-        return Mustache::render($view, $model);
+        $content = Cache::get($key);
+        if (!$content) {
+            $content = Mustache::render($view, $model);
+            Cache::set($key, $content, 86400);
+        }
+        return $content;
     }
 
     /**
      * Get the model for the current request.
      *
-     * @return object An appropriate sub-class of Model if one exists, if not,
-     *                the Response object from klein is used as the model.
+     * @return object The model for the current request.
      */
     protected function model() {
-        if (!$this->model) {
-            $this->model = $this->response;
-        }
         return $this->model;
     }
 
@@ -123,9 +108,9 @@ class Controller {
      */
     public function view() {
         if ($this->output_format) {
-            return $this->action . '_' . $this->output_format;
+            return $this->view . '_' . $this->output_format;
         } else {
-            return $this->action;
+            return $this->view;
         }
     }
 

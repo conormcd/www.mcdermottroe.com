@@ -321,17 +321,6 @@ class TestExceptionController
 extends Controller
 {
     /**
-     * See Controller::__construct for details.
-     *
-     * @param \Klein\Request  $req The Klein request object.
-     * @param \Klein\Response $res The Klein response object.
-     */
-    public function __construct($req, $res) {
-        $this->action = 'dummy';
-        parent::__construct($req, $res);
-    }
-
-    /**
      * Throw an exception to make the get method barf.
      *
      * @return void

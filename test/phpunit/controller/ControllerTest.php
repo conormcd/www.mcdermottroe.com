@@ -11,38 +11,6 @@ class ControllerTest
 extends ControllerTestCase
 {
     /**
-     * Test Controller as a controller in its own right, rather than as a base
-     * implementation for a more specific controller.
-     *
-     * @return void
-     */
-    public function testConstructorAsActiveController() {
-        $req = $this->req();
-        $res = $this->res();
-        $req->action = 'about';
-
-        $controller = $this->create($req, $res);
-        $res = $controller->get();
-
-        $this->assertNotNull($res->body());
-        $this->assertRegexp('/<html>/', $res->body());
-    }
-
-    /**
-     * Test that the constructor detects when no action has been provided.
-     *
-     * @return void
-     */
-    public function testControllerNoAction() {
-        $controller_name = $this->controllerName();
-        $this->assertException(
-            function () use ($controller_name) {
-                new $controller_name($this->req(), $this->res());
-            }
-        );
-    }
-
-    /**
      * Test setCacheHeaders.
      *
      * @return void
@@ -85,6 +53,16 @@ extends ControllerTestCase
         $this->assertEquals($model->mimeType(), $content_type);
         $this->assertEquals($model->lastModified(), $last_modified);
     }
+
+    /**
+     * Use the TestHeadersController as a generic controller implementation for 
+     * the generic controller tests.
+     *
+     * @return string "TestHeadersController"
+     */
+    protected function controllerName() {
+        return 'TestHeadersController';
+    }
 }
 
 /**
@@ -103,10 +81,10 @@ extends Controller
      * @param Model           $model    The model to use. (Should be an
      *                                  instance of TestHeadersModel.)
      */
-    public function __construct($request, $response, $model) {
-        $this->action = 'error';
-        $this->model = $model;
+    public function __construct($request, $response, $model = null) {
         parent::__construct($request, $response);
+        $this->model = $model == null ? new TestHeadersModel() : $model;
+        $this->view = 'error';
     }
 
     /**
