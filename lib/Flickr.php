@@ -130,9 +130,30 @@ extends PhotoProvider
                 );
                 $index++;
             }
-            Cache::set($key, $photos, 86400);
+            Cache::set($key, $photos, $this->albumCacheLifetime($album));
         }
         return $photos;
+    }
+
+    /**
+     * Work out how long we should cache photos for. Older albums get cached
+     * for longer and a random amount is added to each value to discourage lots
+     * of entries from expiring at the same time.
+     *
+     * @param PhotoAlbumModel $album The album.
+     *
+     * @return int The number of seconds we should cache a particular album
+     *             for.
+     */
+    private function albumCacheLifetime($album) {
+        $album_age = time() - $album->timestamp();
+        if ($album_age > (86400 * 365)) {
+            return 0;
+        } else if ($album_age > (86400 * 30)) {
+            return (86400 * 30) + rand(0, 86400);
+        } else {
+            return 86400 + rand(0, 3600);
+        }
     }
 
     /**
