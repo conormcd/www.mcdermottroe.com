@@ -50,13 +50,12 @@ abstract class Controller {
             array_map(
                 "strtolower",
                 array_filter(
-                    preg_split(
-                        "/(?=[A-Z])/",
-                        preg_replace('/Controller$/', '', get_class($this))
-                    )
+                    preg_split("/(?=[A-Z])/", $this->name())
                 )
             )
         );
+
+        NewRelic::nameTransaction($this->newRelicTransaction());
     }
 
     /**
@@ -112,6 +111,15 @@ abstract class Controller {
         } else {
             return $this->view;
         }
+    }
+
+    /**
+     * Get the name of this controller without the trailing "Controller".
+     *
+     * @return string The name of this controller.
+     */
+    protected function name() {
+        return preg_replace('/Controller$/', '', get_class($this));
     }
 
     /**
@@ -196,6 +204,15 @@ abstract class Controller {
             $max_age = $this->model()->ttl();
         }
         return array('public' => true, 'max-age' => $max_age);
+    }
+
+    /**
+     * Name the New Relic transaction.
+     *
+     * @return string The name of the current transaction for New Relic.
+     */
+    protected function newRelicTransaction() {
+        return $this->name();
     }
 }
 

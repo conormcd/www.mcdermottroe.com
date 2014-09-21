@@ -31,6 +31,33 @@ class NewRelic {
     }
 
     /**
+     * Name the current transaction so that New Relic tracks it as such.
+     *
+     * @param string $name The name of the current transaction.
+     *
+     * @return void
+     */
+    public static function nameTransaction($name) {
+        return self::call('newrelic_name_transaction', $name);
+    }
+
+    /**
+     * Tell New Relic about an error ocurring.
+     *
+     * @param string    $message   The error message.
+     * @param Exception $exception The exception that caused the error, if any.
+     *
+     * @return void
+     */
+    public static function noticeError($message, $exception = null) {
+        if ($exception !== null) {
+            return self::call('newrelic_notice_error', $message, $exception);
+        } else {
+            return self::call('newrelic_notice_error', $message);
+        }
+    }
+
+    /**
      * Call a New Relic function if it exists.
      *
      * @return mixed The return value of the function or empty string if the

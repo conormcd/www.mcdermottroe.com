@@ -39,6 +39,7 @@ extends ExceptionTracker
         // We ignore 4xx errors
         if ($exception->getCode() < 400 || $exception->getCode() >= 500) {
             $this->_raven_client->captureException($exception);
+            NewRelic::noticeError($exception->getMessage(), $exception);
         }
     }
 
