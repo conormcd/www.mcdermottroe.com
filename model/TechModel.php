@@ -33,7 +33,7 @@ extends Model
      *             be cached for.
      */
     public function ttl() {
-        return 3600;
+        return 86400;
     }
 
     /**
