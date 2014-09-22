@@ -14,7 +14,7 @@ extends Controller
      * @return array See Controller#cacheControl.
      */
     protected function cacheControl() {
-        return array('public' => true, 'max-age' => 3600);
+        return array('public' => true, 'max-age' => 86400);
     }
 }
 
