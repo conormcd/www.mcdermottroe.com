@@ -73,7 +73,7 @@ extends PageableModel
      */
     public function eTag() {
         $tags = '';
-        foreach ($this->all() as $item) {
+        foreach ($this->entries() as $item) {
             if (method_exists($item, 'eTag')) {
                 $tags .= $item->eTag();
             } else {
