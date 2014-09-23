@@ -38,7 +38,7 @@ extends Controller
     protected function cacheControl() {
         return array(
             'public' => true,
-            'max-age' => 3600,
+            'max-age' => 3600 + rand(0, 300),
         );
     }
 }

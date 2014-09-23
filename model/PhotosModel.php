@@ -200,11 +200,11 @@ extends PageableModel
      */
     public function ttl() {
         if ($this->per_page == 1) {
-            return 86400 * 30;
+            return (86400 * 30) + rand(0, 86400);
         } else if ($this->album) {
-            return 86400;
+            return 86400 + rand(0, 3600);
         }
-        return 3600;
+        return 3600 + rand(0, 300);
     }
 
     /**

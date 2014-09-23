@@ -64,7 +64,7 @@ class GitHub {
             $result = JSON::decode(
                 $this->_http_client->get("https://api.github.com$path")
             );
-            Cache::set($key, $result, 3600);
+            Cache::set($key, $result, 3600 + rand(0, 300));
         }
         return $result;
     }

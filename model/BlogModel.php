@@ -164,7 +164,7 @@ extends PageableModel
      * @return int How many seconds blog pages should be cached for.
      */
     public function ttl() {
-        return 86400;
+        return 86400 + rand(0, 3600);
     }
 
     /**

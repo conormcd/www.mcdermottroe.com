@@ -86,7 +86,7 @@ abstract class Controller {
         $content = Cache::get($key);
         if (!$content) {
             $content = Mustache::render($view, $model);
-            Cache::set($key, $content, 86400);
+            Cache::set($key, $content, 86400 + rand(0, 3600));
         }
         return $content;
     }

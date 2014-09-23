@@ -71,7 +71,7 @@ class Instagram {
                         'isInstagramPhoto' => true,
                     );
                 }
-                Cache::set($key, $images, 3600);
+                Cache::set($key, $images, 3600 + rand(0, 300));
             }
         }
         return $images;

@@ -66,7 +66,7 @@ extends PhotoProvider
                     $set['primary']
                 );
             }
-            Cache::set($key, $albums, 3600);
+            Cache::set($key, $albums, 3600 + rand(0, 300));
         }
         return $albums;
     }
@@ -189,7 +189,7 @@ extends PhotoProvider
                         $this->mapErrorCode($method, $result['code'])
                     );
                 }
-                Cache::set($key, $result, 3600);
+                Cache::set($key, $result, 3600 + rand(0, 300));
             }
         }
         return $result;
