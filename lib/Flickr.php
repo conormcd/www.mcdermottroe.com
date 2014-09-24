@@ -162,10 +162,16 @@ extends PhotoProvider
      * @return string The NSID for the current user.
      */
     private function getCurrentUserNSID() {
-        $response = $this->people->findByUsername(
-            array('username' => $this->_username)
-        );
-        return $response['user']['nsid'];
+        $key = 'FLICKR_API_NSID_' . $this->_username;
+        $nsid = Cache::get($key);
+        if (!$nsid) {
+            $response = $this->people->findByUsername(
+                array('username' => $this->_username)
+            );
+            $nsid = $response['user']['nsid'];
+            Cache::set($key, $nsid, 0);
+        }
+        return $nsid;
     }
 
     /**
