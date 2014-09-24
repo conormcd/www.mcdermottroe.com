@@ -39,9 +39,18 @@ class HTTPClient {
 
         $curl = curl_init();
         curl_setopt_array($curl, $curl_options);
+        $start_time = microtime(true);
         $response = curl_exec($curl);
 
         $info = curl_getinfo($curl);
+        Logger::debug(
+            sprintf(
+                "HTTP %d %.3fms %s",
+                $info['http_code'],
+                (microtime(true) - $start_time) * 1000,
+                $url
+            )
+        );
         if ($info['http_code'] == 0 || $info['http_code'] >= 400) {
             throw new Exception("$url returned {$info['http_code']}");
         }

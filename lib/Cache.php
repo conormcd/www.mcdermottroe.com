@@ -19,6 +19,9 @@ class Cache {
         $success = false;
         if (Environment::get('CACHE_ENABLE') && function_exists('apc_fetch')) {
             $result = apc_fetch($key, $success);
+            if (!$success) {
+                Logger::debug("Cache miss for $key");
+            }
         }
         return $success ? $result : null;
     }
@@ -35,6 +38,7 @@ class Cache {
     public static function set($key, $value, $ttl) {
         if (Environment::get('CACHE_ENABLE') && function_exists('apc_store')) {
             apc_store($key, $value, $ttl);
+            Logger::debug("Storing value at $key for $ttl seconds");
         }
     }
 
