@@ -111,6 +111,54 @@ extends PHPUnit_Framework_TestCase
         $this->assertNotNull($exception, $message);
         return $exception;
     }
+
+    /**
+     * Find out the version and implementation of PHP we're running on.
+     *
+     * @return array The version of the PHP language, the implementation and
+     *               the version of the implementation. All versions are
+     *               integers returned by comparableVersion.
+     */
+    protected function phpVersion() {
+        $version = array();
+        if (defined('HHVM_VERSION')) {
+            $version['version'] = preg_replace('/-hhvm$/', '', PHP_VERSION);
+            $version['implementation'] = 'hhvm';
+            $version['implementation_version'] = HHVM_VERSION;
+        } else {
+            $version['version'] = PHP_VERSION;
+            $version['implementation'] = 'php';
+            $version['implementation_version'] = PHP_VERSION;
+        }
+        $version['version'] = $this->comparableVersion($version['version']);
+        $version['implementation_version'] = $this->comparableVersion(
+            $version['implementation_version']
+        );
+        return $version;
+    }
+
+    /**
+     * Transform an x.y.z version into an integer that can be compared with
+     * others.
+     *
+     * @param string $version_string A version string.
+     *
+     * @return int An integer representation of the version string.
+     */
+    private function comparableVersion($version_string) {
+        if (!preg_match('/^\d+(?:\.\d+){0,2}$/', $version_string)) {
+            throw new Exception("Bad version: $version_string");
+        }
+        $version_parts = explode('.', $version_string);
+        $version = $version_parts[0] * 1000 * 1000;
+        if (count($version_parts) > 1) {
+            $version += $version_parts[1] * 1000;
+            if (count($version_parts) > 2) {
+                $version += $version_parts[2];
+            }
+        }
+        return $version;
+    }
 }
 
 ?>

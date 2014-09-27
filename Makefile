@@ -44,7 +44,7 @@ doc/phploc.xml: vendor/bin/phploc
 	vendor/bin/phploc --exclude vendor --log-xml doc/phploc.xml .
 
 doc/phpmd.xml: test/phpmd.xml vendor/bin/phpmd
-	vendor/bin/phpmd . xml test/phpmd.xml --exclude vendor > doc/phpmd.xml
+	vendor/bin/phpmd . xml test/phpmd.xml --exclude vendor --reportfile doc/phpmd.xml
 
 doc/phpunit-coverage: vendor/bin/phpunit
 	vendor/bin/phpunit --coverage-xml doc/phpunit-coverage --verbose --stderr test/phpunit
