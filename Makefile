@@ -1,5 +1,8 @@
 test: phpcpd phpcs phploc phpmd phpunit
 
+run:
+	php -S localhost:8000 public/index.php
+
 doc: doc/html/index.xhtml
 
 clean:
