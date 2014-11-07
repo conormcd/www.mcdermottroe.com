@@ -90,7 +90,7 @@ extends PHPUnit_Framework_TestCase
             'xls' => 'application/vnd.ms-office',
         );
         foreach (IntegrationRequests::responses() as $url => $res) {
-            $content_type = 'text/html';
+            $content_type = 'text/html; charset=utf-8';
             $extension = preg_replace('/^.*\./', '', $url);
             if (array_key_exists($extension, $content_types)) {
                 $content_type = $content_types[$extension];

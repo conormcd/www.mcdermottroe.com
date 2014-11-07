@@ -144,6 +144,9 @@ abstract class Controller {
                 $this->content_type = $content_type;
             }
         }
+        if ($this->content_type === 'text/html') {
+            $this->content_type .= '; charset=utf-8';
+        }
         $this->response->header('Content-Type', $this->content_type);
 
         // Other headers
