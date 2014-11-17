@@ -39,12 +39,35 @@ class TestModel
 extends Model
 {
     /**
+     * The description of the model.
+     *
+     * @return string The description.
+     */
+    public function description() {
+        return 'The description of the model.';
+    }
+
+    /**
      * The ETag value for this model.
      *
      * @return string The value to be used in the ETag header.
      */
     public function eTag() {
         return 'deadbeef';
+    }
+
+    /**
+     * Generate the metadata for a static file.
+     *
+     * @return array See Model#metadata.
+     */
+    public function metadata() {
+        $data = parent::metadata();
+        $data[] = array('property' => 'og:title', 'content' => 'Test model');
+        $data[] = array('property' => 'og:type', 'content' => 'website');
+        $data[] = array('property' => 'og:url', 'content' => '/test_model');
+        $data[] = array('name' => 'twitter:card', 'content' => 'summary');
+        return $data;
     }
 }
 

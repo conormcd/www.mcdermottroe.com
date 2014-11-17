@@ -60,13 +60,15 @@ extends PhotoProvider
                     array('user_id' => $flickr->getCurrentUserNSID())
                 );
                 foreach ($response['photosets']['photoset'] as $set) {
-                    $albums[] = new PhotoAlbumModel(
+                    $album = new PhotoAlbumModel(
                         $flickr,
                         $set['id'],
-                        $set['title']['_content'],
                         $set['date_create'],
                         $set['primary']
                     );
+                    $album->title($set['title']['_content']);
+                    $album->description($set['description']['_content']);
+                    $albums[] = $album;
                 }
                 return $albums;
             }
@@ -111,7 +113,7 @@ extends PhotoProvider
                 $result = $flickr->photosets->getPhotos(
                     array(
                         'photoset_id' => $album->albumID(),
-                        'extras' => 'url_o,url_q,url_c,url_z,url_m'
+                        'extras' => 'url_o,url_q,url_c,url_z,url_m,description'
                     )
                 );
                 foreach ($result['photoset']['photo'] as $photo) {
@@ -129,8 +131,11 @@ extends PhotoProvider
                         $album,
                         $photo['id'],
                         $index,
-                        $photo['title'],
                         $sizes
+                    );
+                    $photos[$index]->title($photo['title']);
+                    $photos[$index]->description(
+                        $photo['description']['_content']
                     );
                     $index++;
                 }

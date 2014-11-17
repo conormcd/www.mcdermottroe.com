@@ -76,6 +76,15 @@ extends PageableModel
     }
 
     /**
+     * Describe the model.
+     *
+     * @return string The description.
+     */
+    public function description() {
+        return "This is a pageable model.";
+    }
+
+    /**
      * The ETag value for this model.
      *
      * @return string The value to be used in the ETag header.
@@ -91,6 +100,20 @@ extends PageableModel
      */
     public function link() {
         return self::LINK;
+    }
+
+    /**
+     * Generate the metadata.
+     *
+     * @return array See Model#metadata.
+     */
+    public function metadata() {
+        $data = parent::metadata();
+        $data[] = array('property' => 'og:type', 'content' => 'website');
+        $data[] = array('property' => 'og:title', 'content' => 'Title');
+        $data[] = array('property' => 'og:url', 'content' => '/pageable');
+        $data[] = array('name' => 'twitter:card', 'content' => 'summary');
+        return $data;
     }
 }
 

@@ -69,7 +69,9 @@ extends ModelTestCase
         try {
             throw new Exception("Test error", 503);
         } catch (Exception $e) {
-            return new ErrorModel($e);
+            $obj = new ErrorModel($e);
+            $obj->uri('/error_url');
+            return $obj;
         }
     }
 }

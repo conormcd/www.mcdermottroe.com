@@ -1,5 +1,7 @@
 # Google Analytics, jQuery and external links
 
+[description]: # (How to add Google Analytics tracking to outbound links.)
+
 Want to add [Google Analytics](http://www.google.com/analytics/) tracking to
 all the non-HTML resources on your site? How about the outbound links to other
 websites? If you're like me, you've considered it and then rejected it for

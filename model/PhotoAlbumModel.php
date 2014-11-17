@@ -28,24 +28,21 @@ extends Model
      * @param PhotoProvider $provider  The PhotoProvider object which we can
      *                                 use for further requests.
      * @param int           $album_id  The ID of the album.
-     * @param string        $title     The title of the album.
      * @param int           $timestamp The UNIX epoch time for when the album
      *                                 was created.
      * @param int           $thumbnail The ID of the photo which is to be used
      *                                 as the thumbnail for the album.
      */
-    public function __construct(
-        $provider,
-        $album_id,
-        $title,
-        $timestamp,
-        $thumbnail
-    ) {
+    public function __construct($provider, $album_id, $timestamp, $thumbnail) {
+        parent::__construct();
         $this->_provider = $provider;
         $this->_album_id = $album_id;
-        $this->_title = $title;
         $this->_timestamp_create = $timestamp;
         $this->_thumbnail_id = $thumbnail;
+        $this->_title = null;
+        $this->_description = null;
+        $this->_metadata['og:title'] = array($this, 'title');
+        $this->_metadata['og:url'] = array($this, 'link');
     }
 
     /**
@@ -67,11 +64,30 @@ extends Model
     }
 
     /**
-     * Get the title of the photo album.
+     * Get/set the description of the photo album.
+     *
+     * @param string $description The new description of this photo album.
+     *
+     * @return string The description of this photo album.
+     */
+    public function description($description = null) {
+        if ($description !== null) {
+            $this->_description = $description;
+        }
+        return $this->_description;
+    }
+
+    /**
+     * Get/set the title of the photo album.
+     *
+     * @param string $title The new title of the photo album.
      *
      * @return string The title of the photo album.
      */
-    public function title() {
+    public function title($title = null) {
+        if ($title !== null) {
+            $this->_title = $title;
+        }
         return $this->_title;
     }
 
@@ -169,6 +185,15 @@ extends Model
             $tags .= $photo->eTag();
         }
         return md5($tags);
+    }
+
+    /**
+     * Get the relative link to this album.
+     *
+     * @return string The path to this album.
+     */
+    public function link() {
+        return '/photos/' . $this->slug();
     }
 }
 

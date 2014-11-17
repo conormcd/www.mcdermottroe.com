@@ -18,7 +18,7 @@ extends Controller
      */
     public function __construct($request, $response) {
         parent::__construct($request, $response);
-        $this->model = new StaticFileModel($this->request->uri());
+        $this->model = new StaticFileModel();
     }
 
     /**

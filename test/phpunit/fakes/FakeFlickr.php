@@ -52,15 +52,15 @@ extends Flickr
      * @return An array of PhotoAlbumModel objects.
      */
     public function getAlbums() {
-        return array(
-            new PhotoAlbumModel(
-                $this,
-                1234,
-                'A fake photo album',
-                strtotime('1 week ago'),
-                12345678
-            )
+        $album = new PhotoAlbumModel(
+            $this,
+            1234,
+            strtotime('1 week ago'),
+            12345678
         );
+        $album->title('A fake photo album');
+        $album->description('Fake album description');
+        return array($album);
     }
 
     /**
@@ -75,17 +75,18 @@ extends Flickr
 
         $photos = array();
         for ($i = 0; $i < 15; $i++) {
-            $photos[] = new PhotoModel(
+            $photos[$i] = new PhotoModel(
                 $album,
                 $photo_id_offset + $i,
                 $i,
-                "Photo number $i in the set.",
                 array(
                     "thumbnail" => "http://thumbnail/for/$i",
                     "large" => "http://large/for/$i",
                     "fullsize" => "http://fullsize/for/$i",
                 )
             );
+            $photos[$i]->title("Photo number $i in the set.");
+            $photos[$i]->description("Description $i");
         }
         return $photos;
     }

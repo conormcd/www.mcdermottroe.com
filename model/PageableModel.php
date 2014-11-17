@@ -31,6 +31,7 @@ extends Model
      * @param int $per_page The number of items to display per page.
      */
     public function __construct($page = null, $per_page = null) {
+        parent::__construct();
         $this->page = $page ? intval($page) : 1;
         $this->per_page = $per_page ? intval($per_page) : $this->getDefaultPerPage();
         if ($this->page < 1) {

@@ -109,6 +109,9 @@ abstract class Controller {
      * @return object The model for the current request.
      */
     protected function model() {
+        if ($this->model !== null) {
+            $this->model->uri($this->request->uri());
+        }
         return $this->model;
     }
 

@@ -34,6 +34,11 @@ extends PageableModel
     public $updated;
 
     /**
+     * A cache for the current page of blog entries.
+     */
+    private $_entries;
+
+    /**
      * Initialize the selection.
      *
      * @param int    $year     The year of publication of the blog post(s). If
@@ -65,6 +70,10 @@ extends PageableModel
         foreach ($this->entries() as $entry) {
             $this->timestamp = max($this->timestamp, $entry->timestamp());
         }
+
+        $this->_metadata['og:title'] = array($this, 'title');
+        $this->_metadata['og:type'] = 'website';
+        $this->_metadata['og:url'] = array($this, 'link');
     }
 
     /**
@@ -74,16 +83,6 @@ extends PageableModel
      */
     public function atomLink() {
         return $this->link() . '/feed/atom/';
-    }
-
-    /**
-     * The date of publication of the most recent blog post in ISO8601 format.
-     *
-     * @return string The date of publication of the most recent blog post in
-     *                ISO8601 format.
-     */
-    public function dateISO8601() {
-        return Time::dateISO8601($this->timestamp);
     }
 
     /**
@@ -102,11 +101,13 @@ extends PageableModel
      * @return array The selected blog posts as BlogEntryModel objects.
      */
     public function entries() {
-        $entries = array();
-        foreach ($this->page() as $file) {
-            $entries[] = new BlogEntryModel($file);
+        if (!$this->_entries) {
+            $this->_entries = array();
+            foreach ($this->page() as $file) {
+                $this->_entries[] = new BlogEntryModel($file);
+            }
         }
-        return $entries;
+        return $this->_entries;
     }
 
     /**
@@ -116,10 +117,27 @@ extends PageableModel
      */
     public function link() {
         return '/' . join(
+            '/',
             array_filter(
                 array('blog', $this->year, $this->month, $this->day, $this->slug)
             )
         );
+    }
+
+    /**
+     * Generate the metadata for this blog.
+     *
+     * @return array An array of arrays. Each of the inner arrays is an
+     *               associative array and must contain a content key and
+     *               either a name or a property key.
+     */
+    public function metadata() {
+        if (count($this->entries()) == 1) {
+            $entries = $this->entries();
+            return $entries[0]->metadata();
+        } else {
+            return parent::metadata();
+        }
     }
 
     /**
@@ -156,6 +174,20 @@ extends PageableModel
     }
 
     /**
+     * Description of this blog.
+     *
+     * @return string A description of the blog entries represented by this
+     *                model.
+     */
+    public function description() {
+        if (count($this->entries()) == 1) {
+            $entries = $this->entries();
+            return $entries[0]->description();
+        }
+        return $this->title();
+    }
+
+    /**
      * The ETag value for this model.
      *
      * @return string The value to be used in the ETag header.
@@ -166,6 +198,15 @@ extends PageableModel
             $tags .= $entry->eTag();
         }
         return md5($tags);
+    }
+
+    /**
+     * The last time the blog was updated.
+     *
+     * @return int The UNIX epoch time for the last time the blog was updated.
+     */
+    public function timestamp() {
+        return $this->timestamp;
     }
 
     /**
@@ -200,15 +241,18 @@ extends PageableModel
             $fmt = new NumberFormatter('en_US', NumberFormatter::ORDINAL);
             $day = $fmt->format($day);
         }
-        if ($day) {
-            return "Blog posts from the $day of $month $year";
-        } else if ($month) {
-            return "Blog posts from $month $year";
-        } else if ($year) {
-            return "Blog posts from $year";
+        if ($day || $month || $year) {
+            $title = "Blog posts by Conor McDermottroe from";
+            if ($day) {
+                return "$title the $day of $month $year";
+            } else if ($month) {
+                return "$title $month $year";
+            } else {
+                return "$title $year";
+            }
         }
 
-        return null; // Let the default take over in the view.
+        return "Conor McDermottroe's blog";
     }
 
     /**

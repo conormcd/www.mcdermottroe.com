@@ -62,10 +62,11 @@ extends ModelTestCase
         $instance = new PhotoAlbumModel(
             PhotoProvider::getInstance(),
             $instance->albumID(),
-            "My Holiday Photos - Jun 2008",
             strtotime('2013-01-01'),
             $instance->thumbnail()->photoID()
         );
+        $instance->title("My Holiday Photos - Jun 2008");
+        $instance->description("Hol snaps");
         $this->assertEquals(
             strtotime('2008-06-01'),
             $instance->timestamp()
@@ -119,7 +120,6 @@ extends ModelTestCase
         $instance = new PhotoAlbumModel(
             PhotoProvider::getInstance(),
             $instance->albumID(),
-            $instance->title(),
             $instance->timestamp(),
             26667
         );

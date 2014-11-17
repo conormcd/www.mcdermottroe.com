@@ -1,5 +1,7 @@
 # Profiling PHP with XHProf
 
+[description]: # (A quick guide on using XHProf to profile PHP code.)
+
 If you find yourself writing any performance sensitive code in PHP, you
 probably want a profiler to tell you where the slowest parts of your code are.
 Sometimes you can get by with educated guessing and a few well-placed uses of

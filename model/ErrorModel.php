@@ -17,6 +17,7 @@ extends Model
      *                                    an exception.
      */
     public function __construct($exception_or_message, $code = null) {
+        parent::__construct();
         if ($exception_or_message instanceof Exception) {
             $this->_exception = $exception_or_message;
             $this->_message = $this->_exception->getMessage();
@@ -26,6 +27,9 @@ extends Model
             $this->_message = $exception_or_message;
             $this->_code = $code;
         }
+
+        $this->_metadata['og:type'] = 'website';
+        $this->_metadata['og:title'] = array($this, 'message');
     }
 
     /**
@@ -41,6 +45,15 @@ extends Model
             return 500;
         }
         return $this->_code;
+    }
+
+    /**
+     * The error message is the description for this.
+     *
+     * @return string The same value as message().
+     */
+    public function description() {
+        return $this->message();
     }
 
     /**

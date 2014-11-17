@@ -80,7 +80,7 @@ extends PageableModelTestCase
     public function testTitleOnePerPage() {
         $photos = $this->createTestObject(1, 1);
         $this->assertEquals(
-            'A fake photo album - Photo number 0 in the set.',
+            'Photo number 0 in the set.',
             $photos->title()
         );
     }

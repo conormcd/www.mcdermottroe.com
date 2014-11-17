@@ -47,6 +47,8 @@ extends PageableModel
         parent::__construct($page, $per_page);
         $this->album = $album;
         $this->_provider = PhotoProvider::getInstance();
+        $this->_metadata['og:title'] = array($this, 'title');
+        $this->_metadata['og:url'] = array($this, 'link');
     }
 
     /**
@@ -69,6 +71,41 @@ extends PageableModel
         } else {
             return $this->albums();
         }
+    }
+
+    /**
+     * Describe the photos modelled by this object for metadata purposes.
+     *
+     * @return string A description of these photos.
+     */
+    public function description() {
+        if ($this->album) {
+            if ($this->per_page == 1) {
+                $photos = $this->page();
+                return $photos[0]->description();
+            } else {
+                return $this->_provider->getAlbum($this->album)->description();
+            }
+        }
+        return 'Conor McDermottroe\'s photos.';
+    }
+
+    /**
+     * Get the photo to be used as a metadata image.
+     *
+     * @return string The URL of the image.
+     */
+    public function image() {
+        if ($this->album) {
+            if ($this->per_page == 1) {
+                $photos = $this->page();
+                return $photos[0]->large();
+            } else {
+                $album = $this->_provider->getAlbum($this->album);
+                return $album->thumbnail()->large();
+            }
+        }
+        return parent::image();
     }
 
     /**
@@ -163,22 +200,12 @@ extends PageableModel
      */
     public function title() {
         if ($this->album) {
-            $title = null;
-            foreach ($this->albums() as $album) {
-                if ($album->slug() === $this->album) {
-                    $title = $album->title();
-                    break;
-                }
-            }
-
-            if ($title !== null && $this->per_page == 1) {
+            if ($this->per_page == 1) {
                 $photos = $this->page();
-                if ($photos[0]->title()) {
-                    $title = join(' - ', array($title, $photos[0]->title()));
-                }
+                return $photos[0]->title();
+            } else {
+                return $this->_provider->getAlbum($this->album)->title();
             }
-
-            return $title;
         }
         return 'Photos';
     }
@@ -194,6 +221,19 @@ extends PageableModel
             $tags .= $item->eTag();
         }
         return md5($tags);
+    }
+
+    /**
+     * The timestamp of the most recent thing on the page.
+     *
+     * @return int The UNIX epoch timestamp of the most recent thing on the page.
+     */
+    public function timestamp() {
+        $timestamp = 0;
+        foreach ($this->page() as $item) {
+            $timestamp = max($timestamp, $item->timestamp());
+        }
+        return ($timestamp > 0) ? $timestamp : null;
     }
 
     /**

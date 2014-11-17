@@ -109,6 +109,15 @@ class TestHeadersModel
 extends Model
 {
     /**
+     * A description for this test model.
+     *
+     * @return string The description.
+     */
+    public function description() {
+        return "Test headers model";
+    }
+
+    /**
      * A fixed dummy MIME type.
      *
      * @return string A dummy MIME type.
@@ -133,6 +142,23 @@ extends Model
      */
     public function eTag() {
         return md5(__METHOD__);
+    }
+
+    /**
+     * Get/set the URI for this object.
+     *
+     * @param string $uri If provided, the new value for the model URI.
+     *
+     * @return string The current URI for the model.
+     */
+    public function uri($uri = null) {
+        if ($uri !== null) {
+            $this->_uri = $uri;
+        }
+        if ($this->_uri === null) {
+            $this->_uri = '/test/headers';
+        }
+        return $this->_uri;
     }
 }
 
