@@ -138,6 +138,25 @@ extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Some tests need to be skipped on older versions of HHVM so that they
+     * don't trip over known bugs in that implementation. This method can be
+     * used to check if we're running on HHVM and if the version of HHVM is
+     * older than a certain value.
+     *
+     * @param string $version A version of HHVM to compare against.
+     *
+     * @return boolean True iff the current implementation of PHP is HHVM *and*
+     *                 if the version of HHVM is strictly less than $version.
+     */
+    protected function isHHVMAndOlderThan($version) {
+        $php = $this->phpVersion();
+        return  $php['implementation'] == 'hhvm' &&
+                $php['implementation_version'] < $this->comparableVersion(
+                    $version
+                );
+    }
+
+    /**
      * Transform an x.y.z version into an integer that can be compared with
      * others.
      *

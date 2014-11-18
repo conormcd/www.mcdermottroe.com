@@ -225,7 +225,7 @@ extends TestCase
      * @return void
      */
     public function testInfOrNaNCausesException() {
-        if ($this->isHHVMOlderThan33()) {
+        if ($this->isHHVMAndOlderThan('3.3.0')) {
             $this->markTestSkipped('This test fails on old version of HHVM');
         }
         $this->assertException(
@@ -251,32 +251,15 @@ extends TestCase
      * @return void
      */
     public function testUnsupportedTypeCausesException() {
-        if ($this->isHHVMOlderThan33()) {
+        if ($this->isHHVMAndOlderThan('3.4.0')) {
             $this->markTestSkipped('This test fails on old version of HHVM');
         }
         $this->assertException(
             function () {
-                JSON::encode(array('Resource' => fopen('/dev/null', 'r')));
+                $v = JSON::encode(array('Resource' => fopen('/dev/null', 'r')));
+                var_export($v);
             }
         );
-    }
-
-    /**
-     * Check if we're running on an old version of HHVM.
-     *
-     * @return boolean True iff we're running on HHVM *and* the HHVM version is
-     *                 older than 3.3.0. On versions older than that some of
-     *                 the error handling for json_encode was not fully
-     *                 implemented.
-     */
-    private function isHHVMOlderThan33() {
-        $version = $this->phpVersion();
-        if ($version['implementation'] == 'hhvm') {
-            if ($version['implementation_version'] < 3003000) {
-                return true;
-            }
-        }
-        return false;
     }
 }
 
