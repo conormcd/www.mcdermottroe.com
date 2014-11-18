@@ -171,7 +171,7 @@ extends Model
      */
     private function html() {
         $markdown = file_get_contents($this->_file);
-        return $this->cache(
+        return Cache::run(
             'blog_html_' . md5($markdown),
             0,
             function () use ($markdown) {

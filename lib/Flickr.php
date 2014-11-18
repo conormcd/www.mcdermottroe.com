@@ -50,25 +50,27 @@ extends PhotoProvider
      * @return array See {@link PhotoProvider#getAlbum()}
      */
     public function getAlbums() {
-        $key = 'FLICKR_ALBUMS';
-        $albums = Cache::get($key);
-        if (!$albums) {
-            $albums = array();
-            $response = $this->photosets->getList(
-                array('user_id' => $this->getCurrentUserNSID())
-            );
-            foreach ($response['photosets']['photoset'] as $set) {
-                $albums[] = new PhotoAlbumModel(
-                    $this,
-                    $set['id'],
-                    $set['title']['_content'],
-                    $set['date_create'],
-                    $set['primary']
+        $flickr = $this;
+        return Cache::run(
+            'FLICKR_ALBUMS',
+            3600 + rand(0, 300),
+            function () use ($flickr) {
+                $albums = array();
+                $response = $flickr->photosets->getList(
+                    array('user_id' => $flickr->getCurrentUserNSID())
                 );
+                foreach ($response['photosets']['photoset'] as $set) {
+                    $albums[] = new PhotoAlbumModel(
+                        $flickr,
+                        $set['id'],
+                        $set['title']['_content'],
+                        $set['date_create'],
+                        $set['primary']
+                    );
+                }
+                return $albums;
             }
-            Cache::set($key, $albums, 3600 + rand(0, 300));
-        }
-        return $albums;
+        );
     }
 
     /**
@@ -99,40 +101,42 @@ extends PhotoProvider
      * @return array See {@link PhotoProvider#getAlbum()}
      */
     public function getPhotos($album) {
-        $key = 'FLICKR_PHOTOS_' . $album->slug();
-        $photos = Cache::get($key);
-        if (!$photos) {
-            $photos = array();
-            $index = 0;
-            $result = $this->photosets->getPhotos(
-                array(
-                    'photoset_id' => $album->albumID(),
-                    'extras' => 'url_o,url_q,url_c,url_z,url_m'
-                )
-            );
-            foreach ($result['photoset']['photo'] as $photo) {
-                $sizes = array(
-                    'thumbnail' => $photo['url_q'],
-                    'fullsize' => $photo['url_o']
+        $flickr = $this;
+        return Cache::run(
+            'FLICKR_PHOTOS_' . $album->slug(),
+            $this->albumCacheLifetime($album),
+            function () use ($flickr, $album) {
+                $photos = array();
+                $index = 0;
+                $result = $flickr->photosets->getPhotos(
+                    array(
+                        'photoset_id' => $album->albumID(),
+                        'extras' => 'url_o,url_q,url_c,url_z,url_m'
+                    )
                 );
-                foreach (array('c', 'z', 'm', 'o') as $size) {
-                    if (array_key_exists("url_$size", $photo)) {
-                        $sizes['large'] = $photo["url_$size"];
-                        break;
+                foreach ($result['photoset']['photo'] as $photo) {
+                    $sizes = array(
+                        'thumbnail' => $photo['url_q'],
+                        'fullsize' => $photo['url_o']
+                    );
+                    foreach (array('c', 'z', 'm', 'o') as $size) {
+                        if (array_key_exists("url_$size", $photo)) {
+                            $sizes['large'] = $photo["url_$size"];
+                            break;
+                        }
                     }
+                    $photos[$index] = new PhotoModel(
+                        $album,
+                        $photo['id'],
+                        $index,
+                        $photo['title'],
+                        $sizes
+                    );
+                    $index++;
                 }
-                $photos[$index] = new PhotoModel(
-                    $album,
-                    $photo['id'],
-                    $index,
-                    $photo['title'],
-                    $sizes
-                );
-                $index++;
+                return $photos;
             }
-            Cache::set($key, $photos, $this->albumCacheLifetime($album));
-        }
-        return $photos;
+        );
     }
 
     /**
@@ -161,17 +165,18 @@ extends PhotoProvider
      *
      * @return string The NSID for the current user.
      */
-    private function getCurrentUserNSID() {
-        $key = 'FLICKR_API_NSID_' . $this->_username;
-        $nsid = Cache::get($key);
-        if (!$nsid) {
-            $response = $this->people->findByUsername(
-                array('username' => $this->_username)
-            );
-            $nsid = $response['user']['nsid'];
-            Cache::set($key, $nsid, 0);
-        }
-        return $nsid;
+    public function getCurrentUserNSID() {
+        $flickr = $this;
+        return Cache::run(
+            'FLICKR_API_NSID_' . $this->_username,
+            0,
+            function () use ($flickr) {
+                $response = $flickr->people->findByUsername(
+                    array('username' => $this->_username)
+                );
+                return $response['user']['nsid'];
+            }
+        );
     }
 
     /**
@@ -184,21 +189,23 @@ extends PhotoProvider
      */
     public function request($method, $args=array()) {
         $url = $this->constructAPIURL($method, $args);
-        $key = 'FLICKR_API_REQUEST' . md5($url);
-        $result = Cache::get($key);
-        if (!$result) {
-            $result = JSON::decode($this->_http_client->get($url));
-            if ($result !== null) {
-                if ($result['stat'] == 'fail') {
-                    throw new Exception(
-                        $result['message'],
-                        $this->mapErrorCode($method, $result['code'])
-                    );
+        $flickr = $this;
+        return Cache::run(
+            'FLICKR_API_REQUEST' . md5($url),
+            3600 + rand(0, 300),
+            function () use ($flickr, $method, $url) {
+                $result = JSON::decode($flickr->_http_client->get($url));
+                if ($result !== null) {
+                    if ($result['stat'] == 'fail') {
+                        throw new Exception(
+                            $result['message'],
+                            $flickr->mapErrorCode($method, $result['code'])
+                        );
+                    }
                 }
-                Cache::set($key, $result, 3600 + rand(0, 300));
+                return $result;
             }
-        }
-        return $result;
+        );
     }
 
     /**
@@ -249,7 +256,7 @@ extends PhotoProvider
      * @return int The most appropriate HTTP status code or 500 if none can be
      *             calculated.
      */
-    private function mapErrorCode($method, $flickr_error_number) {
+    public function mapErrorCode($method, $flickr_error_number) {
         $error_map = array(
             'flickr.people.findByUsername' => array(1 => 404, 105 => 503),
             'flickr.photosets.getList' => array(1 => 404, 105 => 503),

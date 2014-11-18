@@ -52,6 +52,32 @@ class Cache {
             apc_clear_cache('user');
         }
     }
+
+    /**
+     * Run some code and cache the result.
+     *
+     * @param string   $key      The key for the cache entry.
+     * @param int      $ttl      The life time for the cache entry.
+     * @param callable $callable The code to run and cache.
+     * @param array    $args     Arguments to pass to the cached function.
+     *
+     * @return mixed             The result of the wrapped, possibly from the
+     *                           cache.
+     */
+    public static function run($key, $ttl, $callable, $args = array()) {
+        $result = self::get($key);
+        if ($result === null) {
+            $start = microtime(true);
+            $result = call_user_func_array($callable, $args);
+            Logger::debug(
+                "Value recomputed for $key in " .
+                (microtime(true) - $start) .
+                " seconds."
+            );
+            self::set($key, $result, $ttl);
+        }
+        return $result;
+    }
 }
 
 ?>

@@ -83,12 +83,14 @@ abstract class Controller {
         if ($model) {
             $key .= $model->eTag();
         }
-        $content = Cache::get($key);
-        if (!$content) {
-            $content = Mustache::render($view, $model);
-            Cache::set($key, $content, 86400 + rand(0, 3600));
-        }
-        return $content;
+
+        return Cache::run(
+            $key,
+            86400 + rand(0, 3600),
+            function () use ($view, $model) {
+                return Mustache::render($view, $model);
+            }
+        );
     }
 
     /**

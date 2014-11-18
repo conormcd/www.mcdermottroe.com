@@ -34,36 +34,36 @@ extends PageableModel
      *               of data we fetch from.
      */
     public function all() {
-        $key = 'FRONT_PAGE_DATA';
-        $all = Cache::get($key);
-        if ($all) {
-            return $all;
-        }
-        $all = array();
+        return Cache::run(
+            'FRONT_PAGE_DATA',
+            $this->ttl(),
+            function () {
+                $all = array();
 
-        // Mix in the blog
-        $blog = new BlogModel(null, null, null, null, 1, -1);
-        foreach ($blog->entries() as $blog_entry) {
-            $all[$blog_entry->timestamp()] = $blog_entry;
-        }
+                // Mix in the blog
+                $blog = new BlogModel(null, null, null, null, 1, -1);
+                foreach ($blog->entries() as $blog_entry) {
+                    $all[$blog_entry->timestamp()] = $blog_entry;
+                }
 
-        // Mix in the photo albums
-        $photos = new PhotosModel(null, 1, -1);
-        foreach ($photos->albums() as $album) {
-            $all[$album->timestamp()] = $album;
-        }
+                // Mix in the photo albums
+                $photos = new PhotosModel(null, 1, -1);
+                foreach ($photos->albums() as $album) {
+                    $all[$album->timestamp()] = $album;
+                }
 
-        // Mix in the photos from Instagram
-        $instagram = Instagram::getInstance();
-        foreach ($instagram->getStream() as $photo) {
-            $all[$photo['timestamp']] = $photo;
-        }
+                // Mix in the photos from Instagram
+                $instagram = Instagram::getInstance();
+                foreach ($instagram->getStream() as $photo) {
+                    $all[$photo['timestamp']] = $photo;
+                }
 
-        krsort($all);
-        $all = array_values($all);
-        Cache::set($key, $all, $this->ttl());
+                krsort($all);
+                $all = array_values($all);
 
-        return $all;
+                return $all;
+            }
+        );
     }
 
     /**

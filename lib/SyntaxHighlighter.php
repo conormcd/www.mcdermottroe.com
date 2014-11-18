@@ -17,14 +17,15 @@ class SyntaxHighlighter {
      */
     public static function highlight($matches) {
         $key = join('_', array('syntax', $matches[1], md5($matches[2])));
-        $result = Cache::get($key);
-        if ($result === null) {
-            $geshi = new GeSHi(trim($matches[2]), $matches[1]);
-            $geshi->set_overall_class('codeblock');
-            $result = $geshi->parse_code();
-            Cache::set($key, $result, 0);
-        }
-        return $result;
+        return Cache::run(
+            $key,
+            0,
+            function () use ($matches) {
+                $geshi = new GeSHi(trim($matches[2]), $matches[1]);
+                $geshi->set_overall_class('codeblock');
+                return $geshi->parse_code();
+            }
+        );
     }
 }
 

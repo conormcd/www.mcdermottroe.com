@@ -21,30 +21,6 @@ extends ModelTestCase
     }
 
     /**
-     * Test that methods using the cache method from Model work as expected.
-     *
-     * @return void
-     */
-    public function testMethodWhichIsCached() {
-        $testmodel = $this->createTestObject();
-        $first = $testmodel->methodWhichIsCached();
-        $second = $testmodel->methodWhichIsCached();
-        $this->assertEquals($first, $second);
-    }
-
-    /**
-     * Test that uncached methods are unaffected by Model.
-     *
-     * @return void
-     */
-    public function testMethodWhichIsNotCached() {
-        $testmodel = $this->createTestObject();
-        $first = $testmodel->methodWhichIsNotCached();
-        $second = $testmodel->methodWhichIsNotCached();
-        $this->assertNotEquals($first, $second);
-    }
-
-    /**
      * Get an instance of TestModel to test.
      *
      * @return TestModel An instance of TestModel.
@@ -68,32 +44,6 @@ extends Model
      */
     public function eTag() {
         return 'deadbeef';
-    }
-
-    /**
-     * A sample cached method.
-     *
-     * @return float The time with fractional microseconds when the method was
-     *               called. This value will be cached for 10 seconds.
-     */
-    public function methodWhichIsCached() {
-        return $this->cache(
-            'cached_method',
-            10,
-            function () {
-                return microtime(true);
-            }
-        );
-    }
-
-    /**
-     * A sample uncached method.
-     *
-     * @return float The time with fractional microseconds when the method was
-     *               called.
-     */
-    public function methodWhichIsNotCached() {
-        return microtime(true);
     }
 }
 

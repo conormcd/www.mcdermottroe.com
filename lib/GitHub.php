@@ -58,15 +58,16 @@ class GitHub {
      * @return array The decoded form of the JSON which was returned.
      */
     private function get($path) {
-        $key = 'GITHUB_API_REQUEST_' . md5($path);
-        $result = Cache::get($key);
-        if (!$result) {
-            $result = JSON::decode(
-                $this->_http_client->get("https://api.github.com$path")
-            );
-            Cache::set($key, $result, 3600 + rand(0, 300));
-        }
-        return $result;
+        $client = $this->_http_client;
+        return Cache::run(
+            'GITHUB_API_REQUEST_' . md5($path),
+            3600 + rand(0, 300),
+            function () use ($client, $path) {
+                return JSON::decode(
+                    $client->get("https://api.github.com$path")
+                );
+            }
+        );
     }
 }
 
