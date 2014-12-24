@@ -1,11 +1,14 @@
 <?php
 
 /**
- * A facade over APC.
+ * A facade over Memcached.
  *
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
 class Cache {
+    /** The connection to Memcached. */
+    private static $_memcached = null;
+
     /**
      * Retrieve an entry from the cache.
      *
@@ -15,15 +18,17 @@ class Cache {
      *                    not found.
      */
     public static function get($key) {
-        $result = null;
-        $success = false;
-        if (Environment::get('CACHE_ENABLE') && function_exists('apc_fetch')) {
-            $result = apc_fetch($key, $success);
-            if (!$success) {
+        self::connect();
+
+        $value = null;
+        if (Environment::get('CACHE_ENABLE')) {
+            $value = self::$_memcached->get($key);
+            if (self::$_memcached->getResultCode() !== Memcached::RES_SUCCESS) {
                 Logger::debug("Cache miss for $key");
+                $value = null;
             }
         }
-        return $success ? $result : null;
+        return $value;
     }
 
     /**
@@ -36,9 +41,19 @@ class Cache {
      * @return void
      */
     public static function set($key, $value, $ttl) {
-        if (Environment::get('CACHE_ENABLE') && function_exists('apc_store')) {
-            apc_store($key, $value, $ttl);
-            Logger::debug("Storing value at $key for $ttl seconds");
+        if (Environment::get('CACHE_ENABLE')) {
+            // The Memcached extension considers anything over 60*60*24*30 to
+            // be a UNIX timestamp, so we need to adjust for that here.
+            if ($ttl >= (60*60*24*30)) {
+                $ttl = $ttl + time();
+            }
+
+            self::$_memcached->set($key, $value, $ttl);
+            if (self::$_memcached->getResultCode() === Memcached::RES_SUCCESS) {
+                Logger::debug("Storing value at $key for $ttl seconds");
+            } else {
+                Logger::error("Failed to store $key in Memcached");
+            }
         }
     }
 
@@ -77,6 +92,18 @@ class Cache {
             self::set($key, $result, $ttl);
         }
         return $result;
+    }
+
+    /**
+     * Connect to Memcached if we aren't already connected.
+     *
+     * @return void
+     */
+    private static function connect() {
+        if (self::$_memcached === null) {
+            self::$_memcached = new Memcached('www.mcdermottroe.com');
+            self::$_memcached->addServer('127.0.0.1', 11211);
+        }
     }
 }
 

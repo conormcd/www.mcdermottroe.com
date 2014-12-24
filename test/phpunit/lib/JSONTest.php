@@ -251,7 +251,7 @@ extends TestCase
      * @return void
      */
     public function testUnsupportedTypeCausesException() {
-        if ($this->isHHVMAndOlderThan('3.4.0')) {
+        if ($this->isHHVMAndOlderThan('3.4.1')) {
             $this->markTestSkipped('This test fails on old version of HHVM');
         }
         $this->assertException(
