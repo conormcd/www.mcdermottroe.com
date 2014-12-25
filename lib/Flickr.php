@@ -149,7 +149,7 @@ extends PhotoProvider
      * @return int The number of seconds we should cache a particular album
      *             for.
      */
-    private function albumCacheLifetime($album) {
+    public function albumCacheLifetime($album) {
         $album_age = time() - $album->timestamp();
         if ($album_age > (86400 * 365)) {
             return 0;

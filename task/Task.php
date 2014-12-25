@@ -20,8 +20,14 @@ abstract class Task {
      * @return void
      */
     public function execute() {
+        global $argv;
+
         try {
-            $this->run();
+            $args = array();
+            if (count($argv) > 1) {
+                $args = array_slice($argv, 1);
+            }
+            $this->run($args);
         } catch (Exception $e) {
             print $e->getMessage();
             return 1;
@@ -32,9 +38,11 @@ abstract class Task {
     /**
      * Run the task.
      *
+     * @param array $args The arguments passed to the script.
+     *
      * @return void
      */
-    public abstract function run();
+    public abstract function run($args);
 }
 
 ?>

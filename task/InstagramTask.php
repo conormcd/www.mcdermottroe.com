@@ -3,11 +3,11 @@
 require_once dirname(__DIR__) . '/lib/autoloader.php';
 
 /**
- * Cache warming for the /tech endpoint.
+ * Cache warming for Instagram requests.
  *
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
-class TechTask
+class InstagramTask
 extends Task
 {
     /**
@@ -21,11 +21,11 @@ extends Task
         if (count($args) > 0) {
             Logger::warning("Extra args passed to this task.");
         }
-        $model = new TechModel();
-        $model->gitHubRepos();
+        $instagram = Instagram::getInstance();
+        $instagram->getStream();
     }
 }
 
-exit((new TechTask())->execute());
+exit((new InstagramTask())->execute());
 
 ?>

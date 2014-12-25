@@ -3,11 +3,11 @@
 require_once dirname(__DIR__) . '/lib/autoloader.php';
 
 /**
- * Cache warming for the /tech endpoint.
+ * Cache warming for GitHub requests.
  *
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
-class TechTask
+class GitHubTask
 extends Task
 {
     /**
@@ -21,11 +21,11 @@ extends Task
         if (count($args) > 0) {
             Logger::warning("Extra args passed to this task.");
         }
-        $model = new TechModel();
-        $model->gitHubRepos();
+        $github = GitHub::getInstance();
+        $github->repos();
     }
 }
 
-exit((new TechTask())->execute());
+exit((new GitHubTask())->execute());
 
 ?>
