@@ -13,14 +13,15 @@
 $root = dirname(__DIR__);
 $loader = function ($name) use ($root) {
     $file = null;
-    if (preg_match('/(Controller|Model)$/', $name, $match)) {
+    $types = '(Controller|Model|Task)';
+    if (preg_match("/$types$/", $name, $match)) {
         $file = sprintf(
             "%s/%s/%s.php",
             $root,
             strtolower($match[1]),
             $name
         );
-    } else if (preg_match('/(Controller|Model)Test(?:Case)?$/', $name, $match)) {
+    } else if (preg_match("/{$types}Test(?:Case)?$/", $name, $match)) {
         $file = sprintf(
             "%s/test/phpunit/%s/%s.php",
             $root,
