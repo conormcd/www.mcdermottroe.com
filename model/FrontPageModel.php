@@ -90,7 +90,7 @@ extends PageableModel
      *             be cached for.
      */
     public function ttl() {
-        return 300;
+        return 900;
     }
 }
 
