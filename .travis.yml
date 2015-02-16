@@ -19,3 +19,6 @@ script: make
 cache:
   directories:
     - vendor
+
+notifications:
+  email: false
