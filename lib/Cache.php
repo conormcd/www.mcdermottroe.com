@@ -81,7 +81,7 @@ class Cache {
      */
     public static function run($key, $ttl, $callable, $args = array()) {
         $result = self::get($key);
-        if ($result === null) {
+        if ($result === null || self::warming()) {
             $start = microtime(true);
             $result = call_user_func_array($callable, $args);
             Logger::debug(
@@ -103,6 +103,20 @@ class Cache {
         if (self::$_memcached === null) {
             self::$_memcached = new Memcached('www.mcdermottroe.com');
             self::$_memcached->addServer('127.0.0.1', 11211);
+        }
+    }
+
+    /**
+     * Detect if we're warming caches.
+     *
+     * @return boolean True if the CACHE_WARMING environment variable is set,
+     *                 false otherwise.
+     */
+    private static function warming() {
+        try {
+            return Environment::get('CACHE_WARMING');
+        } catch (Exception $e) {
+            return false;
         }
     }
 }
