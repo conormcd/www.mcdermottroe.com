@@ -14,10 +14,14 @@ extends Model
      */
     const DEFAULT_PER_PAGE = 5;
 
-    /** The number of the page to fetch, this is 1-indexed. */
+    /**
+     * The number of the page to fetch, this is 1-indexed.
+     */
     public $page;
 
-    /** The number of entries to show per page. */
+    /**
+     * The number of entries to show per page.
+     */
     public $per_page;
 
     /**

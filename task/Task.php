@@ -8,7 +8,6 @@
 abstract class Task {
     /**
      * Set up the task
-     *
      */
     public function __construct() {
         $_ENV['CACHE_WARMING'] = true;

@@ -6,7 +6,9 @@
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
 class Cache {
-    /** The connection to Memcached. */
+    /**
+     * The connection to Memcached.
+     */
     private static $_memcached = null;
 
     /**

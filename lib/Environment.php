@@ -6,7 +6,9 @@
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
 class Environment {
-    /** The config files to load. */
+    /**
+     * The config files to load.
+     */
     private static $_config_files = array('/etc/www.mcdermottroe.com.env' => 1);
 
     /**

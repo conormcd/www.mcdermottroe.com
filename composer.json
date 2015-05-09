@@ -8,18 +8,18 @@
     }
   ],
   "require": {
-    "easybook/geshi": "1.0.*",
-    "klein/klein": "2.0.*",
-    "michelf/php-markdown": "1.4.*",
-    "mustache/mustache": "2.7.*",
-    "raven/raven": "0.9.*"
+    "easybook/geshi": "1.*",
+    "klein/klein": "2.1.*",
+    "michelf/php-markdown": "1.5.*",
+    "mustache/mustache": "2.8.*",
+    "raven/raven": "0.11.*"
   },
   "require-dev": {
-    "phploc/phploc": "*",
+    "phploc/phploc": "2.*",
     "phpmd/phpmd" : "2.*",
-    "phpunit/phpunit": "4.1.*",
-    "sebastian/phpcpd": "*",
-    "squizlabs/php_codesniffer": "1.*",
-    "theseer/phpdox": "0.6.*"
+    "phpunit/phpunit": "4.*",
+    "sebastian/phpcpd": "2.*",
+    "squizlabs/php_codesniffer": "2.*",
+    "theseer/phpdox": "0.8.*"
   }
 }

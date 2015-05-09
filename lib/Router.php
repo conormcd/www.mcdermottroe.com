@@ -6,7 +6,9 @@
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
 class Router {
-    /** The instance of Klein we're using for routing. */
+    /**
+     * The instance of Klein we're using for routing.
+     */
     private $_klein;
 
     /**
@@ -159,13 +161,15 @@ class Router {
             }
         }
 
-        // Make sure we have a 404 handler.
-        $this->_klein->respond(
-            '404',
-            function ($req, $res, $srv, $app) {
-                assert($srv !== null);
-                assert($app !== null);
-                (new ErrorController($req, $res))->get();
+        // Make sure we have an error handler.
+        $this->_klein->onHttpError(
+            function ($code, $klein, $matched, $methods_matched, $exception) {
+                assert($code !== null);
+                assert($matched !== null);
+                assert($methods_matched !== null);
+                $req = $klein->request();
+                $res = $klein->response();
+                (new ErrorController($req, $res, $exception))->get();
             }
         );
     }

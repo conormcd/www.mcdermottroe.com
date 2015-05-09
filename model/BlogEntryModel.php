@@ -8,10 +8,14 @@
 class BlogEntryModel
 extends Model
 {
-    /** The path to the file containing the blog post. */
+    /**
+     * The path to the file containing the blog post.
+     */
     private $_file;
 
-    /** The direct link to this blog post. */
+    /**
+     * The direct link to this blog post.
+     */
     public $link;
 
     /**

@@ -14,10 +14,14 @@ extends PageableModel
      */
     const PHOTOS_PER_PAGE = 12;
 
-    /** The name of the album to show. */
+    /**
+     * The name of the album to show.
+     */
     public $album;
 
-    /** The photo provider we're using. */
+    /**
+     * The photo provider we're using.
+     */
     private $_provider;
 
     /**

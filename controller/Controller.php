@@ -6,19 +6,29 @@
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
 abstract class Controller {
-    /** The model object to render. */
+    /**
+     * The model object to render.
+     */
     protected $model;
 
-    /** The main template to render. */
+    /**
+     * The main template to render.
+     */
     protected $view;
 
-    /** The klein Request object for the current page request. */
+    /**
+     * The klein Request object for the current page request.
+     */
     protected $request;
 
-    /** The klein Response object for the current page request. */
+    /**
+     * The klein Response object for the current page request.
+     */
     protected $response;
 
-    /** The format of the output. */
+    /**
+     * The format of the output.
+     */
     protected $output_format;
 
     /**

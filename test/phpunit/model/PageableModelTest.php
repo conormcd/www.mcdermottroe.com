@@ -42,10 +42,14 @@ extends PageableModelTestCase
 class TestPageableModel
 extends PageableModel
 {
-    /** Fake link base. */
+    /**
+     * Fake link base.
+     */
     const LINK = "http://this.is.a/link";
 
-    /** The data to be paged through. */
+    /**
+     * The data to be paged through.
+     */
     private $_data;
 
     /**

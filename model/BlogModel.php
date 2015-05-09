@@ -8,19 +8,29 @@
 class BlogModel
 extends PageableModel
 {
-    /** The year of publication for the blog post(s). */
+    /**
+     * The year of publication for the blog post(s).
+     */
     public $year;
 
-    /** The month of publication for the blog post(s). */
+    /**
+     * The month of publication for the blog post(s).
+     */
     public $month;
 
-    /** The day of publication for the blog post(s). */
+    /**
+     * The day of publication for the blog post(s).
+     */
     public $day;
 
-    /** The URL-sanitized form of the blog post title. */
+    /**
+     * The URL-sanitized form of the blog post title.
+     */
     public $slug;
 
-    /** The last updated time. */
+    /**
+     * The last updated time.
+     */
     public $updated;
 
     /**
