@@ -11,16 +11,16 @@ extends \Klein\Klein
     /**
      * A dummy dispatch which just returns its arguments.
      *
-     * @param \Klein\Request  $request       See \Klein\Klein#dispatch.
-     * @param \Klein\Response $response      See \Klein\Klein#dispatch.
-     * @param boolean         $send_response See \Klein\Klein#dispatch.
-     * @param int             $capture       See \Klein\Klein#dispatch.
+     * @param \Klein\Request          $request       See \Klein\Klein#dispatch.
+     * @param \Klein\AbstractResponse $response      See \Klein\Klein#dispatch.
+     * @param boolean                 $send_response See \Klein\Klein#dispatch.
+     * @param int                     $capture       See \Klein\Klein#dispatch.
      *
-     * @return The arguments that are passed to it.
+     * @return void|string The arguments that are passed to it.
      */
     public function dispatch(
         \Klein\Request $request = null,
-        \Klein\Response $response = null,
+        \Klein\AbstractResponse $response = null,
         $send_response = true,
         $capture = \Klein\Klein::DISPATCH_NO_CAPTURE
     ) {

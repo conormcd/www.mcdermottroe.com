@@ -227,9 +227,9 @@ extends TestCase
     private function assertRoute($klein, $path, $method = 'GET') {
         $found_route = false;
         foreach ($klein->routes() as $route) {
-            if ($route[1] === $path) {
+            if ($route->getPath() === $path) {
                 $found_route = true;
-                $this->assertEquals($method, $route[0]);
+                $this->assertEquals($method, $route->getMethod());
             }
         }
         $this->assertTrue($found_route);
