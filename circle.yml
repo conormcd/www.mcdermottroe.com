@@ -1,13 +1,14 @@
 machine:
   php:
-    version: 5.4.37
+    version: 5.6.5
 
 dependencies:
-  override:
+  pre:
     - sed -i 's/^;//' ~/.phpenv/versions/$(phpenv global)/etc/conf.d/xdebug.ini
     - pecl install -f memcached-2.0.1
-    - make vendor
 
 test:
   override:
-    - make
+    - mkdir -p $CIRCLE_TEST_REPORTS/{phpcs,phpunit}
+    - vendor/bin/phpcs --standard=test/phpcs.xml --extensions=php --ignore=vendor --report=junit --report-junit=${CIRCLE_TEST_REPORTS}/phpcs/phpcs.xml .
+    - vendor/bin/phpunit --verbose --log-junit ${CIRCLE_TEST_REPORTS}/phpunit/phpunit.xml test/phpunit
