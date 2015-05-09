@@ -6,7 +6,9 @@
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
 class Mustache {
-    /** The Mustache_Engine we're using for loading templates. */
+    /**
+     * The Mustache_Engine we're using for loading templates.
+     */
     private static $_engine = null;
 
     /**

@@ -72,11 +72,7 @@ extends ModelTestCase
      * @return void
      */
     public function testBlogPostWithTitle() {
-        $post = $this->generateTestPost(
-<<<MARKDOWN
-# Title Goes Here
-MARKDOWN
-        );
+        $post = $this->generateTestPost("# Title Goes Here\n");
 
         $this->assertEquals($post->title(), 'Title Goes Here');
         $this->assertEquals($post->date(), '1st January 2012');
@@ -122,13 +118,7 @@ MARKDOWN
      * @return void
      */
     public function testBlogPostWithTitleAndBody() {
-        $post = $this->generateTestPost(
-<<<MARKDOWN
-# Title
-
-Body
-MARKDOWN
-        );
+        $post = $this->generateTestPost("# Title\n\nBody\n");
 
         $this->assertEquals($post->title(), 'Title');
         $this->assertEquals($post->date(), '1st January 2012');
@@ -145,7 +135,7 @@ MARKDOWN
      */
     public function testBlogPostWithAnAmazonLink() {
         $post = $this->generateTestPost(
-<<<MARKDOWN
+            <<<MARKDOWN
 # Title
 
 <a href="{{amazonlink:ABCD1234}}">Link</a>
@@ -168,13 +158,7 @@ MARKDOWN
      * @return void
      */
     public function testBlogPostWithAnAmazonBug() {
-        $post = $this->generateTestPost(
-<<<MARKDOWN
-# Title
-
-{{amazonbug:ABCD1234}}
-MARKDOWN
-        );
+        $post = $this->generateTestPost("# Title\n\n{{amazonbug:ABCD1234}}\n");
 
         $this->assertEquals($post->title(), 'Title');
         $this->assertEquals($post->date(), '1st January 2012');
@@ -193,7 +177,7 @@ MARKDOWN
      */
     public function testBlogPostWithCodeBlock() {
         $post = $this->generateTestPost(
-<<<MARKDOWN
+            <<<MARKDOWN
 # Title
 
     if (true) {
@@ -219,7 +203,7 @@ MARKDOWN
      */
     public function testBlogPostWithSyntaxHighlightedCodeBlock() {
         $post = $this->generateTestPost(
-<<<MARKDOWN
+            <<<MARKDOWN
 # Title
 
     {{lang:php}}

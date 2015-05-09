@@ -6,7 +6,9 @@
  * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
 class Router {
-    /** The instance of Klein we're using for routing. */
+    /**
+     * The instance of Klein we're using for routing.
+     */
     private $_klein;
 
     /**

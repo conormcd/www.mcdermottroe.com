@@ -75,7 +75,8 @@ extends Model
         return $this->_title;
     }
 
-    /** Try and infer the real dates of the photos from the album title.
+    /**
+     * Try and infer the real dates of the photos from the album title.
      *
      * @return array A timestamp for the album.
      */

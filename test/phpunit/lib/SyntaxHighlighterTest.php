@@ -10,7 +10,9 @@ require_once dirname(dirname(dirname(__DIR__))) . '/lib/autoloader.php';
 class SyntaxHighlighterTest
 extends TestCase
 {
-    /** Test snippets in a few languages */
+    /**
+     * Test snippets in a few languages.
+     */
     private static $_testCases = array(
         'php' => '<?php phpinfo(); ?>',
     );

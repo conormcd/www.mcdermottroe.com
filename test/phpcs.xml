@@ -3,6 +3,7 @@
     <description>Style checks for www.mcdermottroe.com</description>
 
     <rule ref="Generic">
+        <exclude name="Generic.Arrays.DisallowLongArraySyntax" />
         <exclude name="Generic.Files.EndFileNoNewline" />
         <exclude name="Generic.Files.LowercasedFilename.NotFound" />
         <exclude name="Generic.Files.OneClassPerFile" />
@@ -14,13 +15,13 @@
     </rule>
     <rule ref="PEAR">
         <exclude name="PEAR.Classes.ClassDeclaration.OpenBraceNewLine" />
-        <exclude name="PEAR.Commenting.ClassComment.MissingTag" />
+        <exclude name="PEAR.Commenting.ClassComment" />
         <exclude name="PEAR.Commenting.FileComment" />
         <exclude name="PEAR.Functions.FunctionDeclaration.BraceOnSameLine" />
         <exclude name="PEAR.NamingConventions.ValidFunctionName.PrivateNoUnderscore" />
         <exclude name="PEAR.NamingConventions.ValidFunctionName.PublicUnderscore" />
         <exclude name="PEAR.NamingConventions.ValidVariableName.PublicUnderscore" />
-        <exclude name="PEAR.WhiteSpace.ScopeIndent.Incorrect" />
+        <exclude name="PEAR.WhiteSpace.ScopeIndent" />
     </rule>
     <rule ref="Generic.NamingConventions.CamelCapsFunctionName">
         <properties>

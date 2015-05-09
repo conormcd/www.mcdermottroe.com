@@ -55,7 +55,7 @@ extends ControllerTestCase
     }
 
     /**
-     * Use the TestHeadersController as a generic controller implementation for 
+     * Use the TestHeadersController as a generic controller implementation for
      * the generic controller tests.
      *
      * @return string "TestHeadersController"

@@ -273,7 +273,11 @@ extends PhotoProvider
     }
 }
 
-/** A callable for helping the magic __get in Flickr. */
+/**
+ * A callable for helping the magic __get in Flickr.
+ *
+ * @author Conor McDermottroe <conor@mcdermottroe.com>
+ */
 class FlickrMagic {
     /**
      * Create a new helper.

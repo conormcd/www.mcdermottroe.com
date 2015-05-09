@@ -8,7 +8,9 @@
 class StaticFileModel
 extends Model
 {
-    /** The URI as requested. */
+    /**
+     * The URI as requested.
+     */
     private $_uri;
 
     /**

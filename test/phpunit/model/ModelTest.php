@@ -33,6 +33,7 @@ extends ModelTestCase
 /**
  * A test implementation of Model so that we can exercise it.
  *
+ * @author Conor McDermottroe <conor@mcdermottroe.com>
  */
 class TestModel
 extends Model

@@ -46,7 +46,7 @@ extends FactoryTestCase
                 array(
                     array(
                         'name' => 'fake_repo',
-                        'html_url' => 
+                        'html_url' =>
                             'https://github.com/fake_github_user/fake_repo',
                         'description' => 'A fake GitHub repo.',
                         'private' => false,
