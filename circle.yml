@@ -13,4 +13,7 @@ test:
   override:
     - mkdir -p $CIRCLE_TEST_REPORTS/{phpcs,phpunit}
     - vendor/bin/phpcs --standard=test/phpcs.xml --extensions=php --ignore=vendor --report=junit --report-junit=${CIRCLE_TEST_REPORTS}/phpcs/phpcs.xml .
-    - vendor/bin/phpunit --verbose --log-junit ${CIRCLE_TEST_REPORTS}/phpunit/phpunit.xml test/phpunit
+    - vendor/bin/phpunit --verbose --log-junit ${CIRCLE_TEST_REPORTS}/phpunit/phpunit.xml:
+        parallel: true
+        files:
+          - test/phpunit/*/*Test.php
