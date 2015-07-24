@@ -5,15 +5,15 @@ machine:
 dependencies:
   cache_directories:
     - vendor
-  pre:
+  override:
     - sed -i 's/^;//' ~/.phpenv/versions/$(phpenv global)/etc/conf.d/xdebug.ini
     - pecl install -f memcached-2.0.1
+    - composer install --prefer-source --no-interaction || (rm -rf vendor; composer install --prefer-source --no-interaction)
+    - find vendor -type d -name .git -exec rm -rf {} +
 
 test:
   override:
-    - mkdir -p $CIRCLE_TEST_REPORTS/{phpcs,phpunit}
-    - vendor/bin/phpcs --standard=test/phpcs.xml --extensions=php --ignore=vendor --report=junit --report-junit=${CIRCLE_TEST_REPORTS}/phpcs/phpcs.xml .
-    - vendor/bin/phpunit --verbose --log-junit ${CIRCLE_TEST_REPORTS}/phpunit/phpunit.xml:
+    - vendor/bin/phpunit --verbose --log-junit ${CIRCLE_TEST_REPORTS}/phpunit.xml:
         parallel: true
         files:
           - test/phpunit/*/*Test.php
