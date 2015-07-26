@@ -1,5 +1,7 @@
 # More bodges, more speed.
 
+[description]: # (A terrible hack that works.)
+
 I don't like kludgey solutions to problems. They catch up with you eventually
 and it's usually more expensive in the long run. Unfortunately, like buying a
 house, sometimes you have to take on some debt now rather than spend decades

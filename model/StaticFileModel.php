@@ -9,26 +9,25 @@ class StaticFileModel
 extends Model
 {
     /**
-     * The URI as requested.
-     */
-    private $_uri;
-
-    /**
-     * Initialize.
+     * Initialise with some metadata.
      *
-     * @param string $uri The URI for the request.
+     * @return void
      */
-    public function __construct($uri) {
-        $this->_uri = $uri;
+    public function __construct() {
+        parent::__construct();
+        $this->_metadata['og:type'] = 'website';
+        $this->_metadata['og:title'] = array($this, 'path');
     }
 
     /**
-     * The last modified time of the file, in HTTP date format.
+     * This method should only be called when rendering a model via a template.
+     * If that's happening on a static file then something really bad is
+     * happening.
      *
-     * @return string The last modified time of the file, in HTTP date format.
+     * @return string The path, as a dummy description.
      */
-    public function lastModified() {
-        return Time::http(filemtime($this->path()));
+    public function description() {
+        return $this->path();
     }
 
     /**
@@ -60,12 +59,12 @@ extends Model
      */
     public function path() {
         $public_dir = realpath(dirname(__DIR__) . '/public');
-        $localpath = realpath($public_dir . $this->_uri);
+        $localpath = realpath($public_dir . $this->uri());
 
         if (is_file($localpath) && preg_match("#^$public_dir#", $localpath)) {
             return $localpath;
         }
-        throw new Exception('File not found: ' . $this->_uri, 404);
+        throw new Exception('File not found: ' . $this->uri(), 404);
     }
 
     /**
@@ -75,6 +74,15 @@ extends Model
      */
     public function eTag() {
         return md5_file($this->path());
+    }
+
+    /**
+     * The last modified time of the file.
+     *
+     * @return int The UNIX epoch time for the last modification of the file.
+     */
+    public function timestamp() {
+        return filemtime($this->path());
     }
 }
 

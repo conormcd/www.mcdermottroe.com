@@ -1,5 +1,7 @@
 # A Programmer's Bookshelf
 
+[description]: # (I think software developers should consider reading these books.)
+
 I was participating in [a
 thread](http://www.boards.ie/vbulletin/showthread.php?t=2055604423) on
 [Boards.ie](http://www.boards.ie) recently where the original poster asked the

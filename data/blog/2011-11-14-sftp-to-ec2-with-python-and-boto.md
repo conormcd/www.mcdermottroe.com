@@ -1,5 +1,7 @@
 # SFTP to EC2 with Python and Boto
 
+[description]: # (A code snippent for uploading files to EC2 using boto.)
+
 Today I wanted to automate the upload of some code to a new Amazon EC2
 instance. I've been scripting the rest of the job using 
 [Boto](https://github.com/boto/boto) but when I was lazily looking for an

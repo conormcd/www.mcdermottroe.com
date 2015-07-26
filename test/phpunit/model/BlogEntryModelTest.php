@@ -60,8 +60,8 @@ extends ModelTestCase
 
         $this->assertException(array($post, 'title'));
         $this->assertEquals($post->date(), '1st January 2012');
-        $this->assertEquals($post->dateISO8601(), '2012-01-01T00:00:00Z');
-        $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 00:00:00 +0000');
+        $this->assertEquals($post->updatedTime(), '2012-01-01T12:00:00Z');
+        $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 12:00:00 +0000');
         $this->assertEmpty($post->body());
         $this->assertEmpty($post->summary());
     }
@@ -76,8 +76,8 @@ extends ModelTestCase
 
         $this->assertEquals($post->title(), 'Title Goes Here');
         $this->assertEquals($post->date(), '1st January 2012');
-        $this->assertEquals($post->dateISO8601(), '2012-01-01T00:00:00Z');
-        $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 00:00:00 +0000');
+        $this->assertEquals($post->updatedTime(), '2012-01-01T12:00:00Z');
+        $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 12:00:00 +0000');
         $this->assertEmpty($post->body());
         $this->assertEmpty($post->summary());
     }
@@ -92,8 +92,8 @@ extends ModelTestCase
 
         $this->assertException(array($post, 'title'));
         $this->assertEquals($post->date(), '1st June 2012');
-        $this->assertEquals($post->dateISO8601(), '2012-05-31T23:00:00Z');
-        $this->assertEquals($post->dateRSS(), 'Fri, 01 Jun 2012 00:00:00 +0100');
+        $this->assertEquals($post->updatedTime(), '2012-06-01T11:00:00Z');
+        $this->assertEquals($post->dateRSS(), 'Fri, 01 Jun 2012 12:00:00 +0100');
         $this->assertEmpty($post->body());
         $this->assertEmpty($post->summary());
     }
@@ -122,8 +122,8 @@ extends ModelTestCase
 
         $this->assertEquals($post->title(), 'Title');
         $this->assertEquals($post->date(), '1st January 2012');
-        $this->assertEquals($post->dateISO8601(), '2012-01-01T00:00:00Z');
-        $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 00:00:00 +0000');
+        $this->assertEquals($post->updatedTime(), '2012-01-01T12:00:00Z');
+        $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 12:00:00 +0000');
         $this->assertEquals($post->body(), '<p>Body</p>');
         $this->assertEquals($post->summary(), 'Body');
     }
@@ -144,8 +144,8 @@ MARKDOWN
 
         $this->assertEquals($post->title(), 'Title');
         $this->assertEquals($post->date(), '1st January 2012');
-        $this->assertEquals($post->dateISO8601(), '2012-01-01T00:00:00Z');
-        $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 00:00:00 +0000');
+        $this->assertEquals($post->updatedTime(), '2012-01-01T12:00:00Z');
+        $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 12:00:00 +0000');
         $this->assertRegExp(
             '#http://[^/]*amazon\.com/.*ABCD1234#',
             $post->body()
@@ -162,8 +162,8 @@ MARKDOWN
 
         $this->assertEquals($post->title(), 'Title');
         $this->assertEquals($post->date(), '1st January 2012');
-        $this->assertEquals($post->dateISO8601(), '2012-01-01T00:00:00Z');
-        $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 00:00:00 +0000');
+        $this->assertEquals($post->updatedTime(), '2012-01-01T12:00:00Z');
+        $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 12:00:00 +0000');
         $this->assertRegExp(
             '#<img.*src=.http://[^/]*amazon\.com/.*ABCD1234#s',
             $post->body()
@@ -188,8 +188,8 @@ MARKDOWN
 
         $this->assertEquals($post->title(), 'Title');
         $this->assertEquals($post->date(), '1st January 2012');
-        $this->assertEquals($post->dateISO8601(), '2012-01-01T00:00:00Z');
-        $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 00:00:00 +0000');
+        $this->assertEquals($post->updatedTime(), '2012-01-01T12:00:00Z');
+        $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 12:00:00 +0000');
         $this->assertRegExp(
             '#<pre><code>if \(true\) \{.*print "Woo!";.*\}.*</code></pre>#s',
             $post->body()
@@ -215,8 +215,8 @@ MARKDOWN
 
         $this->assertEquals($post->title(), 'Title');
         $this->assertEquals($post->date(), '1st January 2012');
-        $this->assertEquals($post->dateISO8601(), '2012-01-01T00:00:00Z');
-        $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 00:00:00 +0000');
+        $this->assertEquals($post->updatedTime(), '2012-01-01T12:00:00Z');
+        $this->assertEquals($post->dateRSS(), 'Sun, 01 Jan 2012 12:00:00 +0000');
         $this->assertRegExp(
             '#^<pre class="php codeblock" #',
             $post->body()
@@ -239,7 +239,15 @@ MARKDOWN
      * @return BlogEntryModel A test object.
      */
     protected function createTestObject() {
-        return $this->generateTestPost('');
+        $obj = $this->generateTestPost(
+            <<<MARKDOWN
+# Test object title.
+
+[description]: # (Test object description.)
+MARKDOWN
+        );
+        $obj->uri('/blog/2014/11/24/test-object-title/');
+        return $obj;
     }
 
     /**

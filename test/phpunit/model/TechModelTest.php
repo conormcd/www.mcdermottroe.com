@@ -28,7 +28,9 @@ extends ModelTestCase
      * @return TechModel An instance which can be tested.
      */
     protected function createTestObject() {
-        return new TechModel('/css/default.css');
+        $obj = new TechModel();
+        $obj->uri('/css/default.css');
+        return $obj;
     }
 }
 

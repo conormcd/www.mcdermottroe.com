@@ -62,7 +62,6 @@ extends PHPUnit_Framework_TestCase
      */
     public function tearDown() {
         FakeHTTPClient::reset();
-        Cache::clear();
     }
 
     /**

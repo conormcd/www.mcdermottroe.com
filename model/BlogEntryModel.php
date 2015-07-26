@@ -19,6 +19,11 @@ extends Model
     public $link;
 
     /**
+     * A local cache for the markdown content in the file.
+     */
+    private $_markdown;
+
+    /**
      * Initialize.
      *
      * @param string $blog_markdown_file The full path to the file containing
@@ -37,6 +42,16 @@ extends Model
             '/blog/$1/$2/$3/$4/',
             basename($this->_file)
         );
+
+        parent::__construct();
+
+        $this->_metadata['og:type'] = 'article';
+        $this->_metadata['og:title'] = array($this, 'title');
+        $this->_metadata['og:url'] = $this->link;
+        $this->_metadata['article:author']
+            = 'https://www.facebook.com/conor.mcdermottroe';
+        $this->_metadata['article:published_time'] = array($this, 'updatedTime');
+        $this->_metadata['article:modified_time'] = array($this, 'updatedTime');
     }
 
     /**
@@ -73,16 +88,6 @@ extends Model
      */
     public function date() {
         return Time::day($this->timestamp());
-    }
-
-    /**
-     * The date of publication of the blog post in ISO8601 format.
-     *
-     * @return string The date of publication of the blog post in ISO8601
-     *                format.
-     */
-    public function dateISO8601() {
-        return Time::dateISO8601($this->timestamp());
     }
 
     /**
@@ -126,7 +131,7 @@ extends Model
         $matches = array();
         if (preg_match('/^(\d{4}-\d\d-\d\d)-/', $file, $matches)) {
             $time = new DateTime(
-                "{$matches[1]} 00:00:00",
+                "{$matches[1]} 12:00:00",
                 new DateTimeZone('Europe/Dublin')
             );
             return $time->getTimestamp();
@@ -151,6 +156,37 @@ extends Model
     }
 
     /**
+     * Describe this blog entry.
+     *
+     * @return string A description of this blog entry.
+     */
+    public function description() {
+        $description = '';
+        $markdown = $this->markdown();
+        foreach (preg_split('/[\r\n]+/', $markdown) as $line) {
+            $matches = array();
+            if (preg_match('/^\[description]: # \((.*)\)/', $line, $matches)) {
+                $description .= ' ' . $matches[1];
+            }
+        }
+        return ltrim($description);
+    }
+
+    /**
+     * An image to use for the metadata for this blog post.
+     *
+     * @return string The URL of the image to use.
+     */
+    public function image() {
+        $markdown = $this->markdown();
+        if (preg_match('/<img.*src="(.*?)"/ms', $markdown, $matches)) {
+            return $matches[1];
+        } else {
+            return parent::image();
+        }
+    }
+
+    /**
      * The ETag value for this model.
      *
      * @return string The value to be used in the ETag header.
@@ -161,7 +197,7 @@ extends Model
                 '',
                 array(
                     $this->body(),
-                    $this->dateISO8601(),
+                    $this->updatedTime(),
                 )
             )
         );
@@ -174,7 +210,7 @@ extends Model
      * @return The HTML of the entire blog post.
      */
     private function html() {
-        $markdown = file_get_contents($this->_file);
+        $markdown = $this->markdown();
         return Cache::run(
             'blog_html_' . md5($markdown),
             0,
@@ -182,6 +218,18 @@ extends Model
                 return \Michelf\MarkdownExtra::defaultTransform($markdown);
             }
         );
+    }
+
+    /**
+     * Retrieve the markdown text from the file backing the blog entry.
+     *
+     * @return string The Markdown text for the blog post.
+     */
+    private function markdown() {
+        if (!$this->_markdown) {
+            $this->_markdown = file_get_contents($this->_file);
+        }
+        return $this->_markdown;
     }
 }
 

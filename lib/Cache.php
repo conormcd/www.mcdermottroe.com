@@ -60,17 +60,6 @@ class Cache {
     }
 
     /**
-     * Empty the cache.
-     *
-     * @return void
-     */
-    public static function clear() {
-        if (Environment::get('CACHE_ENABLE') && function_exists('apc_clear_cache')) {
-            apc_clear_cache('user');
-        }
-    }
-
-    /**
      * Run some code and cache the result.
      *
      * @param string   $key      The key for the cache entry.

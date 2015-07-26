@@ -88,16 +88,16 @@ extends PageableModelTestCase
     }
 
     /**
-     * Ensure that the results of dateISO8601 calls return dates in the correct
+     * Ensure that the results of updatedTime calls return dates in the correct
      * pattern.
      *
      * @return void
      */
-    public function testISO8601Dates() {
+    public function testUpdatedTimeDates() {
         $blog = new BlogModel(null, null, null, null, null, -1);
         $this->assertRegexp(
             '/\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d(?:Z|[+-]\d\d\d\d)/',
-            $blog->dateISO8601()
+            $blog->updatedTime()
         );
     }
 
@@ -144,7 +144,7 @@ extends PageableModelTestCase
      */
     public function testTitleDefault() {
         $blog = new BlogModel(null, null, null, null, null, null);
-        $this->assertNull($blog->title());
+        $this->assertEquals('Conor McDermottroe\'s blog', $blog->title());
     }
 
     /**
@@ -154,7 +154,10 @@ extends PageableModelTestCase
      */
     public function testTitleYear() {
         $blog = new BlogModel(2009, null, null, null, null, null);
-        $this->assertEquals('Blog posts from 2009', $blog->title());
+        $this->assertEquals(
+            'Blog posts by Conor McDermottroe from 2009',
+            $blog->title()
+        );
     }
 
     /**
@@ -164,7 +167,10 @@ extends PageableModelTestCase
      */
     public function testTitleYearMonth() {
         $blog = new BlogModel(2009, 3, null, null, null, null);
-        $this->assertEquals('Blog posts from March 2009', $blog->title());
+        $this->assertEquals(
+            'Blog posts by Conor McDermottroe from March 2009',
+            $blog->title()
+        );
     }
 
     /**
@@ -175,7 +181,7 @@ extends PageableModelTestCase
     public function testTitleYearMonthDay() {
         $blog = new BlogModel(2009, 3, 10, null, null, null);
         $this->assertEquals(
-            'Blog posts from the 10th of March 2009',
+            'Blog posts by Conor McDermottroe from the 10th of March 2009',
             $blog->title()
         );
     }

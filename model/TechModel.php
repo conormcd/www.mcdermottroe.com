@@ -14,7 +14,19 @@ extends Model
      * Init.
      */
     public function __construct() {
+        parent::__construct();
         $this->_github = GitHub::getInstance();
+        $this->_metadata['og:type'] = 'website';
+        $this->_metadata['og:title'] = 'My public code';
+    }
+
+    /**
+     * Describe the data shown on the /tech page.
+     *
+     * @return string A description.
+     */
+    public function description() {
+        return "The repositories of code that I've published.";
     }
 
     /**

@@ -20,7 +20,9 @@ extends ModelTestCase
      */
     protected function createTestObject($page = null, $per_page = null) {
         $model_name = preg_replace('/Test$/', '', get_class($this));
-        return new $model_name($page, $per_page);
+        $obj = new $model_name($page, $per_page);
+        $obj->uri('/dummy');
+        return $obj;
     }
 
     /**

@@ -17,9 +17,7 @@ extends ModelTestCase
      * @return void
      */
     public function testLastModified() {
-        $uri = '/css/default.css';
-
-        $instance = new StaticFileModel($uri);
+        $instance = $this->createTestObject();
         $this->assertNotNull($instance->lastModified());
         $this->assertRegexp(
             '/^\w+, \d+ \w+ \d\d\d\d \d\d:\d\d:\d\d GMT$/',
@@ -33,9 +31,7 @@ extends ModelTestCase
      * @return void
      */
     public function testMimeTypeCSS() {
-        $uri = '/css/default.css';
-
-        $instance = new StaticFileModel($uri);
+        $instance = $this->createTestObject();
         $this->assertNotNull($instance->mimeType());
         $this->assertEquals('text/css', $instance->mimeType());
     }
@@ -46,9 +42,7 @@ extends ModelTestCase
      * @return void
      */
     public function testMimeTypePNG() {
-        $uri = '/boards/icons/boards.png';
-
-        $instance = new StaticFileModel($uri);
+        $instance = $this->createTestObject('/boards/icons/boards.png');
         $this->assertNotNull($instance->mimeType());
         $this->assertEquals('image/png', $instance->mimeType());
     }
@@ -61,9 +55,9 @@ extends ModelTestCase
      */
     public function testPath() {
         $uri = '/css/default.css';
-        $path = dirname(dirname(dirname(__DIR__))) . '/public/css/default.css';
+        $path = dirname(dirname(dirname(__DIR__))) . '/public' . $uri;
 
-        $instance = new StaticFileModel($uri);
+        $instance = $this->createTestObject();
         $this->assertNotNull($instance->path());
         $this->assertEquals($path, $instance->path());
     }
@@ -74,9 +68,7 @@ extends ModelTestCase
      * @return void
      */
     public function testPathWithDir() {
-        $uri = '/css/';
-
-        $instance = new StaticFileModel($uri);
+        $instance = $this->createTestObject('/css/');
         $this->assertException(
             function () use ($instance) {
                 $instance->path();
@@ -87,10 +79,14 @@ extends ModelTestCase
     /**
      * Get a copy of StaticFileModel for testing.
      *
+     * @param string $uri The URI for the file.
+     *
      * @return StaticFileModel An instance which can be tested.
      */
-    protected function createTestObject() {
-        return new StaticFileModel('/css/default.css');
+    protected function createTestObject($uri = '/css/default.css') {
+        $obj = new StaticFileModel();
+        $obj->uri($uri);
+        return $obj;
     }
 }
 

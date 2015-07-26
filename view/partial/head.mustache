@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-    <head>
+    <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# fb: http://ogp.me/ns/fb# profile: http://ogp.me/ns/profile#">
         <title>{{title}}{{^title}}Conor McDermottroe{{/title}}</title>
         
         <link rel="shortcut icon" href="/favicon.ico" />
@@ -11,18 +11,17 @@
         <link rel="section" href="/tech/" title="Tech" />
         <link rel="section" href="/photos/" title="Photos" />
         <link rel="section" href="/about/" title="About" />
+        {{#canonicalLink}}<link rel="canonical" href="{{canonicalLink}}" />{{/canonicalLink}}
         <link rel="alternate" href="http://twitter.com/IRLConor" title="Twitter" />
         <link rel="alternate" href="http://www.facebook.com/conor.mcdermottroe" title="Facebook" />
         <link rel="alternate" href="http://www.linkedin.com/in/conormcdermottroe" title="LinkedIn" />
         <link rel="openid.server" href="http://www.myopenid.com/server" />
         <link rel="openid.delegate" href="http://conor.mcdermottroe.myopenid.com" />
 
-        <meta name="msvalidate.01" content="8665D7219E5B4171BD14B2DCED55DF96" />
-
-        <meta name="author" content="Conor McDermottroe" />
-        <meta name="description" content="The personal web pages of Conor McDermottroe" />
-        <meta name="robots" content="index,follow" />
-        <meta name="viewport" content="width=device-width">
+        <meta charset="utf-8" />
+        {{#metadata}}
+        <meta{{#name}} name="{{name}}"{{/name}}{{#property}} property="{{property}}"{{/property}} {{#content}}content="{{content}}"{{/content}} />
+        {{/metadata}}
 
         {{{newRelicJSHeader}}}
 

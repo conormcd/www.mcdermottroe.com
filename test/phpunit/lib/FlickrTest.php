@@ -155,6 +155,7 @@ extends FactoryTestCase
                         array(
                             'id' => 'abcd1234',
                             'title' => array('_content' => 'Fake set'),
+                            'description' => array('_content' => 'Fake'),
                             'date_create' => time(),
                             'primary' => 123456
                         )
@@ -190,6 +191,9 @@ extends FactoryTestCase
                         array(
                             'id' => 123456,
                             'title' => 'A fake photo',
+                            'description' => array(
+                                '_content' => 'Fake photo description'
+                            ),
                             'url_q' => 'fake',
                             'url_o' => 'fake',
                             'url_c' => 'fake',

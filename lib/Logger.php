@@ -60,6 +60,11 @@ class Logger {
      * @return void
      */
     private static function log($level, $message) {
+        if (!is_string($message)) {
+            ob_start();
+            var_dump($message);
+            $message = ob_end_clean();
+        }
         $levels = array(
             'D' => LOG_DEBUG,
             'E' => LOG_ERR,

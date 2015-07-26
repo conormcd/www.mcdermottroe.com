@@ -1,5 +1,7 @@
 # The internet is not your friend
 
+[description]: # (Some thoughts on privacy on the internet.)
+
 Recently there has been a lot of criticism of Facebook for changing its
 privacy policy again. While I have no problem with criticising a company for
 muddling through a policy/terms of service change without talking to its

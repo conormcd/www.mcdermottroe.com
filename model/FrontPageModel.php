@@ -9,6 +9,19 @@ class FrontPageModel
 extends PageableModel
 {
     /**
+     * Initialise with the metadata
+     *
+     * @param int $page     The number of the page to select (1-based).
+     * @param int $per_page The number of items to display per page.
+     *
+     * @return void
+     */
+    public function __construct($page = null, $per_page = null) {
+        parent::__construct($page, $per_page);
+        $this->_metadata['og:title'] = 'Conor McDermottroe';
+        $this->_metadata['og:type'] = 'website';
+    }
+    /**
      * Return the selected page of entries.
      *
      * @return array A page of things for the front page of the site.
@@ -67,6 +80,15 @@ extends PageableModel
     }
 
     /**
+     * Metadata description of the front page.
+     *
+     * @return string
+     */
+    public function description() {
+        return "The personal web pages of Conor McDermottroe.";
+    }
+
+    /**
      * The ETag value for this model.
      *
      * @return string The value to be used in the ETag header.
@@ -81,6 +103,28 @@ extends PageableModel
             }
         }
         return md5($tags);
+    }
+
+    /**
+     * The last time the front page was updated.
+     *
+     * @return int The UNIX epoch time for when the front page was last
+     *             updated.
+     */
+    public function timestamp() {
+        $max_timestamp = null;
+        foreach ($this->page() as $item) {
+            $t = null;
+            if (is_object($item) && method_exists($item, 'timestamp')) {
+                $t = $item->timestamp();
+            } else if (is_array($item) && array_key_exists('timestamp', $item)) {
+                $t = $item['timestamp'];
+            }
+            if ($t !== null && ($max_timestamp === null || $t > $max_timestamp)) {
+                $max_timestamp = $t;
+            }
+        }
+        return $max_timestamp;
     }
 
     /**
