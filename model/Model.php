@@ -104,6 +104,23 @@ abstract class Model {
     }
 
     /**
+     * A canonical link for the model in question, if it exists.
+     *
+     * @return string A canonical URL for the model.
+     */
+    public function canonicalLink() {
+        $metadata = $this->metadata();
+        foreach ($metadata as $item) {
+            if (array_key_exists('property', $item)) {
+                if ($item['property'] == 'og:url') {
+                    return $item['content'];
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * The last time this object was modified, in HTTP header form.
      *
      * @return string The value from timestamp, in HTTP header form.
