@@ -262,11 +262,11 @@ extends PageableModel
      * @return string A relative URL to the page requested.
      */
     private function generateLink($album, $page, $per_page) {
-        if ($page == 1) {
-            $page = null;
-        }
         if ($per_page == $this->getDefaultPerPage()) {
             $per_page = null;
+        }
+        if ($page == 1 && $per_page === null) {
+            $page = null;
         }
         $parts = array_filter(
             array('photos', $album, $page, $per_page)
