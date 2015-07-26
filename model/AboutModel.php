@@ -13,6 +13,7 @@ extends Model
      */
     public function __construct() {
         parent::__construct();
+        $this->_metadata['og:title'] = 'About me.';
         $this->_metadata['og:type'] = 'profile';
         $this->_metadata['profile:first_name'] = 'Conor';
         $this->_metadata['profile:last_name'] = 'McDermottroe';
