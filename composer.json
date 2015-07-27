@@ -12,14 +12,12 @@
     "klein/klein": "2.1.*",
     "michelf/php-markdown": "1.5.*",
     "mustache/mustache": "2.8.*",
-    "raven/raven": "0.11.*"
+    "raven/raven": "0.12.*"
   },
   "require-dev": {
-    "phploc/phploc": "2.*",
     "phpmd/phpmd" : "2.*",
     "phpunit/phpunit": "4.*",
     "sebastian/phpcpd": "2.*",
-    "squizlabs/php_codesniffer": "2.*",
-    "theseer/phpdox": "0.8.*"
+    "squizlabs/php_codesniffer": "2.*"
   }
 }
