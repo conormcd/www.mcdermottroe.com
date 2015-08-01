@@ -51,6 +51,7 @@ class Instagram {
 
         $key = 'INSTAGRAM_API_REQUEST' . md5($url);
         $images = Cache::get($key);
+        $images = null;
         if (!$images) {
             $images = array();
             try {
@@ -61,15 +62,7 @@ class Instagram {
             }
             if ($stream !== null && array_key_exists('data', $stream)) {
                 foreach ($stream['data'] as $image) {
-                    $images[] = array(
-                        'timestamp' => $image['created_time'],
-                        'dateISO8601' => Time::dateISO8601($image['created_time']),
-                        'link' => $image['link'],
-                        'image' => $image['images']['standard_resolution']['url'],
-                        'caption' => $image['caption']['text'],
-                        'title' => Time::day($image['created_time']),
-                        'isInstagramPhoto' => true,
-                    );
+                    $images[] = new InstagramPhotoModel($image);
                 }
                 Cache::set($key, $images, 3600 + rand(0, 300));
             }

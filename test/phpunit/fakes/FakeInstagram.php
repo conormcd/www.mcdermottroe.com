@@ -11,20 +11,19 @@ extends Instagram
     /**
      * Override {@link Instagram#getStream()}.
      *
-     * @return array An array of associative arrays, each of which is a
-     *               reference to a photo on Instagram.
+     * @return array An array of InstagramPhotoModel objects.
      */
     public function getStream() {
-        return array(
-            array(
-                'timestamp' => 1410988718,
-                'link' => 'http://a.fake/instagram/link',
-                'image' => 'http://a.fake/instagram/image',
-                'caption' => 'This is a fake Instagram photo',
-                'title' => Time::day(1410988718),
-                'isInstagramPhoto' => true,
-            ),
+        $data_dir = dirname(dirname(dirname(__FILE__))) . '/data';
+        $data = JSON::decode(
+            file_get_contents("$data_dir/instagram_users_media_recent.json")
         );
+
+        $images = array();
+        foreach ($data['data'] as $image) {
+            $images[] = new InstagramPhotoModel($image);
+        }
+        return $images;
     }
 }
 

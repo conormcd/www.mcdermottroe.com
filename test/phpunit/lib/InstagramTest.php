@@ -30,23 +30,9 @@ extends FactoryTestCase
         // Fake response for this call.
         FakeHTTPClient::addResponse(
             "#^https://api.instagram.com/.*/media/recent.*#",
-            JSON::encode(
-                array(
-                    'data' => array(
-                        array(
-                            'created_time' => 1388534400,
-                            'link' => 'http://fake.link',
-                            'images' => array(
-                                'standard_resolution' => array(
-                                    'url' => 'http://fake.image.url',
-                                )
-                            ),
-                            'caption' => array(
-                                'text' => 'Fake Instagram caption',
-                            )
-                        )
-                    )
-                )
+            file_get_contents(
+                dirname(dirname(__DIR__)) .
+                '/data/instagram_users_media_recent.json'
             )
         );
 
@@ -54,19 +40,7 @@ extends FactoryTestCase
         $images = $instagram->getStream();
 
         $this->assertNotNull($images);
-        $this->assertTrue(count($images) == 1);
-        $this->assertEquals(
-            array(
-                'timestamp' => 1388534400,
-                'link' => 'http://fake.link',
-                'image' => 'http://fake.image.url',
-                'caption' => 'Fake Instagram caption',
-                'title' => '1st January 2014',
-                'isInstagramPhoto' => true,
-                'dateISO8601' => '2014-01-01T00:00:00Z',
-            ),
-            $images[0]
-        );
+        $this->assertEquals(20, count($images));
     }
 
     /**
@@ -90,7 +64,7 @@ extends FactoryTestCase
         $images = $instagram->getStream();
 
         $this->assertNotNull($images);
-        $this->assertTrue(count($images) == 0);
+        $this->assertEquals(0, count($images));
         $this->assertNotNull(ExceptionTracker::getInstance()->lastException);
     }
 
