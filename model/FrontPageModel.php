@@ -68,7 +68,7 @@ extends PageableModel
                 // Mix in the photos from Instagram
                 $instagram = Instagram::getInstance();
                 foreach ($instagram->getStream() as $photo) {
-                    $all[$photo['timestamp']] = $photo;
+                    $all[$photo->timestamp()] = $photo;
                 }
 
                 krsort($all);
@@ -96,11 +96,7 @@ extends PageableModel
     public function eTag() {
         $tags = '';
         foreach ($this->entries() as $item) {
-            if (method_exists($item, 'eTag')) {
-                $tags .= $item->eTag();
-            } else {
-                $tags .= var_export($item, true);
-            }
+            $tags .= $item->eTag();
         }
         return md5($tags);
     }
@@ -114,14 +110,10 @@ extends PageableModel
     public function timestamp() {
         $max_timestamp = null;
         foreach ($this->page() as $item) {
-            $t = null;
-            if (is_object($item) && method_exists($item, 'timestamp')) {
-                $t = $item->timestamp();
-            } else if (is_array($item) && array_key_exists('timestamp', $item)) {
-                $t = $item['timestamp'];
-            }
-            if ($t !== null && ($max_timestamp === null || $t > $max_timestamp)) {
-                $max_timestamp = $t;
+            if ($max_timestamp !== null) {
+                $max_timestamp = max($max_timestamp, $item->timestamp());
+            } else {
+                $max_timestamp = $item->timestamp();
             }
         }
         return $max_timestamp;
