@@ -27,6 +27,15 @@ extends Model
     }
 
     /**
+     * How long to cache the sitemap for.
+     *
+     * @return int A number of seconds to cache for.
+     */
+    public function ttl() {
+        return 86400;
+    }
+
+    /**
      * All of the URLs that will be in the sitemap.
      *
      * @return array A list of the URLs that will be included in the sitemap.
