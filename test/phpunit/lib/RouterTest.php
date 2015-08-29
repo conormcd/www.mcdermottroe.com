@@ -275,7 +275,12 @@ extends TestCase
         $this->assertNotNull($router);
         $res = new \Klein\Response();
         $klein->dispatch($this->constructRequest($path), $res, false);
-        $this->assertEquals($status, $res->status()->getCode());
+        $res_status = $res->status()->getCode();
+        $this->assertEquals(
+            $status,
+            $res_status,
+            "$path returned $res_status, expected $status"
+        );
         if ($status == 301 || $status == 304) {
             $this->assertRegexp($pattern, $res->headers()->get('Location'));
         } else {

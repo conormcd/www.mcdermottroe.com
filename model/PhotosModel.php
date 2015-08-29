@@ -118,7 +118,7 @@ extends PageableModel
         if ($this->album && $this->page < $this->numPages()) {
             $link = $this->generateLink(
                 $this->album,
-                ($this->page * $this->per_page) + 1,
+                $this->page + 1,
                 $this->per_page
             );
         }
@@ -144,7 +144,7 @@ extends PageableModel
         if ($this->album && $this->page > 1) {
             $link = $this->generateLink(
                 $this->album,
-                ((($this->page - 1) * $this->per_page) - $this->per_page) + 1,
+                $this->page - 1,
                 $this->per_page
             );
         }
@@ -186,11 +186,7 @@ extends PageableModel
      * @return array See {@link PageableModel#link()}.
      */
     public function link() {
-        return $this->generateLink(
-            $this->album,
-            (($this->page - 1) * $this->per_page) + 1,
-            $this->per_page
-        );
+        return $this->generateLink($this->album, $this->page, $this->per_page);
     }
 
     /**
@@ -261,16 +257,20 @@ extends PageableModel
      *
      * @return string A relative URL to the page requested.
      */
-    private function generateLink($album, $page, $per_page) {
-        if ($per_page == $this->getDefaultPerPage()) {
+    public function generateLink($album, $page, $per_page) {
+        if ($per_page == $this->getDefaultPerPage() || $per_page === -1) {
             $per_page = null;
         }
-        if ($page == 1 && $per_page === null) {
+        if ($page <= 1 && $per_page === null) {
             $page = null;
+        } else {
+            $effective_per_page = $per_page;
+            if ($effective_per_page === null) {
+                $effective_per_page = $this->getDefaultPerPage();
+            }
+            $page = (($page - 1) * $effective_per_page) + 1;
         }
-        $parts = array_filter(
-            array('photos', $album, $page, $per_page)
-        );
+        $parts = array_filter(array('photos', $album, $page, $per_page));
         return '/' . join('/', $parts);
     }
 }

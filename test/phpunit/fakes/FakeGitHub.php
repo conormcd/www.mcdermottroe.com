@@ -28,6 +28,7 @@ extends GitHub
                 'name' => 'fake_repo',
                 'url' => "https://github.com/{$this->_user}/fake_repo",
                 'description' => 'This is a fake repo',
+                'timestamp' => time() - (86400 * 7),
             ),
         );
     }

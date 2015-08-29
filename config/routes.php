@@ -59,7 +59,8 @@ $ROUTES = array(
     '/photos/?' => 'PhotosController',
     '/about/?' => 'AboutController',
     '/tech/?' => 'TechController',
-    '@.*\.(?:css|dtd|html|js|pl|rdf|txt|xls|xml)$' => 'StaticFileController',
+    '/google-sitemap.xml' => 'GoogleSiteMapController',
+    '@.*\.(?:css|dtd|html|js|pl|rdf|txt|xls)$' => 'StaticFileController',
     '@.*\.(?:gif|ico|jpg|png)$' => 'StaticFileController',
 );
 

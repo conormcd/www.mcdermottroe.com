@@ -153,6 +153,15 @@ extends Model
     public function link() {
         return '/photos/' . $this->slug();
     }
+
+    /**
+     * Get the time the photo was "created" (really the date of the album).
+     *
+     * @return int The time the album was created/updated.
+     */
+    public function timestamp() {
+        return $this->_album->timestamp();
+    }
 }
 
 ?>

@@ -73,7 +73,6 @@ extends PageableModel
 
         $this->_metadata['og:title'] = array($this, 'title');
         $this->_metadata['og:type'] = 'website';
-        $this->_metadata['og:url'] = array($this, 'link');
     }
 
     /**

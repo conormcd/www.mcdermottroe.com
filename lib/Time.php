@@ -30,6 +30,17 @@ class Time {
     }
 
     /**
+     * Parse an ISO8601 into a UNIX epoch time.
+     *
+     * @param string $iso8601_string The ISO8601 timestamp.
+     *
+     * @return int The UNIX epoch time.
+     */
+    public static function parseISO8601($iso8601_string) {
+        return strtotime($iso8601_string);
+    }
+
+    /**
      * Format a timestamp in the RSS standard format.
      *
      * @param int $timestamp The UNIX epoch time to format.

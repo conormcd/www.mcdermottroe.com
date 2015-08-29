@@ -18,6 +18,7 @@ extends Model
         $this->_github = GitHub::getInstance();
         $this->_metadata['og:type'] = 'website';
         $this->_metadata['og:title'] = 'My public code';
+        $this->_metadata['og:url'] = '/tech';
     }
 
     /**
@@ -55,6 +56,23 @@ extends Model
      */
     public function eTag() {
         return md5(var_export($this->gitHubRepos(), true));
+    }
+
+    /**
+     * We consider /tech to be updated when any of the repos are.
+     *
+     * @return int The UNIX epoch timestamp for when /tech was updated.
+     */
+    public function timestamp() {
+        $timestamp = null;
+        foreach ($this->gitHubRepos() as $repo) {
+            if ($timestamp === null) {
+                $timestamp = $repo['timestamp'];
+            } else {
+                $timestamp = max($timestamp, $repo['timestamp']);
+            }
+        }
+        return $timestamp;
     }
 }
 
