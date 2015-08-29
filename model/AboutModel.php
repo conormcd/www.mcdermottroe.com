@@ -15,6 +15,7 @@ extends Model
         parent::__construct();
         $this->_metadata['og:title'] = 'About me.';
         $this->_metadata['og:type'] = 'profile';
+        $this->_metadata['og:url'] = '/about';
         $this->_metadata['profile:first_name'] = 'Conor';
         $this->_metadata['profile:last_name'] = 'McDermottroe';
         $this->_metadata['profile:gender'] = 'male';

@@ -39,6 +39,8 @@ extends FactoryTestCase
      * @return void
      */
     public function testRepos() {
+        $timestamp = time() - 86400;
+
         // Fake response for this call.
         FakeHTTPClient::addResponse(
             "#^https://api.github.com/users/fake_github_user/repos#",
@@ -51,6 +53,7 @@ extends FactoryTestCase
                         'description' => 'A fake GitHub repo.',
                         'private' => false,
                         'fork' => false,
+                        'updated_at' => Time::dateISO8601($timestamp),
                     ),
                 )
             )
@@ -63,6 +66,7 @@ extends FactoryTestCase
                     'name' => 'fake_repo',
                     'url' => 'https://github.com/fake_github_user/fake_repo',
                     'description' => 'A fake GitHub repo.',
+                    'timestamp' => $timestamp,
                 )
             ),
             $github->repos()

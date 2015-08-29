@@ -44,6 +44,7 @@ class GitHub {
                     'name' => $repo['name'],
                     'url' => $repo['html_url'],
                     'description' => $repo['description'],
+                    'timestamp' => Time::parseISO8601($repo['updated_at']),
                 );
             }
         }

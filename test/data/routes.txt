@@ -84,7 +84,6 @@ GET /contact.php 301
 GET /contact/ 301
 GET /favicon.ico
 GET /foaf.rdf
-GET /google-sitemap.xml 404
 GET /google4a11b935886cafde.html
 GET /index.php
 GET /photos/

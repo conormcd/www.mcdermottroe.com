@@ -146,6 +146,26 @@ extends Model
     }
 
     /**
+     * Get/set the URI for this object.
+     *
+     * @param string $uri Ignored.
+     *
+     * @return string The current URI for this model.
+     */
+    public function uri($uri = null) {
+        $this->_uri = $uri; // NOP
+        $link = "";
+        if ($this->page > 1) {
+            $link .= "?page={$this->page}";
+        }
+        if ($this->per_page !== $this->getDefaultPerPage()) {
+            $link .= $link ? '&' : '?';
+            $link .= "per_page={$this->per_page}";
+        }
+        return $this->link() . $link;
+    }
+
+    /**
      * Fetch all the data for the items requested. This data will then be paged
      * using {@link #page}.
      *
