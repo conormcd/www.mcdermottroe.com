@@ -30,23 +30,18 @@ extends TestCase
     }
 
     /**
-     * Test a selection of routes derived from actual traffic.
+     * Ensure that all the routes described in the sitemap actually route.
      *
      * @return void
      */
-    public function testSampleRoutes() {
-        $root = dirname(dirname(__DIR__));
-        $static_root = "$root/public";
-        $sample_data = file_get_contents("$root/test/data/routes.txt");
-        foreach (preg_split('/[\r\n]+/', $sample_data) as $line) {
-            if (preg_match('/^([A-Z]+) (\S+)(?: (\d+))?/', $line, $matches)) {
-                $method = $matches[1];
-                $uri = $matches[2];
-                $status = isset($matches[3]) ? $matches[3] : 200;
-                if (!file_exists($static_root . $uri)) {
-                    $this->assertRoute($method, $uri, $status);
-                }
-            }
+    public function testSiteMapRoutes() {
+        $urls = (new GoogleSiteMapModel())->urls();
+        foreach ($urls as $url) {
+            $this->assertRoute(
+                'GET',
+                preg_replace('#^http://www.mcdermottroe.com#', '', $url['loc']),
+                200
+            );
         }
     }
 
