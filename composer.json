@@ -12,7 +12,7 @@
     "klein/klein": "2.1.*",
     "michelf/php-markdown": "1.5.*",
     "mustache/mustache": "2.8.*",
-    "raven/raven": "0.12.*"
+    "sentry/sentry": "0.21.*"
   },
   "require-dev": {
     "phpmd/phpmd" : "2.*",
