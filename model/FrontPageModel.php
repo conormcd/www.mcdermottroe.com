@@ -65,12 +65,6 @@ extends PageableModel
                     $all[$album->timestamp()] = $album;
                 }
 
-                // Mix in the photos from Instagram
-                $instagram = Instagram::getInstance();
-                foreach ($instagram->getStream() as $photo) {
-                    $all[$photo->timestamp()] = $photo;
-                }
-
                 krsort($all);
                 $all = array_values($all);
 

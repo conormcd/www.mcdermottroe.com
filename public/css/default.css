@@ -176,25 +176,3 @@ code {
   margin-left: auto;
   margin-right: auto;
 }
-
-.instagramphoto {
-  margin-bottom: 50px;
-}
-
-.instagramphoto h2 {
-  text-align: center;
-}
-
-.instagramphoto img {
-  width: 480px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.instagramphoto .caption {
-  width: 480px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}

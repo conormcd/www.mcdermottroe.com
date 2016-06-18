@@ -42,16 +42,10 @@ extends PHPUnit_Framework_TestCase
         // Dummy GitHub info
         $_ENV['GITHUB_USER'] = 'fake_github_user';
 
-        // Dummy Instagram credentials.
-        $_ENV['INSTAGRAM_CLIENT_ID'] = 'fake fake fake';
-        $_ENV['INSTAGRAM_CLIENT_SECRET'] = 'fake fake fake';
-        $_ENV['INSTAGRAM_USER_ID'] = 123456;
-
         // Use fakes for the external service providers.
         $_ENV['EXCEPTION_TRACKER'] = 'FakeSentry';
         $_ENV['GITHUB_CLASS'] = 'FakeGitHub';
         $_ENV['HTTP_CLIENT_CLASS'] = 'FakeHTTPClient';
-        $_ENV['INSTAGRAM_CLASS'] = 'FakeInstagram';
         $_ENV['PHOTO_PROVIDER'] = 'FakeFlickr';
     }
 
