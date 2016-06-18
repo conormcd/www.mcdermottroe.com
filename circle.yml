@@ -5,14 +5,10 @@ machine:
 dependencies:
   cache_directories:
     - vendor
-  override:
+  pre:
     - sed -i 's/^;//' ~/.phpenv/versions/$(phpenv global)/etc/conf.d/xdebug.ini
     - pecl install -f memcached-2.0.1
-    - composer install
 
 test:
   override:
-    - vendor/bin/phpunit --verbose --log-junit ${CIRCLE_TEST_REPORTS}/phpunit.xml:
-        parallel: true
-        files:
-          - test/phpunit/*/*Test.php
+    - vendor/bin/phpunit --verbose --log-junit ${CIRCLE_TEST_REPORTS}/phpunit.xml test/phpunit
