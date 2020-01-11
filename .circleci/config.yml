@@ -15,7 +15,7 @@ jobs:
       - checkout
       - run:
           name: Validate HTML
-          command: /vnu-runtime-image/bin/vnu index.html
+          command: /vnu-runtime-image/bin/vnu public/index.html
       - run:
           name: Validate CSS
-          command: /vnu-runtime-image/bin/vnu --css css/index.html
+          command: /vnu-runtime-image/bin/vnu --css public/css/index.html
