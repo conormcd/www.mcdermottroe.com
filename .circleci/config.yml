@@ -1,0 +1,21 @@
+---
+
+version: "2.1"
+
+workflows:
+  validate:
+    jobs:
+      - validate
+
+jobs:
+  validate:
+    docker:
+      - image: validator/validator:latest
+    steps:
+      - checkout
+      - run:
+          name: Validate HTML
+          command: /vnu-runtime-image/bin/vnu index.html
+      - run:
+          name: Validate CSS
+          command: /vnu-runtime-image/bin/vnu --css css/index.html
