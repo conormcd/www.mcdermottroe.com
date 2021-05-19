@@ -1,0 +1,15 @@
+# ex:ft=procmail
+
+:0
+* ^From:.*@boards.ie
+{
+	:0 fbhw
+	| /usr/bin/perl -T /path/to/boards_filter_private_message.pl --names-file /path/to/names_file --my-real-name 'Your real name' --my-boards-name YoreNick
+
+	:0 c
+	* ^X-Boards-Filter-Message-Type: (PM|RP|RVM)
+	! important_messages@get_emailed_to_my_phone.com
+
+	:0
+	mailboxforallboardsnotifications/
+}

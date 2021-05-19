@@ -1,0 +1,20 @@
+{% extends "basic.html" %}
+
+{% block content %}
+<div class="archive animated fadeInDown">
+    <ul class="list-with-title">
+        {% for term in terms %}
+            <div class="listing-title"><a href="{{term.permalink}}" title="{{term.name}}">{{ term.name }}</a></div>
+            <ul class="listing">
+                {% for post in term.pages %}
+                <div class="listing-item">
+                  <div class="listing-post">
+                    <a href="{{ post.permalink }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </div>
+                </div>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock content %}

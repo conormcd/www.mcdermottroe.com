@@ -1,0 +1,33 @@
+base_url = "https://www.mcdermottroe.com"
+build_search_index = false
+compile_sass = true
+feed_filename = "rss.xml"
+generate_feed = true
+theme = "anatole-zola"
+title = "Conor McDermottroe"
+
+taxonomies = [
+  { name = "tags", paginate_by = 10 },
+]
+
+[translations.en]
+about = "About"
+home = "Home"
+tags = "Tags"
+archive = "Archive"
+links = "Links"
+next_page = "Next Page"
+last_page = "Previous Page"
+
+[markdown]
+highlight_code = true
+
+[extra.show]
+tags = true
+
+[extra.social]
+facebook = "conor.mcdermottroe"
+github = "conormcd"
+instagram = "irlconor"
+linkedin = "conormcdermottroe"
+twitter = "IRLConor"
