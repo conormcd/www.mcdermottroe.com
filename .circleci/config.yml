@@ -3,19 +3,60 @@
 version: "2.1"
 
 workflows:
-  validate:
+  build-and-deploy:
     jobs:
-      - validate
+      - build
+      - deploy:
+          requires:
+            - build
+          context:
+            - fastmail-ftp
+          filters:
+            branches:
+              only:
+                - master
 
 jobs:
-  validate:
+  build:
     docker:
-      - image: validator/validator:latest
+      - image: cimg/base:edge
     steps:
       - checkout
       - run:
-          name: Validate HTML
-          command: /vnu-runtime-image/bin/vnu public/index.html
+          name: Fetch and install Zola
+          command: |
+            curl -Lso zola.tar.gz https://github.com/getzola/zola/releases/download/v0.13.0/zola-v0.13.0-x86_64-unknown-linux-gnu.tar.gz
+            tar xzf zola.tar.gz
+            sudo mv zola /usr/bin/zola
       - run:
-          name: Validate CSS
-          command: /vnu-runtime-image/bin/vnu --css public/css/index.html
+          name: Check all links
+          command: zola check
+      - run:
+          name: Build the site
+          command: zola build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - public
+
+  deploy:
+    docker:
+      - image: cimg/base:edge
+    steps:
+      - run:
+          name: Install LFTP
+          command: |
+            sudo apt-get update
+            sudo apt-get install lftp
+      - attach_workspace:
+          at: .
+      - run:
+          name: Mirror files using lftp
+          command: |
+            cat > ftp-script \<<EOF
+            open --user conor@mcdermottroe.com --env-password ftp.fastmail.com
+            cd conor.mcdermottroe.com/files/www.mcdermottroe.com
+            mirror -R
+            EOF
+            cd public
+            lftp -f ../ftp-script
