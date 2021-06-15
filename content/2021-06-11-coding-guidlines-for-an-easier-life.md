@@ -1,5 +1,5 @@
 +++
-title = "Make your life easier"
+title = "Coding guidelines for an easier life"
 template = "page.html"
 date = 2021-06-11T22:00:00Z
 
@@ -9,16 +9,15 @@ tags = ["Tech"]
 
 If you write software for long enough you begin to develop instincts about the
 relative difficulty of different problems and some of those solidify into
-rules of thumb. Like all such things they are not really _rules_ but patterns
-of thinking that you can choose to deviate from when you have good reason to
-do so. The following are some that I have come across recently. I can't claim
-that any of them are original ideas, but they are some of the things that
-guide my work on a daily basis.
+rules of thumb.  The following are some of the guidelines that direct my work
+on a daily basis.
 
 # Choose simpler graph data structures
 
-Many problems are graph problems of one sort or another and there's a
-hierarchy of increasing complexity of graph types:
+Many problems are graph problems of one sort or another. Resolving
+dependencies in a package manager, traversing a file system, exploring friend
+connections in a social network, all of those are examples of graph problems.
+There's a hierarchy of increasing complexity of graph types:
 
 - list
 - tree
@@ -43,7 +42,7 @@ It can be very hard to make your data truly immutable. For example, the [GDPR
 "right to be forgotten"](https://gdpr-info.eu/art-17-gdpr/) means that
 anything containing [personal data](https://gdpr-info.eu/art-4-gdpr/) must be
 deletable. So just like with graph data structures there's a kind of hierarchy
-of mutability of data structures:
+of mutability of data storage:
 
 - Truly immutable. The data is created and is never destroyed.
 - Can be atomicly created or destroyed but never modified.
@@ -53,7 +52,9 @@ of mutability of data structures:
 - All parts of the data structure are mutable.
 
 Stay as far up that list as you can and you will avoid many implementation
-problems.
+problems. You can extend this practice into the data structures you use in
+code (e.g. "final everything" in Java or by using Clojure's core data types)
+but it's much more important to think about it for your data at rest.
 
 # Choose simpler programming models
 
@@ -61,7 +62,8 @@ There are lots of techniques to improve the performance of software. Use none
 of them until you are forced to. Concurrency is hard to get right.
 Event-driven systems can be difficult to reason about. Manual memory
 management is a notorious source of bugs. Functions without side-effects are
-easier to test than functions with them.
+easier to test than functions with them. Optimise for simplicity first, not
+performance.
 
 Start with single-threaded, single process code in the highest-level language
 you can use and iterate from there. Use pure functions when you can, but don't
@@ -69,7 +71,7 @@ be a zealot about it. The ["Functional Core, Imperative
 Shell"](https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell)
 pattern can be very useful.
 
-# Worry about all your public interfaces
+# Focus on your public interfaces
 
 [Hyrum's law](https://www.hyrumslaw.com/) teaches us that anything your
 customer can perceive about your software is part of its public interface. If
@@ -85,6 +87,9 @@ and for some reason you don't want the ordering to be defined then you may
 need to deliberately shuffle the items to prevent people from depending on the
 order.
 
+Always remember that your colleagues are also your customers. If they _can_
+depend on something they _will_.
+
 # You probably can't avoid distributed systems
 
 Even if you have only one web server running a monolithic application, if you
@@ -96,9 +101,10 @@ your career.
 It's extremely hard to avoid distributed systems so you have to get good at
 working on them. Here are some things to remember:
 
-- There's no such thing as a zero-downtime atomic deploy. You can choose
-  downtime if you want, but choosing a safe, non-atomic deployment pattern is
-  much easier.
+- In almost all systems there's no such thing as a zero-downtime atomic deploy
+  where all of your customers instantaneously transfer from one version of
+  your software to another. You can choose downtime if you want, but choosing
+  a safe, non-atomic deployment pattern is much easier.
 - Your system's topology is a graph. The guidance for graph data structures
   above applies here too. If you have cycles in your graph of services you
   will regret it.
@@ -146,11 +152,12 @@ Types of limits worth thinking about are:
 
 There are many other rules of thumb that I use in my day-to-day work, but it's
 sometimes difficult to even notice that I'm doing it. If you want to become
-more conscious about your own rules of thumb, trust your gut during code
+more conscious about your own, personal guidelines trust your gut during code
 reviews. If something seems wrong then you need to stop and think. Maybe
 there's actually something wrong with the code or maybe your instincts are
-wrong. Either way you should use that feeling to refine your own rules of
-thumb and teach them to those that are coming after you.
+wrong. Either way you should use that feeling to refine your own patterns of
+working and teach them to those that are coming after you.
 
 Thanks to [Nathan Dintenfass](https://twitter.com/ndintenfass) for the prompt
-to write this piece.
+to write this piece and to [Hannah Henderson](https://twitter.com/hendersgame)
+for some great feedback.
