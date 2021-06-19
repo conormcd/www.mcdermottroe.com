@@ -48,6 +48,12 @@
     {%- if config.extra.social.weibo -%}
     <li><a href="https://weibo.com/{{ config.extra.social.weibo }}"><i class="fab fa-weibo"></i></a></li>
     {%- endif -%}
+    {%- if config.extra.social.linkedin -%}
+    <li><a href="https://linkedin.com/in/{{ config.extra.social.linkedin }}"><i class="fab fa-linkedin"></i></a></li>
+    {%- endif -%}
+    {%- if config.extra.social.flickr -%}
+    <li><a href="https://www.flickr.com/photos/{{ config.extra.social.flickr }}"><i class="fab fa-flickr"></i></a></li>
+    {%- endif -%}
     {% block more_social_link %}
     {% endblock more_social_link %}
   </ul>
@@ -74,7 +80,7 @@
       <div class="back_btn">
         <li><a onclick="window.history.go(-1)" {% if current_path == "/" %}style="display:none;"{% endif %}><i class="fas fa-chevron-left"></i></a></li>
       </div>
-      <div class="avatar"><img src="{{ get_url(path="images/avatar.jpg") }}" alt=""></div>
+      <div class="avatar"><img src="{{ get_url(path="images/avatar.jpg") }}"></div>
     </div>
   </div>
   <div class="autopagerize_page_element">
