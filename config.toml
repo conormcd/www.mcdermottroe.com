@@ -13,6 +13,7 @@ taxonomies = [
 [translations.en]
 about = "About"
 home = "Home"
+cv = "CV/Resume"
 tags = "Tags"
 archive = "Archive"
 links = "Links"
