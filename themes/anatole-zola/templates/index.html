@@ -19,7 +19,10 @@
               <div class="meta">
                 <div class="info">
                   {% if page.date %}
-                    <i class="far fa-sun"></i><span class="date">{{ page.date | date(format="%Y-%m-%d") }}</span>
+                    <i class="far fa-sun"></i>
+                    <span class="date">
+                      {{ page.date | date(format=trans(key="date_format", lang=lang)) }}
+                    </span>
                   {% endif %}
                   {% if config.extra.comment %}
 					          <i class="far fa-comments"></i>
@@ -28,7 +31,7 @@
                   {% if page.taxonomies.tags %}
                     <i class="fas fa-tags"></i>
                     {% for tag in page.taxonomies.tags %}
-                      <a class="tag" href="{{ get_url(path="@/_index.md") }}tags/{{tag}}">&nbsp;{{tag}}</a>
+                      <a class="tag" href="{{ get_taxonomy_url(kind="tags", name=tag, lang=page.lang) | safe }}">&nbsp;{{tag}}</a>
                     {% endfor %}
                   {% endif %}
                 </div>
@@ -40,15 +43,15 @@
 		  <ul class="clearfix">
         {% if paginator.next %}
           <li class="next pagbuttons">
-            <a class="btn" role="navigation" href="{{ paginator.next }}">
-              {{ trans(key="next_page") }}
+            <a class="btn" role="navigation" href="{{ paginator.next }}" aria-label="{{ trans(key="next_page", lang=lang) }}">
+              {{ trans(key="next_page", lang=lang) }}
             </a>
           </li>
         {% endif %}
         {% if paginator.previous %}
           <li class="pre pagbuttons">
-            <a class="btn" role="navigation" href="{{ paginator.previous }}">
-              {{ trans(key="last_page") }}
+            <a class="btn" role="navigation" href="{{ paginator.previous }}" aria-label="{{ trans(key="last_page", lang=lang) }}">
+              {{ trans(key="last_page", lang=lang) }}
             </a>
           </li>
         {% endif %}

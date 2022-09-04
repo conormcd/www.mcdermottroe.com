@@ -19,6 +19,7 @@ archive = "Archive"
 links = "Links"
 next_page = "Next Page"
 last_page = "Previous Page"
+date_format = "%Y-%m-%d"
 
 [markdown]
 highlight_code = true
