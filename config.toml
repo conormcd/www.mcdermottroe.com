@@ -10,7 +10,7 @@ taxonomies = [
   { name = "tags", paginate_by = 10 },
 ]
 
-[translations.en]
+[translations]
 about = "About"
 home = "Home"
 cv = "CV/Resume"
