@@ -41,22 +41,23 @@ jobs:
 
   deploy:
     docker:
-      - image: cimg/base:edge
+      - image: rclone/rclone:latest
     steps:
-      - run:
-          name: Install LFTP
-          command: |
-            sudo apt-get update
-            sudo apt-get install lftp
       - attach_workspace:
           at: .
       - run:
-          name: Mirror files using lftp
+          name: rclone config
           command: |
-            cat > ftp-script \<<EOF
-            open --user conor@mcdermottroe.com --env-password ftp.fastmail.com
-            cd conor.mcdermottroe.com/files/www.mcdermottroe.com
-            mirror -R
+            mkdir -p ~/.config/rclone
+            cat > ~/.config/rclone/rclone.conf \<<EOF
+            [fastmail]
+            type = webdav
+            url = https://myfiles.fastmail.com
+            vendor = other
+            user = conor@mcdermottroe.com
             EOF
-            cd public
-            lftp -f ../ftp-script
+      - run:
+          name: rclone sync
+          command: |
+            export RCLONE_WEBDAV_PASS=$(echo "${WEBDAV_PASS}" | rclone obscure -)
+            rclone sync public fastmail:www.mcdermottroe.com
