@@ -53,6 +53,9 @@
       {%- if config.extra.social.twitter -%}
       <li><a href="https://twitter.com/{{ config.extra.social.twitter }}" aria-label="Go to Twitter profile page"><i class="fab fa-twitter"></i></a></li>
       {%- endif -%}
+      {%- if config.extra.social.mastodon -%}
+      <li><a href="{{ config.extra.social.mastodon }}" rel="me" aria-label="Go to Mastodon profile page"><i class="fab fa-mastodon"></i></a></li>
+      {%- endif -%}
       {% if config.extra.social.facebook -%}
       <li><a href="https://www.facebook.com/{{ config.extra.social.facebook }}" aria-label="Go to FaceBook profile page"><i class="fab fa-facebook"></i></a></li>
       {%- endif -%}
