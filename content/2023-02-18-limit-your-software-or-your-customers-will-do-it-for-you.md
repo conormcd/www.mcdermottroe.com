@@ -11,14 +11,14 @@ In [a previous blog post](@/2021-06-11-coding-guidlines-for-an-easier-life.md)
 I touched briefly on the topic of limits and it was the part of that post that
 provoked the most reaction.
 
-<blockquote class="twitter-tweet" data-conversation="none"><p lang="en" dir="ltr">Nice. All ring true, but running prod systems, &quot;everything should have limits&quot; is *so* helpful, and was a huge lesson to me. In practice, everything always has limits, but if you don&#39;t set them explicitly you only discover them (painfully) at runtime.</p>&mdash; Simon Frankau (@simon_frankau) <a href="https://twitter.com/simon_frankau/status/1405169647482281989?ref_src=twsrc%5Etfw">June 16, 2021</a></blockquote>
 <blockquote class="twitter-tweet" data-conversation="none"><p lang="en" dir="ltr">The limits section really resonates with me the most. Before joining Amazon, I used to think that &quot;good&quot; system have no limits, that they should essentially be unbounded. But the more robust systems I&#39;ve worked on have known limits and are adjusted overtime.</p>&mdash; memattchung (@memattchung) <a href="https://twitter.com/memattchung/status/1405221384138018820?ref_src=twsrc%5Etfw">June 16, 2021</a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none"><p lang="en" dir="ltr">Nice. All ring true, but running prod systems, &quot;everything should have limits&quot; is *so* helpful, and was a huge lesson to me. In practice, everything always has limits, but if you don&#39;t set them explicitly you only discover them (painfully) at runtime.</p>&mdash; Simon Frankau (@simon_frankau) <a href="https://twitter.com/simon_frankau/status/1405169647482281989?ref_src=twsrc%5Etfw">June 16, 2021</a></blockquote>
 
 In particular, the last part of Simon Frankau's tweet resonated strongly with
-me. All systems have limits and your only choice is whether to make them
-explicit or to let your users find those limits at a time you might not be
-prepared for them. With that in mind, I'm going to try and brain-dump as much
-as I know about limits in order to expand on that topic.
+me. All systems have limits. Your only choice is whether to make them explicit
+or to let your users find those limits at a time you might not be prepared for
+them. With that in mind, I'm going to explore the topic of limits here.
+
 
 # Contents
 
@@ -69,15 +69,20 @@ principles so long as you understand _why_ you're doing so.
    are exactly the people you _don't_ want to annoy. With that in mind, when
    creating new limits you should always pick the tightest restriction you can
    get away with.
+6. **Implement limits sooner rather than later.** Limiting something that was
+   previously unlimited can be very painful for your users. Doing so during an
+   outage in order to resolve the problem is very painful for you and your
+   colleagues. The best way to avoid this pain is to make a discussion about
+   limits an integral part of your design process.
 
 # Types of limits
 
 Now that we have some principles, we can start to enumerate the different
 places you should consider defining limits. A mature system will have many
 overlapping limits complementing each other so the best way to think of the
-following items is that they should be prompts. If you're not implementing all
-of them that's OK, but you should either plan some work to add them or
-document why they aren't appropriate in your case.
+following items is as prompts. If you're not implementing all of them that's
+OK, but you should either plan some work to add them or document why they
+aren't appropriate in your case.
 
 ## Rate limits
 
@@ -96,7 +101,7 @@ frequently botched.
     be enforced after authentication, so this rate limit enforcement will be
     more closely intertwined with your own product. This should prompt you to
     do two things: first, ensure that authentication is done as early as
-    possible in the request handling process and second, implement the rate
+    possible in the request handling processl; second, implement the rate
     limiting immediately after authentication.
   - By account/team/organization – If you don't charge per-user prices then
     you should probably consider rate limiting across the entire account (or
@@ -151,14 +156,21 @@ frequently botched.
 
 - Retention periods – It's very tempting to retain data forever just in case
   you might need it later. You will eventually run into technical, cost or
-  governance constraints that force you to store less. Sometimes it can be
-  complex to implement the retention limits so if you're short on time at
-  least implement some soft limits in your presentation layer. If old data is
-  hidden from your customers you can figure out how to delete it later and
-  they won't notice or complain. The exception to this is personal information
-  or anything else your users might consider to be sensitive. For that, you
-  probably need to hard delete anything the user can't see in order to
-  maintain trust.
+  governance constraints that force you to store less. Ideally you will
+  implement retention limits before your colleagues in
+  [GRC](https://en.wikipedia.org/wiki/Governance,_risk_management,_and_compliance)
+  ask you to. You can often buy time to work around technical or cost
+  constraints with increased spending or a few targeted hacks. If your
+  software is in breach of a law, regulation or compliance system you can only
+  engineer your way out of it by solving the problem directly. Doing that
+  under extreme time pressure is something to be avoided at all costs.
+  Sometimes it can be complex to implement the retention limits so if you're
+  short on time at least implement some soft limits in your presentation
+  layer. If old data is hidden from your customers you can figure out how to
+  delete it later and they won't notice or complain. The exception to this is
+  personal information or anything else your users might consider to be
+  sensitive. For that, you probably need to hard delete anything the user
+  can't see in order to maintain trust.
 - Session limits – Sessions must expire and they should also be subject to
   idle timeouts. Both the maximum length of a session and the idle timeout are
   user experience concerns so you will need to choose values that align with
@@ -240,10 +252,13 @@ implement them.
   `RateLimit-Limit` `RateLimit-Remaining` `RateLimit-Reset` and `Retry-After`
   headers. For gRPC you could return the `RESOURCE_EXHAUSTED` status.
 - Buffer work requests – If you have an API that is a request to do some work
-  asynchronously it can be valueable to use a queue to implement a global rate
+  asynchronously it can be valuable to use a queue to implement a global rate
   limit. Rather than doing the work in the API handler, queue a request to do
   the work and then consume that queue at a known-safe rate. This allows some
-  customers to provide bursts of requests without overwhelming the system.
+  customers to provide bursts of requests without overwhelming the system. Be
+  warned though, this will only help smooth over bursts of requests. [It
+  doesn't give you extra
+  capacity](https://ferd.ca/queues-don-t-fix-overload.html).
 - Silently drop stuff on the floor – If you have tiered rate limits your
   outermost tier can be a crude connection or packet limit that
   unceremoniously drops traffic. For example, you might have a 1 req/sec/user
