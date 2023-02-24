@@ -249,8 +249,9 @@ implement them.
 - Return appropriate machine-readable results – Ensure that a well-behaved
   client can react automatically to being limited. For HTTP this means using
   the HTTP status code of 429 or 503 and (if possible) some combination of
-  `RateLimit-Limit` `RateLimit-Remaining` `RateLimit-Reset` and `Retry-After`
-  headers. For gRPC you could return the `RESOURCE_EXHAUSTED` status.
+  `RateLimit-Limit`, `RateLimit-Remaining`, `RateLimit-Reset`, and
+  `Retry-After` headers. For gRPC you could return the `RESOURCE_EXHAUSTED`
+  status.
 - Buffer work requests – If you have an API that is a request to do some work
   asynchronously it can be valuable to use a queue to implement a global rate
   limit. Rather than doing the work in the API handler, queue a request to do
