@@ -7,17 +7,19 @@ date = 2023-02-18T00:00:00Z
 tags = ["Tech"]
 +++
 
-In [a previous blog post](@/2021-06-11-coding-guidlines-for-an-easier-life.md)
-I touched briefly on the topic of limits and it was the part of that post that
-provoked the most reaction.
+I wrote previously about [Coding Guidelines for an Easier Life](@/2021-06-11-coding-guidlines-for-an-easier-life.md)
+and my brief comments on limits provoked the most interest with reactions like:
 
 <blockquote class="twitter-tweet" data-conversation="none"><p lang="en" dir="ltr">The limits section really resonates with me the most. Before joining Amazon, I used to think that &quot;good&quot; system have no limits, that they should essentially be unbounded. But the more robust systems I&#39;ve worked on have known limits and are adjusted overtime.</p>&mdash; memattchung (@memattchung) <a href="https://twitter.com/memattchung/status/1405221384138018820?ref_src=twsrc%5Etfw">June 16, 2021</a></blockquote>
 <blockquote class="twitter-tweet" data-conversation="none"><p lang="en" dir="ltr">Nice. All ring true, but running prod systems, &quot;everything should have limits&quot; is *so* helpful, and was a huge lesson to me. In practice, everything always has limits, but if you don&#39;t set them explicitly you only discover them (painfully) at runtime.</p>&mdash; Simon Frankau (@simon_frankau) <a href="https://twitter.com/simon_frankau/status/1405169647482281989?ref_src=twsrc%5Etfw">June 16, 2021</a></blockquote>
 
-In particular, the last part of Simon Frankau's tweet resonated strongly with
-me. All systems have limits. Your only choice is whether to make them explicit
-or to let your users find those limits at a time you might not be prepared for
-them. With that in mind, I'm going to explore the topic of limits here.
+The last bit of Simon Frankau's tweet resonated particularly strongly with me: 
+>In practice, everything always has limits, but if you don't set them explicitly you only discover them (painfully) at runtime.
+
+_All_ systems have limits. As an engineer, your only choice is whether to make those limits explicit...
+or to let users run headlong into them at a time when you might or might not be prepared. 
+
+With that in mind, let's explore the topic of limits.
 
 
 # Contents
