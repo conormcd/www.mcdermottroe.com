@@ -40,42 +40,61 @@ With that in mind, let's explore the topic of limits.
 # Principles of limiting
 
 Before diving into the details, it's worth setting out some guiding
-principles. Like almost everything else in software engineering, implementing
-limits is a matter of judgement so it's not wrong to deviate from these
-principles so long as you understand _why_ you're doing so.
+principles. Like many things in software engineering, implementing
+limits is a matter of judgement: it's never wrong to deviate from basic 
+principles so long as you understand _why_ you're deviating.
 
-1. **Understand how your systems work.** If your software is full of [haunted
+Reach for limits early, reach for limits often, and make sure to:
+
+1. **Implement limits sooner rather than later.**
+   As a rule, [people hate losing things](https://en.wikipedia.org/wiki/Loss_aversion). 
+   Taking stuff away from your users, such as an "unlimited experience", rarely makes them happy. It can be very painful.
+   
+   Speaking not at all from my own painful experiences (not one bit), doing so during an outage in order to resolve the problem only heightens that pain for you, your
+   colleagues, and your customers. The best way to avoid this pain in the first place is to make a discussion about
+   limits an integral part of your design process. That's right, always
+2. **Start with strict limits.**
+   It is always, _always_ easier to relax a limit than to tighten one.
+
+   Plus, monitoring usage early on makes it easier to identify heavy system use. Heavy use of your
+   system(s) can be an indicator of a customer being heavily invested in your
+   product. Not only are those customers more likely to pay more for higher limits, they
+   are exactly the customers you _don't_ want to annoy by restricting their existing usage.
+
+   When creating new limits, always pick the tightest restriction you
+   can get away with.
+3. **Understand how your systems work.**
+   This may seem like a no-brainer, but it especially true when you are working in
+   a legacy system. The blast radius of a change is not always clear, and if your software is full of [haunted
    forests](https://increment.com/software-architecture/exit-the-haunted-forest/)
    you are going to struggle to implement sensible limits without endangering
    the stability of your system.
-2. **Understand the impact of limiting your users.** Restricting what your
-   users can do is a painful process. You may be forced to choose to forego
-   additional revenue in order to protect the stability of your system. You
-   may choose to put roadblocks on your sign up process to prevent abuse.
-   These can be rational choices but you need to make them carefully, with
-   data and with agreement from all the relevant stakeholders.
-3. **Limit as close to the edge as possible.** If you can promptly and
+<Hannah has to go get ready for dinner>
+
+4. **Understand the impact of limiting your users.** 
+   Restricting what your users can do is a painful process. 
+
+   Speaking not at all from my own painful experiences, you may, hypothetically,
+   need to make difficult decisions like choosing to forego
+   additional revenue in order to protect the stability of your system or
+   adding roadblocks in your sign-up process to prevent abuse. These types of
+   decisions will have real, often negative impact on your business value and user experience.
+   In order to make these choices must be made carefully, with
+   data and with agreement from all the relevant stakeholders. 
+
+5. **Limit as close to the edge as possible.** 
+   If you can promptly and
    synchronously refuse your customer's request it's usually a cleaner user
    experience that makes it easier for them to understand. It's often the
    safest option when implementing defences against denial of service attacks
    because you can consume fewer resources per blocked request.
-4. **Layer your defences.** You won't always be able to limit at the edge of
+6. **Layer your defences.**
+   You won't always be able to limit at the edge of
    your system. For example, if you want to limit each user to 10 requests per
    second you need to implement that after your authentication code has run.
    That can leave your authentication layer vulnerable so you could implement
    a global 10,000 requests per second limit in front of it, or a 1,000
    requests per second per IP limit.
-5. **It's easier to relax a limit than tighten it.** Taking stuff away from
-   your users rarely makes them happy. Heavy use of your system(s) can also be
-   an indicator of a customer being heavily invested in your product and those
-   are exactly the people you _don't_ want to annoy. With that in mind, when
-   creating new limits you should always pick the tightest restriction you can
-   get away with.
-6. **Implement limits sooner rather than later.** Limiting something that was
-   previously unlimited can be very painful for your users. Doing so during an
-   outage in order to resolve the problem is very painful for you and your
-   colleagues. The best way to avoid this pain is to make a discussion about
-   limits an integral part of your design process.
 
 # Types of limits
 
