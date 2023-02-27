@@ -69,17 +69,14 @@ Reach for limits early, reach for limits often, and make sure to:
    forests](https://increment.com/software-architecture/exit-the-haunted-forest/)
    you are going to struggle to implement sensible limits without endangering
    the stability of your system.
-<Hannah has to go get ready for dinner>
 
 4. **Understand the impact of limiting your users.** 
-   Restricting what your users can do is a painful process. 
+   Restricting what your users can do invariably has tradeoffs.
 
-   Speaking not at all from my own painful experiences, you may, hypothetically,
-   need to make difficult decisions like choosing to forego
-   additional revenue in order to protect the stability of your system or
-   adding roadblocks in your sign-up process to prevent abuse. These types of
+   In order to protect the stability of your system you may need to make difficult decisions like choosing to forego
+   additional revenue or adding roadblocks in your sign-up process to prevent abuse. These types of
    decisions will have real, often negative impact on your business value and user experience.
-   In order to make these choices must be made carefully, with
+   Make sure you understand the downstream impact of your decisions and make these choices must be made carefully, with
    data and with agreement from all the relevant stakeholders. 
 
 5. **Limit as close to the edge as possible.** 
