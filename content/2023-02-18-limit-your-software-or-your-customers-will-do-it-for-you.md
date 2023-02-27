@@ -79,19 +79,19 @@ Reach for limits early, reach for limits often, and make sure to:
    Make sure you understand the downstream impact of your decisions and make these choices must be made carefully, with
    data and with agreement from all the relevant stakeholders. 
 
-5. **Limit as close to the edge as possible.** 
-   If you can promptly and
-   synchronously refuse your customer's request it's usually a cleaner user
-   experience that makes it easier for them to understand. It's often the
-   safest option when implementing defences against denial of service attacks
-   because you can consume fewer resources per blocked request.
+5. **Limit as close to the edge as possible.**
+   Promptly and
+   synchronously refuse your customers' requests: distinct boundaries are clearer and easier for users to understand
+   and provide a more consistent experience. As a bonus, limits at the edge of your system are often the
+   safest option when implementing defences against denial of service attacks. They allow
+   you to consume fewer resources per blocked request.
+
 6. **Layer your defences.**
-   You won't always be able to limit at the edge of
-   your system. For example, if you want to limit each user to 10 requests per
-   second you need to implement that after your authentication code has run.
-   That can leave your authentication layer vulnerable so you could implement
-   a global 10,000 requests per second limit in front of it, or a 1,000
-   requests per second per IP limit.
+   It isn't always possible to limit at the edge of
+   your system. For example, if you want to set a per-user limit, your authentication code has to run before your check to limit the user to, say, 10 requests per
+   second.
+   That leaves your authentication layer vulnerable. To protect your authentication layer, you could implement
+   a global IP rate limit in front of it. A limit of 1,000 requests per second per IP would protect your system by ensuring a maximum of ~10,000 requests per second.
 
 # Types of limits
 
