@@ -95,12 +95,10 @@ Reach for limits early, reach for limits often, and make sure to:
 
 # Types of limits
 
-Now that we have some principles, we can start to enumerate the different
-places you should consider defining limits. A mature system will have many
-overlapping limits complementing each other so the best way to think of the
-following items is as prompts. If you're not implementing all of them that's
-OK, but you should either plan some work to add them or document why they
-aren't appropriate in your case.
+Now that we have some principles, let's look at a few places where limits should be defined. A mature system will have many
+overlapping limits complementing each other, the
+following items are prompts to help you identify helpful system limits. It's always a good exercise
+to document why a limit isn't appropriate in a given case or, better yet, to plan work to add a new limit!
 
 ## Rate limits
 
