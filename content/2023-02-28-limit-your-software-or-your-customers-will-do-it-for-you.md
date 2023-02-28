@@ -320,3 +320,23 @@ In summary, you should:
 Many thanks are due to [Cian Synnott](https://emauton.org/) and [Hannah
 Henderson](https://www.hannah-henderson.com/) for excellent feedback and
 suggestions which significantly improved this blog post.
+
+# Commentary
+
+Simon Frankau once again had
+[useful](https://twitter.com/simon_frankau/status/1630672361996402692)
+[things](https://twitter.com/simon_frankau/status/1630673873493544961) to say
+on this topic:
+
+> Really nice. I'd consider adding a couple of items:
+>
+>  a) Test to your limits. A goal of limits is to ensure your system works
+>     within the limits, so ensure your scale tests run up to the limits.
+>
+>  b) Test to the limits. Make sure that the system degrades gracefully at the
+>     limit,
+>
+>  c) There are situations where hitting the limit is unpleasant (like the
+>     Amazon thread limit outage). In those cases, put in monitoring alerts
+>     well below the limit, so you can mitigate in advance, not just at the
+>     limit.
