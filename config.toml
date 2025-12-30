@@ -1,8 +1,8 @@
 base_url = "https://www.mcdermottroe.com"
 build_search_index = false
 compile_sass = true
-feed_filename = "rss.xml"
-generate_feed = true
+feed_filenames = [ "rss.xml" ]
+generate_feeds = true
 theme = "anatole-zola"
 title = "Conor McDermottroe"
 
@@ -28,10 +28,7 @@ highlight_code = true
 tags = true
 
 [extra.social]
-facebook = "conor.mcdermottroe"
 github = "conormcd"
 instagram = "irlconor"
 linkedin = "conormcdermottroe"
-twitter = "IRLConor"
-flickr = "91242583@N03"
 mastodon = "https://mastodon.social/@irlconor"
