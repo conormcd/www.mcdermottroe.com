@@ -10,7 +10,7 @@ workflows:
           requires:
             - build
           context:
-            - fastmail-ftp
+            - fastmail-webdav
           filters:
             branches:
               only:
@@ -25,12 +25,9 @@ jobs:
       - run:
           name: Fetch and install Zola
           command: |
-            curl -Lso zola.tar.gz https://github.com/getzola/zola/releases/download/v0.16.1/zola-v0.16.1-x86_64-unknown-linux-gnu.tar.gz
+            curl -Lso zola.tar.gz https://github.com/getzola/zola/releases/download/v0.21.0/zola-v0.21.0-x86_64-unknown-linux-gnu.tar.gz
             tar xzf zola.tar.gz
             sudo mv zola /usr/bin/zola
-      - run:
-          name: Check all links
-          command: zola check || true
       - run:
           name: Build the site
           command: zola build
