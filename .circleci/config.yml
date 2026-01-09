@@ -10,7 +10,7 @@ workflows:
           requires:
             - build
           context:
-            - fastmail-ftp
+            - fastmail-webdav
           filters:
             branches:
               only:
