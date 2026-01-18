@@ -21,8 +21,8 @@ next_page = "Next Page"
 last_page = "Previous Page"
 date_format = "%Y-%m-%d"
 
-[markdown]
-highlight_code = true
+[markdown.highlighting]
+theme = "github-light"
 
 [extra.show]
 tags = true
