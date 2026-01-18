@@ -1,21 +1,16 @@
-title = "Anatole"
-description = "A other zola theme"
 base_url = "https://example.com"
 compile_sass = true
-highlight_code = true
 build_search_index = false
-generate_feed = true
-highlight_theme = "base16-ocean-light"
 default_language = "en"
 
-taxonomies = [
-    {name = "tags"},
-]
+[markdown]
+highlight_code = true
+highlight_theme = "base16-ocean-dark"
 
 [languages.en]
 title = "Anatole"
 description = "A other zola theme"
-generate_feed = true
+generate_feeds = true
 taxonomies = [
     {name = "tags"},
 ]
@@ -23,7 +18,7 @@ taxonomies = [
 [languages.zh]
 title = "Anatole"
 description = "A other zola theme"
-generate_feed = true
+generate_feeds = true
 taxonomies = [
     {name = "tags"},
 ]
@@ -71,6 +66,17 @@ links = "Länkar"
 date_format = "%Y-%m-%d"
 next_page = "Nästa Sidan"
 last_page = "Sista Sidan"
+
+[languages.ja.translations]
+language_name = "日本語"
+about = "About"
+home = "Home"
+tags = "タグ"
+archive = "アーカイブ"
+links = "リンク"
+date_format = "%Y-%m-%d"
+next_page = "次頁"
+last_page = "前頁"
 
 [extra.social]
 github = ""
